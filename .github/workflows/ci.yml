@@ -117,13 +117,6 @@ jobs:
           cache: true
       - name: Install dependencies
         run: dart pub get
-      - name: Run E2E test group - ${{ matrix.test_group }}
-        run: |
-          case "${{ matrix.test_group }}" in
-            "CreateCommand E2E Tests")
-              dart test test/e2e/create_command_test.dart --reporter github
-              ;;
-            "InitCommand E2E Tests")
-              dart test test/e2e/init_command_test.dart --reporter github
-              ;;
-          esac
+      - name: Run E2E test - ${{ matrix.test_group }}
+        run: dart test --tags e2e --plain-name "${{ matrix.test_group }}" --reporter expanded
+        timeout-minutes: 8
