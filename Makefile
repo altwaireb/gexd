@@ -1,7 +1,7 @@
 # Makefile for Gexd CLI - Simplified version
 # Usage: make <target>
 
-.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify git-status git-check-attributes git-add git-commit git-push git-deploy
+.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify pre-commit
 
 # Default target
 help:
@@ -38,14 +38,7 @@ help:
 	@echo "  fix       - Apply dart fixes"
 	@echo "  pre-commit- Pre-commit checks"
 	@echo ""
-	@echo "Git Operations:"
-	@echo "  git-status      - Show git status"
-	@echo "  git-check-attributes - Check git attributes for key files"
-	@echo "  git-add         - Add all changes"
-	@echo "  git-commit      - Commit changes"
-	@echo "  git-push        - Push to remote"
-	@echo "  git-deploy      - Full deployment (add + commit + push)"
-	@echo ""
+
 	@echo "Advanced:"
 	@echo "  setup     - Setup development environment"
 	@echo "  coverage  - Generate test coverage report"
@@ -175,34 +168,6 @@ test-file:
 quick: format analyze test-unit
 	@echo "⚡ Quick development cycle completed!"
 
-# Pre-commit checks
-pre-commit: format analyze test-unit build-verify
+# Pre-commit checks (without build-verify to avoid git state conflicts)
+pre-commit: format analyze test-unit
 	@echo "✅ Pre-commit checks passed!"
-
-# Git operations
-git-status:
-	@echo "📊 Git status:"
-	git status
-
-git-check-attributes:
-	@echo "🔍 Checking git attributes for key files:"
-	@git check-attr -a lib/gexd.dart
-	@git check-attr -a bin/gexd.dart
-	@git check-attr -a Makefile
-	@git check-attr -a bricks/getx/__brick__/lib/main.dart
-
-git-add:
-	@echo "➕ Adding all changes..."
-	git add .
-
-git-commit:
-	@echo "💾 Committing changes..."
-	@read -p "Enter commit message: " MSG; git commit -m "$$MSG"
-
-git-push:
-	@echo "🚀 Pushing to remote..."
-	git push origin main
-
-# Full git workflow
-git-deploy: git-add git-commit git-push
-	@echo "🎉 Successfully deployed to GitHub!"
