@@ -1,0 +1,58 @@
+# Include all languages in GitHub statistics
+# This shows the project has professional development tools
+
+# Main source code
+lib/* linguist-detectable=true
+bin/* linguist-detectable=true
+test/* linguist-detectable=true
+
+# Development tools (hide from language stats but keep detectable)
+Makefile linguist-detectable=false
+*.md linguist-detectable=false
+
+# Mason Bricks - Handle special characters and line endings
+bricks/**/__brick__/** text eol=lf
+bricks/**/*.dart text eol=lf
+bricks/**/*.yaml text eol=lf
+
+# Dart files - ensure consistent line endings
+*.dart text eol=lf
+
+# Configuration files
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+
+# Documentation
+*.md text eol=lf
+README.md text eol=lf
+CHANGELOG.md text eol=lf
+
+# Git files
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Pub files
+pubspec.yaml text eol=lf
+pubspec.lock text eol=lf
+
+# Analysis and test configuration
+analysis_options.yaml text eol=lf
+dart_test.yaml text eol=lf
+
+# Mason configuration
+mason.yaml text eol=lf
+mason-lock.json text eol=lf
+
+# Binary files (if any in future)
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Images (if any in future)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary

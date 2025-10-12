@@ -1,7 +1,7 @@
 # Makefile for Gexd CLI - Simplified version
 # Usage: make <target>
 
-.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify git-status git-add git-commit git-push git-deploy
+.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify git-status git-check-attributes git-add git-commit git-push git-deploy
 
 # Default target
 help:
@@ -39,11 +39,12 @@ help:
 	@echo "  pre-commit- Pre-commit checks"
 	@echo ""
 	@echo "Git Operations:"
-	@echo "  git-status  - Show git status"
-	@echo "  git-add     - Add all changes"
-	@echo "  git-commit  - Commit changes"
-	@echo "  git-push    - Push to remote"
-	@echo "  git-deploy  - Full deployment (add + commit + push)"
+	@echo "  git-status      - Show git status"
+	@echo "  git-check-attributes - Check git attributes for key files"
+	@echo "  git-add         - Add all changes"
+	@echo "  git-commit      - Commit changes"
+	@echo "  git-push        - Push to remote"
+	@echo "  git-deploy      - Full deployment (add + commit + push)"
 	@echo ""
 	@echo "Advanced:"
 	@echo "  setup     - Setup development environment"
@@ -182,6 +183,13 @@ pre-commit: format analyze test-unit build-verify
 git-status:
 	@echo "📊 Git status:"
 	git status
+
+git-check-attributes:
+	@echo "🔍 Checking git attributes for key files:"
+	@git check-attr -a lib/gexd.dart
+	@git check-attr -a bin/gexd.dart
+	@git check-attr -a Makefile
+	@git check-attr -a bricks/getx/__brick__/lib/main.dart
 
 git-add:
 	@echo "➕ Adding all changes..."
