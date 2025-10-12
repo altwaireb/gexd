@@ -1,7 +1,7 @@
 # Makefile for Gexd CLI - Simplified version
 # Usage: make <target>
 
-.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify
+.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify git-status git-add git-commit git-push git-deploy
 
 # Default target
 help:
@@ -37,6 +37,13 @@ help:
 	@echo "  quick     - Quick development cycle (format+analyze+test)"
 	@echo "  fix       - Apply dart fixes"
 	@echo "  pre-commit- Pre-commit checks"
+	@echo ""
+	@echo "Git Operations:"
+	@echo "  git-status  - Show git status"
+	@echo "  git-add     - Add all changes"
+	@echo "  git-commit  - Commit changes"
+	@echo "  git-push    - Push to remote"
+	@echo "  git-deploy  - Full deployment (add + commit + push)"
 	@echo ""
 	@echo "Advanced:"
 	@echo "  setup     - Setup development environment"
@@ -170,3 +177,24 @@ quick: format analyze test-unit
 # Pre-commit checks
 pre-commit: format analyze test-unit build-verify
 	@echo "✅ Pre-commit checks passed!"
+
+# Git operations
+git-status:
+	@echo "📊 Git status:"
+	git status
+
+git-add:
+	@echo "➕ Adding all changes..."
+	git add .
+
+git-commit:
+	@echo "💾 Committing changes..."
+	@read -p "Enter commit message: " MSG; git commit -m "$$MSG"
+
+git-push:
+	@echo "🚀 Pushing to remote..."
+	git push origin main
+
+# Full git workflow
+git-deploy: git-add git-commit git-push
+	@echo "🎉 Successfully deployed to GitHub!"
