@@ -1,0 +1,10 @@
+# Generation Details
+generated_by: Gexd CLI
+creation_version: {{version}}
+current_version: {{version}}
+generated_date: {{generated_date}}
+last_updated: null
+
+# Project Information
+project_name: {{project_name}}
+template: {{template}}

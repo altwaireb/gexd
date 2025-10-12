@@ -1,0 +1,5 @@
+bricks:
+  getx:
+    path: bricks/getx
+  clean:
+    path: bricks/clean
