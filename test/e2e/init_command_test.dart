@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 import '../helpers/e2e_helper.dart';
 
 void main() {
-  group('End-to-End Tests - Init Command', () {
+  group('InitCommand E2E Tests', () {
     late Directory tempDir;
 
     setUp(() async {

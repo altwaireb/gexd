@@ -1,7 +1,7 @@
 # Makefile for Gexd CLI - Simplified version
 # Usage: make <target>
 
-.PHONY: help clean test build install format format-bricks analyze deps check release dev ci build-runner build-runner-watch build-runner-clean build-verify pre-commit
+.PHONY: help clean test build install format format-bricks analyze deps check release dev ci ci-local build-runner build-runner-watch build-runner-clean build-verify pre-commit
 
 # Default target
 help:
@@ -16,10 +16,12 @@ help:
 	@echo "  dev           - Run development tests (fast)"
 	@echo ""
 	@echo "Testing:"
-	@echo "  test-unit - Run unit tests only"
-	@echo "  test-smoke- Run smoke tests only"
-	@echo "  test-e2e  - Run E2E tests only"
-	@echo "  ci        - Run CI tests"
+	@echo "  test-unit      - Run unit tests only"
+	@echo "  test-smoke     - Run smoke tests only"
+	@echo "  test-integration - Run integration tests only"
+	@echo "  test-e2e       - Run E2E tests only"
+	@echo "  ci             - Run CI tests"
+	@echo "  ci-local       - Run local CI simulation"
 	@echo ""
 	@echo "Build & Deploy:"
 	@echo "  build     - Build project"
@@ -119,6 +121,25 @@ dev:
 ci:
 	@echo "🤖 Running CI tests..."
 	dart test --preset ci
+
+# Run local CI simulation
+ci-local:
+	@echo "🚀 Running local CI simulation..."
+	@echo "1️⃣ Checking formatting..."
+	@make format
+	@echo "2️⃣ Analyzing code..."
+	@make analyze
+	@echo "3️⃣ Running unit tests..."
+	@make test-unit
+	@echo "4️⃣ Running integration tests..."
+	@make test-integration
+	@echo "5️⃣ Running build runner..."
+	@make build-runner
+	@echo "6️⃣ Build verification..."
+	@make build-verify
+	@echo "7️⃣ Running E2E tests..."
+	@make test-e2e
+	@echo "✅ Local CI simulation completed!"
 
 # Build
 build:
