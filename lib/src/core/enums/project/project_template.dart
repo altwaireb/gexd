@@ -44,8 +44,9 @@ enum ProjectTemplate {
     return allKeys.contains(key.toLowerCase());
   }
 
+  /// Get a list of formatted strings for display in prompts
   static List<String> get toList =>
-      ProjectTemplate.values.map((t) => t.displayName).toList();
+      values.map((e) => '${e.key} - ${e.description}').toList();
 
   /// Automatically generate allowedHelp map for argParser
   static Map<String, String> get allowedHelp {

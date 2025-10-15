@@ -56,7 +56,7 @@ class InitCommand extends Command<int> {
 
       final factory = InitServiceFactory(_logger);
 
-      final init = InitProject(
+      final init = InitJob(
         data,
         masonService: factory.createMason(),
         dependencyService: factory.createDependency(),

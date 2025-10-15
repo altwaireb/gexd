@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'package:{{project_name.snakeCase()}}/app/core/routes/app_pages.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/app_pages.dart';
 
 class NotFoundController extends GetxController {
   /// Navigate back to home

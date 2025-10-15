@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
-class InitProject {
+class InitJob {
   final InitData data;
   final Logger logger;
   final MasonServiceInterface masonService;
   final DependencyServiceInterface dependencyService;
   final PostGenerationServiceInterface postGenService;
 
-  InitProject(
+  InitJob(
     this.data, {
     required this.masonService,
     required this.dependencyService,
@@ -18,7 +18,7 @@ class InitProject {
     Logger? logger,
   }) : logger = logger ?? Logger();
 
-  Directory get targetDirectory => Directory(data.currentDir);
+  Directory get targetDirectory => Directory(data.targetDir);
 
   Future<int> execute() async {
     try {

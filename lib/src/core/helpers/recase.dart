@@ -1,0 +1,191 @@
+/// A utility class for converting strings between various casing styles.
+///
+/// Enhanced version based on Mason's ReCase with improved acronym handling.
+/// This implementation properly handles common acronyms (XML, API, HTML, etc.)
+/// to prevent over-splitting when converting between cases.
+///
+/// Examples:
+/// - XMLParser -> xml_parser (not x_m_l_parser)
+/// - APIManager -> api_manager (not a_p_i_manager)
+/// - HTTPClient -> http_client (not h_t_t_p_client)
+///
+/// The class analyzes the given input string and provides methods to
+/// retrieve the text in different casing formats like camelCase, CONSTANT_CASE,
+/// snake_case, and others.
+class ReCase {
+  /// Constructs an instance of [ReCase] by analyzing the given [text] and
+  /// grouping it into words.
+  ReCase(String text) : _words = _groupIntoWords(text);
+
+  static final _upperAlphaRegex = RegExp('[A-Z]');
+  static final _symbolSet = {' ', '.', '/', '_', r'\', '-'};
+  final List<String> _words;
+
+  /// Common acronyms that should be treated as single words
+  static final _commonAcronyms = {
+    'XML',
+    'HTML',
+    'CSS',
+    'JSON',
+    'API',
+    'HTTP',
+    'HTTPS',
+    'URL',
+    'URI',
+    'SQL',
+    'DB',
+    'ID',
+    'UUID',
+    'JWT',
+    'OAuth',
+    'TCP',
+    'UDP',
+    'IP',
+    'DNS',
+    'SSL',
+    'TLS',
+    'FTP',
+    'SSH',
+    'GUI',
+    'CLI',
+    'SDK',
+    'CDN',
+    'PDF',
+    'CSV',
+    'RSS',
+    'SEO',
+    'CMS',
+    'MVC',
+    'ORM',
+    'CRUD',
+  };
+
+  /// Groups the [text] into words considering different separators and casing.
+  /// Enhanced to handle common acronyms properly.
+  static List<String> _groupIntoWords(String text) {
+    // First, handle common acronyms
+    String processedText = _handleAcronyms(text);
+
+    final sb = StringBuffer();
+    final words = <String>[];
+    final isAllCaps = processedText.toUpperCase() == processedText;
+
+    for (var i = 0; i < processedText.length; i++) {
+      final char = processedText[i];
+      final nextChar = i + 1 == processedText.length
+          ? null
+          : processedText[i + 1];
+
+      if (_symbolSet.contains(char)) {
+        continue;
+      }
+
+      sb.write(char);
+
+      final isEndOfWord =
+          nextChar == null ||
+          (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
+          _symbolSet.contains(nextChar);
+
+      if (isEndOfWord) {
+        words.add(sb.toString());
+        sb.clear();
+      }
+    }
+
+    return words;
+  }
+
+  /// Handles common acronyms to prevent over-splitting
+  static String _handleAcronyms(String input) {
+    String result = input;
+
+    for (final acronym in _commonAcronyms) {
+      // Replace acronym followed by PascalCase word (e.g., XMLParser -> XmlParser)
+      result = result.replaceAll(
+        RegExp('$acronym(?=[A-Z][a-z])'),
+        '${acronym[0]}${acronym.substring(1).toLowerCase()}',
+      );
+      // Replace acronym at end of string (e.g., parseXML -> parseXml)
+      result = result.replaceAll(
+        RegExp('$acronym\$'),
+        '${acronym[0]}${acronym.substring(1).toLowerCase()}',
+      );
+    }
+
+    return result;
+  }
+
+  /// Returns the text in camelCase format.
+  String get camelCase => _getCamelCase();
+
+  /// Returns the text in CONSTANT_CASE format.
+  String get constantCase => _getConstantCase();
+
+  /// Returns the text in Sentence case format.
+  String get sentenceCase => _getSentenceCase();
+
+  /// Returns the text in snake_case format.
+  String get snakeCase => _getSnakeCase();
+
+  /// Returns the text in dot.case format.
+  String get dotCase => _getSnakeCase(separator: '.');
+
+  /// Returns the text in param-case format.
+  String get paramCase => _getSnakeCase(separator: '-');
+
+  /// Returns the text in path/case format.
+  String get pathCase => _getSnakeCase(separator: '/');
+
+  /// Returns the text in PascalCase format.
+  String get pascalCase => _getPascalCase();
+
+  /// Returns the text in Pascal.Dot.Case format.
+  String get pascalDotCase => _getPascalCase(separator: '.');
+
+  /// Returns the text in Header-Case format.
+  String get headerCase => _getPascalCase(separator: '-');
+
+  /// Returns the text in Title Case format.
+  String get titleCase => _getPascalCase(separator: ' ');
+
+  String _getCamelCase({String separator = ''}) {
+    final words = _words.map(_upperCaseFirstLetter).toList();
+    if (_words.isNotEmpty) {
+      words[0] = words[0].toLowerCase();
+    }
+
+    return words.join(separator);
+  }
+
+  String _getConstantCase({String separator = '_'}) {
+    final words = _words.map((word) => word.toUpperCase()).toList();
+
+    return words.join(separator);
+  }
+
+  String _getPascalCase({String separator = ''}) {
+    final words = _words.map(_upperCaseFirstLetter).toList();
+
+    return words.join(separator);
+  }
+
+  String _getSentenceCase({String separator = ' '}) {
+    final words = _words.map((word) => word.toLowerCase()).toList();
+    if (_words.isNotEmpty) {
+      words[0] = _upperCaseFirstLetter(words[0]);
+    }
+
+    return words.join(separator);
+  }
+
+  String _getSnakeCase({String separator = '_'}) {
+    final words = _words.map((word) => word.toLowerCase()).toList();
+
+    return words.join(separator);
+  }
+
+  String _upperCaseFirstLetter(String word) {
+    return '''${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}''';
+  }
+}

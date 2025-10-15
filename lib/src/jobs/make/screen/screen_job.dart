@@ -1,0 +1,157 @@
+import 'dart:io';
+
+import 'package:gexd/gexd.dart';
+import 'package:mason_logger/mason_logger.dart';
+import 'package:path/path.dart' as path;
+
+class ScreenJob {
+  final ScreenData data;
+  final Logger logger;
+  final MasonServiceInterface masonService;
+  final RouteUpdateServiceInterface routeUpdateService;
+
+  ScreenJob(
+    this.data, {
+    required this.masonService,
+    required this.routeUpdateService,
+    Logger? logger,
+  }) : logger = logger ?? Logger();
+
+  Future<int> execute() async {
+    try {
+      // Generate files
+      final List<String> generatedFiles = await _generate(data);
+
+      // Update routes if not skipped
+      bool routesUpdated = false;
+      if (data.skipRoute == false) {
+        routesUpdated = await _tryUpdateRoutes(data);
+      }
+      _logSummary(generatedFiles, routesUpdated);
+      return ExitCode.success.code;
+    } on ValidationException catch (e) {
+      logger.errMessage(JobMessages.validationFailed, {'error': e.message});
+      return ExitCode.usage.code;
+    } on ModelNotFoundException catch (e) {
+      logger.errMessage(JobMessages.modelNotFound, {'error': e.message});
+      return ExitCode.usage.code;
+    } catch (e) {
+      logger.err('${ScreenConstants.generationFailed}: $e');
+      return ExitCode.software.code;
+    }
+  }
+
+  void _logSummary(List<String> generatedFiles, bool routesUpdated) {
+    logger.info('');
+    logger.info('Screen generation summary:');
+    logger.info('  Name: ${data.name}');
+    logger.info('  Type: ${data.screenType.key}');
+    if (data.onPath != null && data.onPath!.isNotEmpty) {
+      logger.info('  On: ${data.onPath}');
+    }
+    if (data.hasModel) {
+      logger.info('  Model: ${data.modelName}');
+    }
+    if (data.skipRoute == false && routesUpdated == true) {
+      logger.info('  Route Update: Attempted');
+    } else {
+      logger.warn('  Route Update: Skipped');
+    }
+    logger.info('');
+    if (generatedFiles.isNotEmpty) {
+      logger.info('Generated files:');
+      for (final file in generatedFiles) {
+        logger.info(' - $file');
+      }
+    } else {
+      logger.info('No files were generated.');
+    }
+    logger.info('');
+  }
+
+  /// Generate screen files using Mason brick
+  Future<List<String>> _generate(ScreenData screenData) async {
+    final progress = logger.progress(ScreenConstants.generatingFiles);
+
+    try {
+      final targetDir = await _prepareTargetDirectory(screenData);
+
+      await masonService.generateFromPackageBrick(
+        brickName: 'screen',
+        targetDir: targetDir,
+        vars: data.toVars(),
+        overwrite: true,
+      );
+
+      progress.complete(ScreenConstants.filesGeneratedSuccess);
+
+      return _buildGeneratedFilesList(screenData);
+    } catch (e) {
+      progress.fail(ScreenConstants.generationFailed);
+      rethrow;
+    }
+  }
+
+  Future<Directory> _prepareTargetDirectory(ScreenData screenData) async {
+    final basePath = await ArchitectureCoordinator.getComponentPathByConfig(
+      NameComponent.screen,
+    );
+
+    final currentDir = screenData.targetDir;
+    final targetPath = screenData.onPath != null
+        ? path.join(currentDir.path, basePath, screenData.onPath!)
+        : path.join(currentDir.path, basePath);
+
+    final targetDir = Directory(targetPath);
+
+    if (!await targetDir.exists()) {
+      await targetDir.create(recursive: true);
+      logger.detail('Created directory: $targetPath');
+    }
+
+    return targetDir;
+  }
+
+  /// Build list of generated files for reporting
+  List<String> _buildGeneratedFilesList(ScreenData screenData) {
+    final basePath = screenData.onPath != null ? '${screenData.onPath}/' : '';
+    final screenSnakeCase = StringHelpers.toSnakeCase(screenData.name);
+
+    return [
+      '$basePath$screenSnakeCase/${ScreenConstants.controllerSuffix}'
+          .formatWith({'name': screenSnakeCase}),
+      '$basePath$screenSnakeCase/${ScreenConstants.viewSuffix}'.formatWith({
+        'name': screenSnakeCase,
+      }),
+      '$basePath$screenSnakeCase/${ScreenConstants.bindingSuffix}'.formatWith({
+        'name': screenSnakeCase,
+      }),
+    ];
+  }
+
+  /// Try to update routes automatically
+  Future<bool> _tryUpdateRoutes(ScreenData screenData) async {
+    final progress = logger.progress(ScreenConstants.updatingRoutes);
+
+    try {
+      final success = await routeUpdateService.addScreenRoute(
+        screenName: screenData.name,
+        subPath: screenData.onPath,
+        template: screenData.template,
+      );
+
+      if (success) {
+        progress.complete(ScreenConstants.routesUpdatedSuccess);
+        return true;
+      } else {
+        progress.fail(ScreenConstants.routeUpdateFailed);
+        logger.detail('Routes were not updated automatically');
+        return false;
+      }
+    } catch (e) {
+      progress.fail(ScreenConstants.routeUpdateFailed);
+      logger.detail('Route update failed: $e');
+      return false;
+    }
+  }
+}

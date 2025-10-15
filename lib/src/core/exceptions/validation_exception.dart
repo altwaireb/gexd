@@ -249,13 +249,3 @@ class ValidationException implements Exception {
   /// Checks if this exception is related to a specific field
   bool isForField(String fieldName) => field == fieldName;
 }
-
-/// Thrown when a required model is not found
-class ModelNotFoundException implements Exception {
-  final String modelName;
-
-  const ModelNotFoundException(this.modelName);
-
-  @override
-  String toString() => 'ModelNotFoundException: Model "$modelName" not found';
-}

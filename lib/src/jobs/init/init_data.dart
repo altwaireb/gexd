@@ -4,13 +4,13 @@ class InitData {
   final String name;
   final ProjectTemplate template;
   final bool? full;
-  final String currentDir;
+  final String targetDir;
 
   InitData({
     required this.name,
     required this.template,
     this.full,
-    required this.currentDir,
+    required this.targetDir,
   });
 
   Map<String, dynamic> toVars() {

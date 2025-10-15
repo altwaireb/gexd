@@ -31,6 +31,7 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
 
     addCommand(CreateCommand(logger: _logger, prompt: _prompt));
     addCommand(InitCommand(logger: _logger, prompt: _prompt));
+    addCommand(MakeCommand(logger: _logger));
   }
 
   @override

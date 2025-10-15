@@ -34,7 +34,7 @@ class InitInputs {
       name: name,
       template: template,
       full: full,
-      currentDir: currentDir,
+      targetDir: currentDir,
     );
   }
 

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
-class CreateProject {
+class CreateJob {
   final CreateData data;
   final Logger logger;
   final FlutterProjectServiceInterface flutterService;
@@ -11,7 +11,7 @@ class CreateProject {
   final DependencyServiceInterface dependencyService;
   final PostGenerationServiceInterface postGenService;
 
-  CreateProject(
+  CreateJob(
     this.data, {
     required this.flutterService,
     required this.masonService,

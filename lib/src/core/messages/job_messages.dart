@@ -89,6 +89,16 @@ class JobMessages {
   /// Parameters: {error}
   static const validationFailed = Message("Failed to validate input: {error}");
 
+  /// Model not found
+  /// Parameters: {error}
+  /// Used in screen generation job
+  /// The error parameter contains the model name that was not found
+  ///
+  /// Example: "UserModel - Model not found"
+  /// This message is used when a required model for screen generation is not found
+  ///
+  static const modelNotFound = Message("Model not found: {error}");
+
   /// Operation duration message
   /// Parameters: {operation}, {duration}
   static const operationDuration = Message("{operation} ({duration})");

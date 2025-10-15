@@ -3,3 +3,5 @@ bricks:
     path: bricks/getx
   clean:
     path: bricks/clean
+  screen:
+    path: bricks/screen

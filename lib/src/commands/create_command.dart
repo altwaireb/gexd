@@ -57,13 +57,19 @@ class CreateCommand extends Command<int> {
   @override
   Future<int> run() async {
     try {
+      // Validate project name argument
       // handle inputs
-      final data = await CreateInputs(argResults!, prompt: _prompt).handle();
+      final CreateData inputs = await CreateInputs(
+        argResults!,
+        prompt: _prompt,
+      ).handle();
+
       // execute creation
-      final factory = CreateServiceFactory(_logger);
+      final CreateServiceFactory factory = CreateServiceFactory(_logger);
+
       // create project job
-      final create = CreateProject(
-        data,
+      final CreateJob create = CreateJob(
+        inputs,
         flutterService: factory.createFlutter(),
         masonService: factory.createMason(),
         dependencyService: factory.createDependency(),

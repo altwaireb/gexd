@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:gexd/src/core/exceptions/validation_exception.dart';
-import 'package:gexd/src/core/enums/project/project_template.dart';
-import 'package:gexd/src/core/enums/project/name_component.dart';
-import 'package:gexd/src/templates/architecture_coordinator.dart';
+import 'package:gexd/gexd.dart';
 
 /// Field validator utility class that provides comprehensive validation methods
 /// with consistent error handling and user-friendly messages.
@@ -948,10 +945,6 @@ class FieldValidator {
 }
 
 extension StringCasingExtension on String {
-  String get toCapitalized =>
-      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
-  String get toTitleCase => replaceAll(
-    RegExp(' +'),
-    ' ',
-  ).split(' ').map((str) => str.toCapitalized).join(' ');
+  String get toCapitalized => length > 0 ? StringHelpers.capitalize(this) : '';
+  String get toTitleCase => StringHelpers.toTitleCase(this);
 }

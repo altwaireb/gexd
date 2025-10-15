@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:{{project_name.snakeCase()}}/app/core/bindings/initial_binding.dart';
 import 'package:{{project_name.snakeCase()}}/app/core/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/core/routes/app_pages.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/app_pages.dart';
 
 /// {{project_name}} — Main entry point
 ///
