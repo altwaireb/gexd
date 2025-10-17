@@ -202,6 +202,55 @@ class ValidationException implements Exception {
     );
   }
 
+  /// Factory constructor for invalid path format validation
+  factory ValidationException.invalidPath(String path, String reason) {
+    return ValidationException(
+      'Invalid path format: "$path". $reason',
+      code: ValidationErrorCode.invalidFormat,
+      field: 'path',
+      value: path,
+      details: {'reason': reason},
+    );
+  }
+
+  /// Factory constructor for path depth validation
+  factory ValidationException.pathTooDeep(String path, int maxDepth) {
+    return ValidationException(
+      'Path "$path" exceeds maximum depth of $maxDepth levels.',
+      code: ValidationErrorCode.outOfRange,
+      field: 'path depth',
+      value: path,
+      details: {'maxDepth': maxDepth, 'actualDepth': path.split('/').length},
+    );
+  }
+
+  /// Factory constructor for file not found validation
+  factory ValidationException.fileNotFound(String filePath) {
+    return ValidationException(
+      'File not found: $filePath',
+      code: ValidationErrorCode.notFound,
+      field: 'file',
+      value: filePath,
+      details: {'filePath': filePath},
+    );
+  }
+
+  /// Factory constructor for missing dependency validation
+  factory ValidationException.missingDependency(
+    String dependency, {
+    String? hint,
+  }) {
+    final message =
+        'Required dependency "$dependency" is missing.${hint != null ? ' $hint' : ''}';
+    return ValidationException(
+      message,
+      code: ValidationErrorCode.missingDependency,
+      field: 'dependency',
+      value: dependency,
+      details: {'dependency': dependency, if (hint != null) 'hint': hint},
+    );
+  }
+
   /// Factory constructor for custom validation messages
   factory ValidationException.custom(
     String message, {

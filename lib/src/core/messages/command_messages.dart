@@ -129,6 +129,8 @@ class CommandMessages {
 
   /// Error messages for different exception types
   static const validationFailed = Message("❌ Validation failed: {message}");
+  static const configFailed = Message("⚙️ Configuration error: {message}");
+  static const modelFailed = Message("🏗️ Model error: {message}");
   static const initializationError = Message(
     "⚠️ Initialization error: {message}",
   );

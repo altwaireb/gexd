@@ -33,15 +33,11 @@ class ProjectHelpers {
   }
 
   /// Get current project template from config
-  /// Throws ValidationException if template not found or invalid project
+  /// Throws ConfigProjectException if template not found or invalid project
   static Future<ProjectTemplate> getTemplate() async {
     final template = await ConfigService.getProjectTemplate();
     if (template == null) {
-      throw ValidationException.invalidFormat(
-        'template',
-        'Could not detect project template',
-        expectedFormat: 'A valid Gexd project template',
-      );
+      throw ConfigProjectException.unknownTemplate();
     }
     return template;
   }

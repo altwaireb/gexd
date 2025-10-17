@@ -54,58 +54,26 @@ jobs:
           sdk: stable
       - name: Install dependencies
         run: dart pub get
-      - name: Run unit tests
-        run: dart test --tags unit --reporter github
-      
-  # Integration Tests
-  integration-tests:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - name: Install dependencies
-        run: dart pub get
-      - name: Run integration tests
-        run: dart test --tags integration --reporter github
-
-  # Build verification
-  build-verify:
-    name: Build Verification
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [format, analyze, unit-tests, integration-tests]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - name: Install dependencies
-        run: dart pub get
       - name: Run build runner
         run: dart run build_runner build --delete-conflicting-outputs
-      - name: Verify build is clean
-        run: dart test test/build_verify_test.dart --reporter github
-
+      - name: Run unit tests
+        run: dart test --tags unit --reporter github
+      - name: Run build tests
+        run: dart test --tags build --reporter github
+      
   # E2E Tests
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [build-verify]
+    needs: [unit-tests]
     strategy:
       fail-fast: false
       matrix:
         test_group: [
           'CreateCommand E2E Tests',
-          'InitCommand E2E Tests'
+          'InitCommand E2E Tests',
+          'ScreenCommand E2E Tests'
         ]
     steps:
       - name: Checkout

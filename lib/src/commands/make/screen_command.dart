@@ -41,7 +41,7 @@ class ScreenCommand extends Command<int>
       )
       ..addFlag(
         'has-model',
-        help: 'Auto-detect model class for withState screens',
+        help: 'Use model class with same name as screen for withState screens',
         negatable: false,
       )
       ..addFlag(
@@ -84,7 +84,7 @@ Screen Types:
 
 Model Detection:
   --model <ModelName>       Specify exact model class for withState screens
-  --has-model               Auto-detect model class for withState screens
+  --has-model               Use model class with same name as screen
 
 Examples:
   gexd make screen                                    # Interactive mode
@@ -92,8 +92,8 @@ Examples:
   gexd make screen Login --type form                  # Generate form screen type
   gexd make screen Login --force                      # Force overwrite without prompting
   gexd make screen Login --on auth                    # Create in subdirectory
-  gexd make screen UserList --type withState --model User          # Specific model class
-  gexd make screen ProductList --type withState --has-model        # Auto-detect model
+  gexd make screen UserList --type withState --model User          # Specific model class (User)
+  gexd make screen Product --type withState --has-model            # Use Product model (same name)
   gexd make screen UserProfile --on auth/user --type withState --skip-route --force
 ''';
 
@@ -125,17 +125,17 @@ Examples:
       );
 
       return create.execute();
-    } on ValidationException catch (e, s) {
-      _logger.err('❌ Validation Error: $e');
-      _logger.detail(s.toString());
+    } on ValidationException catch (error, stackTrace) {
+      _logger.err(error.toString());
+      _logger.detail(stackTrace.toString());
       return ExitCode.usage.code;
-    } on ModelNotFoundException catch (e, s) {
-      _logger.err('❌ Model Detection Error: $e');
-      _logger.detail(s.toString());
+    } on ModelNotFoundException catch (error, stackTrace) {
+      _logger.err(error.toString());
+      _logger.detail(stackTrace.toString());
       return ExitCode.usage.code;
-    } catch (e, s) {
-      _logger.err('❌ Error: $e');
-      _logger.detail(s.toString());
+    } catch (error, stackTrace) {
+      _logger.err('❌ Error: $error');
+      _logger.detail(stackTrace.toString());
       return ExitCode.software.code;
     }
   }

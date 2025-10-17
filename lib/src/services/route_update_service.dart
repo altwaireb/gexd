@@ -67,7 +67,7 @@ class RouteUpdateService implements RouteUpdateServiceInterface {
     final file = File(filePath);
     final content = await file.readAsString();
 
-    final routeName = screenName.toUpperCase();
+    final routeName = StringHelpers.toConstantCase(screenName);
     final routePath = _generateRoutePath(screenName, subPath);
 
     // Add to Routes class
@@ -130,7 +130,7 @@ class RouteUpdateService implements RouteUpdateServiceInterface {
     final file = File(filePath);
     final content = await file.readAsString();
 
-    final routeName = screenName.toUpperCase();
+    final routeName = StringHelpers.toConstantCase(screenName);
     final importPath = await _generateImportPath(screenName, subPath, template);
 
     // Add import statements

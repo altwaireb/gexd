@@ -1,4 +1,4 @@
-@Tags(['integration'])
+@Tags(['unit'])
 library;
 
 import 'package:test/test.dart';

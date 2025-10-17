@@ -46,6 +46,14 @@ help:
 	@echo "  coverage  - Generate test coverage report"
 	@echo "  test-file - Run specific test file"
 	@echo ""
+	@echo "Fast Testing:"
+	@echo "  build-fast - Build executable for fast fake project testing"
+	@echo "  test-fast  - Run tests with fast fake projects"
+	@echo "  test-fake  - Test the fake project system specifically"
+	@echo "  benchmark  - Compare fake vs real project performance"
+	@echo "  compare-performance - Side-by-side comparison of real vs fake tests"
+	@echo "  clean-fast - Clean fast build artifacts"
+	@echo ""
 
 # Dependencies
 deps:
@@ -192,3 +200,36 @@ quick: format analyze test-unit
 # Pre-commit checks (without build-verify to avoid git state conflicts)
 pre-commit: format analyze test-unit
 	@echo "✅ Pre-commit checks passed!"
+
+# Fast Testing with Fake Projects
+build-fast: clean
+	@echo "🏗️  Building fast executable for testing..."
+	@mkdir -p bin
+	dart compile exe bin/gexd.dart -o bin/gexd
+	@echo "✅ Fast executable built: bin/gexd"
+
+# Run tests with fast fake projects
+test-fast: build-fast
+	@echo "🚀 Running tests with fast fake projects..."
+	dart test
+
+# Test fake project system specifically
+test-fake: build-fast
+	@echo "🚀 Testing fake project system..."
+	dart test test/fake_project_system_test.dart
+
+# Performance benchmark between fake and real projects
+benchmark: build-fast
+	@echo "📊 Running performance benchmark..."
+	dart test test/fake_project_system_test.dart --name "should measure performance difference"
+
+# Clean fast build artifacts
+clean-fast:
+	@echo "🧹 Cleaning fast build artifacts..."
+	@rm -f bin/gexd
+	@echo "✅ Fast build artifacts cleaned"
+
+# Compare performance between modern and fast tests
+compare-performance: build-fast
+	@echo "🏁 Running performance comparison between real and fake projects..."
+	@./scripts/compare_test_performance.sh

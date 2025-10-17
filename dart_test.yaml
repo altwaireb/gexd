@@ -7,24 +7,19 @@ reporter: "expanded"
 
 # Test tags configuration
 tags:
-  # Core test types
+  # Fast unit tests for individual functions/classes
   unit:
     description: "Fast unit tests for individual functions/classes"
     timeout: "30s"
-  integration:
-    description: "Medium-speed tests exercising multiple units together"
-    timeout: "2m"
+  
+  # End-to-end tests with real project creation  
   e2e:
     description: "End-to-end tests with real project creation"
     timeout: "8m"
-  smoke:
-    description: "Essential smoke tests for basic functionality"
-    timeout: "1m"
+  
+  # Build and verification tests
   build:
-    description: "Build verification tests"
-    timeout: "2m"
-  verification:
-    description: "Code generation and build verification tests"
+    description: "Build verification and code generation tests"
     timeout: "2m"
 
 # Performance settings

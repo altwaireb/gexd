@@ -1,7 +1,8 @@
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
-class CreateInputs {
+class CreateInputs with HasArgResults, HasName, HasInteractiveMode {
+  @override
   final ArgResults argResults;
   final PromptServiceInterface prompt;
 
@@ -33,8 +34,7 @@ class CreateInputs {
   // Return the valid project name
   // Throws ValidationException if invalid
   Future<String> _getProjectName() async {
-    final positionalArgs = argResults.rest;
-    final nameArg = positionalArgs.isNotEmpty ? positionalArgs.first : null;
+    final nameArg = nameFromArgs;
 
     if (nameArg != null && nameArg.isNotEmpty) {
       _validateProjectName(nameArg);
@@ -54,6 +54,12 @@ class CreateInputs {
   /// or prompt the user
   Future<ProjectTemplate> _getTemplate() async {
     final templateArg = argResults['template'] as String?;
+
+    // If not in interactive mode and no template specified, use default
+    if (!isInteractiveMode && (templateArg == null || templateArg.isEmpty)) {
+      return ProjectTemplate.getx;
+    }
+
     if (templateArg != null && templateArg.isNotEmpty) {
       if (ProjectTemplate.isValidKey(templateArg)) {
         return ProjectTemplate.fromKey(templateArg);
@@ -83,6 +89,11 @@ class CreateInputs {
     final options = ["android", "ios", "web", "macos", "linux", "windows"];
     final defaultPlatforms = ['android', 'ios'];
 
+    // If not in interactive mode and no platforms specified, use defaults
+    if (!isInteractiveMode && (arg == null || arg.isEmpty)) {
+      return defaultPlatforms;
+    }
+
     if (arg != null && arg.isNotEmpty) {
       final invalid = arg.where((s) => !options.contains(s)).toList();
       if (invalid.isNotEmpty) {
@@ -109,7 +120,12 @@ class CreateInputs {
   Future<String> _getOrg() async {
     final orgArg = argResults["org"] as String?;
 
-    if (orgArg != null) {
+    // If not in interactive mode and no org specified, use default
+    if (!isInteractiveMode && (orgArg == null || orgArg.isEmpty)) {
+      return 'com.example';
+    }
+
+    if (orgArg != null && orgArg.isNotEmpty) {
       _validateOrg(orgArg);
       return orgArg;
     }
@@ -117,8 +133,8 @@ class CreateInputs {
     return await prompt.input(
       'Organization name',
       defaultValue: 'com.example',
-      validator: (v) {
-        _validateOrg(v, toUserMessage: true);
+      validator: (value) {
+        _validateOrg(value, toUserMessage: true);
         return null;
       },
     );
@@ -127,7 +143,12 @@ class CreateInputs {
   Future<String> _getDescription() async {
     final descArg = argResults["description"] as String?;
 
-    if (descArg != null) {
+    // If not in interactive mode and no description specified, use default
+    if (!isInteractiveMode && (descArg == null || descArg.isEmpty)) {
+      return 'A new Flutter project';
+    }
+
+    if (descArg != null && descArg.isNotEmpty) {
       _validateDirectory(descArg);
       return descArg;
     }
@@ -146,11 +167,8 @@ class CreateInputs {
     final fullArg = argResults['full'] as bool?;
     if (fullArg == true) return true;
 
-    final hasArgs =
-        argResults.rest.isNotEmpty ||
-        argResults.options.any((key) => key != 'full');
-
-    if (hasArgs) return false;
+    // If not in interactive mode and no full flag specified, use default
+    if (!isInteractiveMode) return false;
 
     return await prompt.confirm(
       'Do you want to add all template-specific directories?',

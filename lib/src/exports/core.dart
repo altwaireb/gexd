@@ -1,8 +1,9 @@
-// validations
+// exceptions
 export '../core/exceptions/validation_exception.dart';
 export '../core/exceptions/project_creation_exception.dart';
 export '../core/exceptions/mason_brick_exception.dart';
 export '../core/exceptions/model_not_found_exception.dart';
+export '../core/exceptions/config_project_exception.dart';
 
 // messages
 export '../core/messages/command_messages.dart';

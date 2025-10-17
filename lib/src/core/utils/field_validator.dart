@@ -234,22 +234,11 @@ class FieldValidator {
     // Check depth limit
     final parts = value.split('/');
     if (parts.length > maxDepth) {
+      final exception = ValidationException.pathTooDeep(value, maxDepth);
       if (toUserMessage) {
-        throw ValidationException(
-          'The $field path exceeds maximum depth of $maxDepth levels. '
-          'Current depth: ${parts.length}, Path: "$value"',
-          code: ValidationErrorCode.invalidFormat,
-          field: field,
-          value: value,
-        ).toUserMessage();
+        throw exception.toUserMessage();
       } else {
-        throw ValidationException(
-          'The $field path exceeds maximum depth of $maxDepth levels. '
-          'Current depth: ${parts.length}, Path: "$value"',
-          code: ValidationErrorCode.invalidFormat,
-          field: field,
-          value: value,
-        );
+        throw exception;
       }
     }
 
@@ -257,43 +246,27 @@ class FieldValidator {
     for (int i = 0; i < parts.length; i++) {
       final part = parts[i];
       if (part.isEmpty) {
+        final exception = ValidationException.invalidPath(
+          value,
+          'Path contains empty segments. Each level must have a valid name.',
+        );
         if (toUserMessage) {
-          throw ValidationException(
-            'The $field path contains empty segments. '
-            'Each level must have a valid name.',
-            code: ValidationErrorCode.invalidFormat,
-            field: field,
-            value: value,
-          ).toUserMessage();
+          throw exception.toUserMessage();
         } else {
-          throw ValidationException(
-            'The $field path contains empty segments. '
-            'Each level must have a valid name.',
-            code: ValidationErrorCode.invalidFormat,
-            field: field,
-            value: value,
-          );
+          throw exception;
         }
       }
 
       // Each part should follow snake_case or lowercase
       if (!RegExp(r'^[a-z0-9]+(_[a-z0-9]+)*$').hasMatch(part)) {
+        final exception = ValidationException.invalidPath(
+          value,
+          'Path segment "$part" must be in snake_case format. Use lowercase letters, numbers, and underscores only.',
+        );
         if (toUserMessage) {
-          throw ValidationException(
-            'The $field path segment "$part" must be in snake_case format. '
-            'Use lowercase letters, numbers, and underscores only.',
-            code: ValidationErrorCode.invalidFormat,
-            field: field,
-            value: value,
-          ).toUserMessage();
+          throw exception.toUserMessage();
         } else {
-          throw ValidationException(
-            'The $field path segment "$part" must be in snake_case format. '
-            'Use lowercase letters, numbers, and underscores only.',
-            code: ValidationErrorCode.invalidFormat,
-            field: field,
-            value: value,
-          );
+          throw exception;
         }
       }
     }
@@ -468,20 +441,11 @@ class FieldValidator {
 
     final file = File(filePath);
     if (!file.existsSync()) {
+      final exception = ValidationException.fileNotFound(filePath);
       if (toUserMessage) {
-        throw ValidationException(
-          'File not found: $filePath',
-          code: ValidationErrorCode.invalidFormat,
-          field: field,
-          value: filePath,
-        ).toUserMessage();
+        throw exception.toUserMessage();
       } else {
-        throw ValidationException(
-          'File not found: $filePath',
-          code: ValidationErrorCode.invalidFormat,
-          field: field,
-          value: filePath,
-        );
+        throw exception;
       }
     }
   }
@@ -704,20 +668,11 @@ class FieldValidator {
     template ??= await ArchitectureCoordinator.getCurrentProjectTemplate();
 
     if (template == null) {
+      final exception = ConfigProjectException.unknownTemplate(screenName);
       if (toUserMessage) {
-        throw ValidationException(
-          'Could not detect project template. Make sure you are in a Gexd project.',
-          code: ValidationErrorCode.notFound,
-          field: field,
-          value: screenName,
-        ).toUserMessage();
+        throw exception.toUserMessage();
       } else {
-        throw ValidationException(
-          'Could not detect project template. Make sure you are in a Gexd project.',
-          code: ValidationErrorCode.notFound,
-          field: field,
-          value: screenName,
-        );
+        throw exception;
       }
     }
 

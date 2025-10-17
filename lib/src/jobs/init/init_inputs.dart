@@ -118,20 +118,16 @@ class InitInputs {
   Future<void> _validateFlutterProject(String directory) async {
     final pubspecFile = File(path.join(directory, 'pubspec.yaml'));
     if (!await pubspecFile.exists()) {
-      throw ValidationException.invalidFormat(
-        'directory',
-        'Not a valid Flutter project (pubspec.yaml not found)',
-        expectedFormat: 'A Flutter project directory with pubspec.yaml',
-      );
+      throw ConfigProjectException.missing('pubspec.yaml');
     }
 
     // Check if pubspec contains flutter dependencies
     final content = await pubspecFile.readAsString();
     if (!content.contains('flutter:')) {
-      throw ValidationException.invalidFormat(
-        'pubspec',
-        'Not a Flutter project (no flutter dependencies found)',
-        expectedFormat: 'A pubspec.yaml with flutter dependencies',
+      throw ConfigProjectException.invalidFormat(
+        'pubspec.yaml',
+        content,
+        expectedFormat: 'A Flutter project with flutter dependencies',
       );
     }
 

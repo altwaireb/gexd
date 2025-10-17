@@ -70,24 +70,9 @@ class CreateJob {
       _logSummary();
 
       return ExitCode.success.code;
-    } on ValidationException catch (e) {
-      logger.errMessage(JobMessages.validationFailed, {'error': e.message});
-      return ExitCode.usage.code;
-    } on ProjectCreationException catch (e) {
-      logger.errMessage(JobMessages.projectCreationFailed, {
-        'error': e.message,
-      });
-      return ExitCode.software.code;
-    } on MasonBrickException catch (e) {
-      logger.errMessage(JobMessages.templateGeneratedFailed, {
-        'error': e.message,
-      });
-      return ExitCode.software.code;
     } catch (e) {
-      logger.errMessage(JobMessages.projectCreationFailed, {
-        'error': e.toString(),
-      });
-      return ExitCode.software.code;
+      // Re-throw to let GexdCommandRunner handle it centrally
+      rethrow;
     }
   }
 

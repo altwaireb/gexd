@@ -1,0 +1,19 @@
+# Development files
+TEST_TAGS_GUIDE.md
+test_plan.md
+test/basic_test.dart
+test/helpers/e2e_helper.dart
+
+# Build files
+bin/gexd
+
+# IDE files
+.idea/
+.vscode/
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp

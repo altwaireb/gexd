@@ -29,15 +29,9 @@ class ScreenJob {
       }
       _logSummary(generatedFiles, routesUpdated);
       return ExitCode.success.code;
-    } on ValidationException catch (e) {
-      logger.errMessage(JobMessages.validationFailed, {'error': e.message});
-      return ExitCode.usage.code;
-    } on ModelNotFoundException catch (e) {
-      logger.errMessage(JobMessages.modelNotFound, {'error': e.message});
-      return ExitCode.usage.code;
     } catch (e) {
-      logger.err('${ScreenConstants.generationFailed}: $e');
-      return ExitCode.software.code;
+      // Re-throw to let GexdCommandRunner handle it centrally
+      rethrow;
     }
   }
 

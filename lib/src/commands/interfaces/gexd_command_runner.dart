@@ -43,6 +43,22 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
         'message': e.message,
       });
       return ExitCode.usage.code;
+    } on ConfigProjectException catch (e) {
+      _logger.errMessage(CommandMessages.configFailed, {'message': e.message});
+      return ExitCode.config.code;
+    } on ModelNotFoundException catch (e) {
+      _logger.errMessage(CommandMessages.modelFailed, {'message': e.message});
+      return ExitCode.usage.code;
+    } on ProjectCreationException catch (e) {
+      _logger.errMessage(JobMessages.projectCreationFailed, {
+        'error': e.message,
+      });
+      return ExitCode.software.code;
+    } on MasonBrickException catch (e) {
+      _logger.errMessage(JobMessages.templateGeneratedFailed, {
+        'error': e.message,
+      });
+      return ExitCode.software.code;
     } catch (error) {
       _logger.errMessage(CommandMessages.unexpectedError, {
         'error': error.toString(),

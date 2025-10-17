@@ -42,6 +42,11 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
         basePath: targetDir,
         suffixes: ['Model'],
       );
+
+      // Validate that model exists when using --has-model
+      if (!modelData.exists) {
+        throw ModelNotFoundException.fromModelName(name, template);
+      }
     }
 
     return ScreenData(
@@ -76,12 +81,16 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
 
   Future<String?> _getOnPath() async {
     final pathArg = argResults['on'] as String?;
+
+    // If not in interactive mode and no path specified, use default (null)
+    if (!isInteractiveMode && (pathArg == null || pathArg.isEmpty)) {
+      return null;
+    }
+
     if (pathArg != null && pathArg.isNotEmpty) {
       _validateOnPath(pathArg);
       return pathArg;
     }
-
-    if (!isInteractiveMode) return null;
 
     final askForPath = await prompt.confirm(
       ScreenConstants.askForOnPathPrompt,
@@ -102,6 +111,12 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
 
   Future<ScreenType> _getScreenType() async {
     final typeArg = argResults['type'] as String?;
+
+    // If not in interactive mode and no type specified, use default
+    if (!isInteractiveMode && (typeArg == null || typeArg.isEmpty)) {
+      return ScreenType.basic;
+    }
+
     if (typeArg != null && typeArg.isNotEmpty) {
       if (!ScreenType.isValidKey(typeArg)) {
         throw ValidationException.invalidOption(
@@ -112,8 +127,6 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
       }
       return ScreenType.fromKey(typeArg) ?? ScreenType.basic;
     }
-
-    if (!isInteractiveMode) return ScreenType.basic;
 
     final options = ScreenType.toList;
     final selection = await prompt.select(
@@ -133,6 +146,7 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
       return true;
     }
 
+    // If not in interactive mode and no skip-route flag specified, use default (false)
     if (!isInteractiveMode) return false;
 
     final confirm = await prompt.confirm(
@@ -146,6 +160,11 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
   Future<String?> _getModelName(ScreenType screenType) async {
     final modelArg = argResults['model'] as String?;
 
+    // If not in interactive mode and no model specified, use default (null)
+    if (!isInteractiveMode && (modelArg == null || modelArg.isEmpty)) {
+      return null;
+    }
+
     if (modelArg != null && modelArg.isNotEmpty) {
       if (screenType != ScreenType.withState) {
         throw ValidationException.custom(
@@ -156,8 +175,6 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
       await _validateModelName(modelArg);
       return modelArg;
     }
-
-    if (!isInteractiveMode) return null;
 
     if (screenType != ScreenType.withState) return null;
 
@@ -192,6 +209,7 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
       return true;
     }
 
+    // If not in interactive mode and no has-model flag specified, use default (false)
     if (!isInteractiveMode) return false;
 
     if (screenType != ScreenType.withState) return false;

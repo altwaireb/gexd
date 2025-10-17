@@ -43,7 +43,7 @@ class ScreenData {
     'has_model': modelData?.exists ?? false,
     'modelExists': modelData?.exists ?? false,
     'modelImport': modelData?.importPath != null && modelData!.exists
-        ? "import '${modelData!.importPath}';"
+        ? modelData!.importPath
         : null,
   };
 

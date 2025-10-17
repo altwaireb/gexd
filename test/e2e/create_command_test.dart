@@ -4,18 +4,18 @@ library;
 import 'dart:io';
 import 'package:test/test.dart';
 import 'package:path/path.dart' as p;
-import '../helpers/e2e_helper.dart';
+import '../helpers/e2e_helpers.dart';
 
 void main() {
   group('CreateCommand E2E Tests', () {
     late Directory tempDir;
 
     setUp(() async {
-      tempDir = await E2EHelper.createTemp('gexd_e2e_');
+      tempDir = await E2EHelpers.createTemp();
     });
 
     tearDown(() async {
-      await E2EHelper.cleanup(tempDir);
+      await E2EHelpers.cleanupDir(tempDir);
     });
 
     test(
@@ -25,7 +25,7 @@ void main() {
         final projectPath = p.join(tempDir.path, projectName);
 
         // Run gexd create command with GetX template
-        final result = await E2EHelper.runGexd([
+        final result = await E2EHelpers.runGexd([
           'create',
           projectName,
           '--template',
@@ -55,14 +55,14 @@ void main() {
 
         // Verify basic Flutter structure
         expect(
-          E2EHelper.validateBasicStructure(projectPath),
+          E2EHelpers.validateBasicStructure(projectPath),
           isTrue,
           reason: 'Project should have basic Flutter structure',
         );
 
         // Verify GetX-specific structure
         expect(
-          E2EHelper.validateGetXStructure(projectPath),
+          E2EHelpers.validateGetXStructure(projectPath),
           isTrue,
           reason: 'Project should have GetX architecture structure',
         );
@@ -86,7 +86,7 @@ void main() {
         final projectPath = p.join(tempDir.path, projectName);
 
         // Run gexd create command with Clean template
-        final result = await E2EHelper.runGexd([
+        final result = await E2EHelpers.runGexd([
           'create',
           projectName,
           '--template',
@@ -116,14 +116,14 @@ void main() {
 
         // Verify basic Flutter structure
         expect(
-          E2EHelper.validateBasicStructure(projectPath),
+          E2EHelpers.validateBasicStructure(projectPath),
           isTrue,
           reason: 'Project should have basic Flutter structure',
         );
 
         // Verify Clean Architecture structure
         expect(
-          E2EHelper.validateCleanStructure(projectPath),
+          E2EHelpers.validateCleanStructure(projectPath),
           isTrue,
           reason: 'Project should have Clean Architecture structure',
         );
@@ -142,7 +142,7 @@ void main() {
 
     test('should handle invalid project names gracefully', () async {
       // Test with invalid project name (contains spaces)
-      final result = await E2EHelper.runGexd([
+      final result = await E2EHelpers.runGexd([
         'create',
         'invalid project name',
         '--template',
@@ -175,7 +175,7 @@ void main() {
       const projectName = 'test_invalid_template';
 
       // Test with invalid template
-      final result = await E2EHelper.runGexd([
+      final result = await E2EHelpers.runGexd([
         'create',
         projectName,
         '--template',

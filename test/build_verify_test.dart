@@ -1,4 +1,4 @@
-@Tags(['build', 'verification'])
+@Tags(['build'])
 library;
 
 import 'package:build_verify/build_verify.dart';
