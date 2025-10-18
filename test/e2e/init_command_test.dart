@@ -2,6 +2,7 @@
 library;
 
 import 'dart:io';
+import 'package:io/io.dart' show ExitCode;
 import 'package:test/test.dart';
 import 'package:path/path.dart' as p;
 import '../helpers/e2e_helpers.dart';
@@ -193,7 +194,7 @@ void main() {
         '--no-pub',
       ], workingDirectory: tempDir.path);
 
-      expect(createResult.exitCode, equals(0));
+      expect(createResult.exitCode, equals(ExitCode.success.code));
 
       // Step 2: Try to init with invalid template
       final result = await E2EHelpers.runGexd([
@@ -236,7 +237,7 @@ void main() {
           '--no-pub',
         ], workingDirectory: tempDir.path);
 
-        expect(createResult.exitCode, equals(0));
+        expect(createResult.exitCode, equals(ExitCode.success.code));
 
         // Step 2: Initialize with gexd using optimized execution
         final result = await E2EHelpers.runGexd([
@@ -249,7 +250,7 @@ void main() {
         final duration = stopwatch.elapsedMilliseconds;
 
         // Verify success
-        expect(result.exitCode, equals(0));
+        expect(result.exitCode, equals(ExitCode.success.code));
 
         // Verify structure
         expect(E2EHelpers.validateGetXStructure(projectPath), isTrue);
@@ -280,7 +281,7 @@ void main() {
           '--no-pub',
         ], workingDirectory: tempDir.path);
 
-        expect(createResult.exitCode, equals(0));
+        expect(createResult.exitCode, equals(ExitCode.success.code));
 
         final result = await E2EHelpers.runGexd([
           'init',
@@ -289,7 +290,7 @@ void main() {
           '--full',
         ], workingDir: projectPath);
 
-        expect(result.exitCode, equals(0));
+        expect(result.exitCode, equals(ExitCode.success.code));
 
         // Verify comprehensive GetX structure
         final expectedFiles = [
@@ -345,7 +346,10 @@ void main() {
         ], workingDir: emptyPath);
 
         // Verify semantic exception handling
-        expect(result.exitCode, equals(70)); // ConfigProjectException exit code
+        expect(
+          result.exitCode,
+          equals(ExitCode.software.code),
+        ); // ConfigProjectException exit code
 
         final errorOutput = result.stderr as String;
 
@@ -378,7 +382,7 @@ void main() {
           '--no-pub',
         ], workingDirectory: tempDir.path);
 
-        expect(createResult.exitCode, equals(0));
+        expect(createResult.exitCode, equals(ExitCode.success.code));
 
         final flutterCreateTime = stopwatch.elapsedMilliseconds;
 
@@ -393,7 +397,7 @@ void main() {
         final totalTime = stopwatch.elapsedMilliseconds;
         final initTime = totalTime - flutterCreateTime;
 
-        expect(result.exitCode, equals(0));
+        expect(result.exitCode, equals(ExitCode.success.code));
         expect(E2EHelpers.validateGetXStructure(projectPath), isTrue);
 
         print('⚡ Optimized Init Performance:');

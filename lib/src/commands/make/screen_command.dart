@@ -121,6 +121,7 @@ Examples:
         inputs,
         masonService: factory.createMason(),
         routeUpdateService: factory.createRoute(),
+        postGenerationService: factory.createPostGeneration(),
         logger: _logger,
       );
 

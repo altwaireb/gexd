@@ -1,5 +1,11 @@
 # Gexd CLI
 
+[![CI](https://github.com/altwaireb/gexd/actions/workflows/ci.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/ci.yml)
+[![Release](https://github.com/altwaireb/gexd/actions/workflows/build-release.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/build-release.yml)
+[![codecov](https://codecov.io/gh/altwaireb/gexd/branch/main/graph/badge.svg)](https://codecov.io/gh/altwaireb/gexd)
+[![pub package](https://img.shields.io/pub/v/gexd.svg)](https://pub.dev/packages/gexd)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A powerful command-line tool for generating Flutter projects with GetX and Clean Architecture templates.
 
 ## Development

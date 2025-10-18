@@ -19,6 +19,13 @@ jobs:
         uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       - name: Install dependencies
         run: dart pub get
       - name: Verify formatting
@@ -35,10 +42,17 @@ jobs:
         uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       - name: Install dependencies
         run: dart pub get
       - name: Analyze code
-        run: dart analyze --fatal-infos
+        run: dart analyze --fatal-warnings --fatal-infos
 
   # Unit Tests
   unit-tests:
@@ -52,14 +66,30 @@ jobs:
         uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       - name: Install dependencies
         run: dart pub get
       - name: Run build runner
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Run unit tests
-        run: dart test --tags unit --reporter github
+        run: dart test --tags unit --reporter github --concurrency=4
       - name: Run build tests
-        run: dart test --tags build --reporter github
+        run: dart test --tags build --reporter github --concurrency=4
+      - name: Generate coverage report
+        run: dart test --tags unit --coverage=coverage
+      - name: Convert coverage to LCOV
+        run: dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/lcov.info
+          fail_ci_if_error: false
       
   # E2E Tests
   e2e-tests:
@@ -83,8 +113,15 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       - name: Install dependencies
         run: dart pub get
       - name: Run E2E test - ${{ matrix.test_group }}
-        run: dart test --tags e2e --plain-name "${{ matrix.test_group }}" --reporter expanded
-        timeout-minutes: 8
+        run: dart test --tags e2e --plain-name "${{ matrix.test_group }}" --reporter expanded --concurrency=2
+        timeout-minutes: 15

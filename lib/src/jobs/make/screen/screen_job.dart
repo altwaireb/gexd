@@ -9,11 +9,13 @@ class ScreenJob {
   final Logger logger;
   final MasonServiceInterface masonService;
   final RouteUpdateServiceInterface routeUpdateService;
+  final PostGenerationServiceInterface postGenerationService;
 
   ScreenJob(
     this.data, {
     required this.masonService,
     required this.routeUpdateService,
+    required this.postGenerationService,
     Logger? logger,
   }) : logger = logger ?? Logger();
 
@@ -27,6 +29,11 @@ class ScreenJob {
       if (data.skipRoute == false) {
         routesUpdated = await _tryUpdateRoutes(data);
       }
+
+      // Format generated screen code for better quality
+      final screenDir = Directory(path.join(data.targetDir.path, data.name));
+      await postGenerationService.formatCode(screenDir.path);
+
       _logSummary(generatedFiles, routesUpdated);
       return ExitCode.success.code;
     } catch (e) {
@@ -108,7 +115,13 @@ class ScreenJob {
 
   /// Build list of generated files for reporting
   List<String> _buildGeneratedFilesList(ScreenData screenData) {
-    final basePath = screenData.onPath != null ? '${screenData.onPath}/' : '';
+    final componentBasePath = ArchitectureCoordinator.getComponentPath(
+      NameComponent.screen,
+      screenData.template,
+    );
+    final basePath = screenData.onPath != null
+        ? '$componentBasePath/${screenData.onPath}/'
+        : '$componentBasePath/';
     final screenSnakeCase = StringHelpers.toSnakeCase(screenData.name);
 
     return [

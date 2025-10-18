@@ -6,4 +6,6 @@ class ScreenServiceFactory {
   ScreenServiceFactory(this.logger);
   MasonService createMason() => MasonService(logger: logger);
   RouteUpdateService createRoute() => RouteUpdateService(logger: logger);
+  PostGenerationService createPostGeneration() =>
+      PostGenerationService(logger: logger);
 }

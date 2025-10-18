@@ -2,9 +2,9 @@
 library;
 
 import 'dart:io';
+import 'package:io/io.dart' show ExitCode;
 import 'package:test/test.dart';
 import '../../../../helpers/e2e_test_base.dart';
-import '../../../../helpers/project_test_helpers.dart';
 
 /// 🎯 Screen Command E2E Test - Clean Unified Version
 ///
@@ -32,9 +32,7 @@ class ScreenCommandTest extends E2ETestBase {
       tearDownAll(() async {
         await super.tearDownAll();
         print('🧹 Screen command tests completed successfully!');
-      });
-
-      // 📋 Pre-conditions & Validation
+      }); // 📋 Pre-conditions & Validation
       group('📋 Pre-conditions & Validation', () {
         test('should fail on uninitialized project', () async {
           final stopwatch = Stopwatch()..start();
@@ -42,7 +40,7 @@ class ScreenCommandTest extends E2ETestBase {
 
           try {
             final result = await run(['make', 'screen', 'TestItem'], tempDir);
-            expect(result.exitCode, equals(78));
+            expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
             stopwatch.stop();
@@ -64,7 +62,7 @@ class ScreenCommandTest extends E2ETestBase {
               'screen',
               '--help',
             ], project.projectDir);
-            expect(result.exitCode, equals(0));
+            expect(result.exitCode, equals(ExitCode.success.code));
             expect(result.stdout, contains('Generate screen files'));
             expect(result.stdout, contains('--type'));
             expect(result.stdout, contains('--model'));
@@ -84,7 +82,7 @@ class ScreenCommandTest extends E2ETestBase {
               'invalidname',
               '--force',
             ], project.projectDir);
-            expect(result.exitCode, equals(64));
+            expect(result.exitCode, equals(ExitCode.usage.code));
             expect(result.stderr, contains('invalid format'));
             print('✅ Screen name validation working correctly');
           } finally {
@@ -103,7 +101,7 @@ class ScreenCommandTest extends E2ETestBase {
               'invalidtype',
               '--force',
             ], project.projectDir);
-            expect(result.exitCode, equals(70));
+            expect(result.exitCode, equals(ExitCode.software.code));
             expect(result.stderr, contains('is not an allowed value'));
             print('✅ Screen type validation working correctly');
           } finally {
@@ -628,36 +626,40 @@ class Product {
           }
         });
 
-        test('should allow overwriting with force flag', () async {
-          final project = await createProject('getx');
-          try {
-            // Create screen first time
-            final firstResult = await run([
-              'make',
-              'screen',
-              'Profile',
-              '--force',
-            ], project.projectDir);
-            expect(firstResult.exitCode, equals(0));
+        test(
+          'should allow overwriting with force flag',
+          () async {
+            final project = await createProject('getx');
+            try {
+              // Create screen first time
+              final firstResult = await run([
+                'make',
+                'screen',
+                'Profile',
+                '--force',
+              ], project.projectDir);
+              expect(firstResult.exitCode, equals(0));
 
-            // Overwrite with --force
-            final secondResult = await run([
-              'make',
-              'screen',
-              'Profile',
-              '--force',
-            ], project.projectDir);
-            expect(secondResult.exitCode, equals(0));
-            expect(
-              secondResult.stdout,
-              contains('Screen files generated successfully'),
-            );
+              // Overwrite with --force
+              final secondResult = await run([
+                'make',
+                'screen',
+                'Profile',
+                '--force',
+              ], project.projectDir);
+              expect(secondResult.exitCode, equals(0));
+              expect(
+                secondResult.stdout,
+                contains('Screen files generated successfully'),
+              );
 
-            print('✅ Successfully overwritten with force flag');
-          } finally {
-            await project.cleanup();
-          }
-        });
+              print('✅ Successfully overwritten with force flag');
+            } finally {
+              await project.cleanup();
+            }
+          },
+          timeout: const Timeout(Duration(minutes: 5)),
+        );
       });
 
       // ⚡ Performance & Quality Tests
@@ -676,11 +678,12 @@ class Product {
             final duration = stopwatch.elapsedMilliseconds;
 
             expect(result.exitCode, equals(0));
+
             // Performance expectation (adjusted for E2E environment)
             expect(
               duration,
-              lessThan(20000),
-            ); // 20 seconds max (adjusted for E2E environment)
+              lessThan(60000),
+            ); // 60 seconds max (adjusted for CI with real projects)
 
             print('✅ Screen created in ${duration}ms (performance verified)');
           } finally {
@@ -713,9 +716,12 @@ class Product {
             final totalTime = times.reduce((a, b) => a + b);
             final averageTime = totalTime / times.length;
 
-            // Reasonable expectations for E2E
-            expect(totalTime, lessThan(60000)); // Under 60 seconds total
-            expect(averageTime, lessThan(25000)); // Under 25 seconds each
+            // Reasonable expectations for E2E (adjusted for CI)
+            expect(totalTime, lessThan(180000)); // Under 3 minutes total for CI
+            expect(
+              averageTime,
+              lessThan(60000),
+            ); // Under 60 seconds each for CI
 
             stopwatch.stop();
             print(
@@ -761,123 +767,83 @@ class Product {
 
       // 🔄 Cross-Template Compatibility Tests
       group('🔄 Cross-Template Compatibility', () {
-        test('should create screens in both templates successfully', () async {
-          print('🏗️ Setting up both template projects (smart mode)...');
-          final projects = await createBothProjects();
-          try {
-            final stopwatch = Stopwatch()..start();
+        test(
+          'should create screens in both templates successfully',
+          () async {
+            print('🏗️ Setting up both template projects (smart mode)...');
+            final projects = await createBothProjects();
+            try {
+              final stopwatch = Stopwatch()..start();
 
-            // Test GetX
-            final getxResult = await run([
-              'make',
-              'screen',
-              'Products',
-              '--force',
-            ], projects.getxProject.projectDir);
-            expect(getxResult.exitCode, equals(0));
-
-            // Test Clean
-            final cleanResult = await run([
-              'make',
-              'screen',
-              'Products',
-              '--force',
-            ], projects.cleanProject.projectDir);
-            expect(cleanResult.exitCode, equals(0));
-
-            stopwatch.stop();
-            print(
-              '⚡ Cross-template test completed in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print('✅ Cross-template compatibility verified');
-          } finally {
-            await projects.cleanup();
-          }
-        });
-
-        test('should handle all screen types in both templates', () async {
-          print('🏗️ Setting up both template projects (smart mode)...');
-          final projects = await createBothProjects();
-          try {
-            final screenTypes = ['basic', 'form', 'withState'];
-
-            for (final screenType in screenTypes) {
-              // GetX template
+              // Test GetX
               final getxResult = await run([
                 'make',
                 'screen',
-                '${screenType.capitalize()}Test',
-                '--type',
-                screenType,
+                'Products',
                 '--force',
               ], projects.getxProject.projectDir);
               expect(getxResult.exitCode, equals(0));
 
-              // Clean template
+              // Test Clean
               final cleanResult = await run([
                 'make',
                 'screen',
-                '${screenType.capitalize()}Test',
-                '--type',
-                screenType,
+                'Products',
                 '--force',
               ], projects.cleanProject.projectDir);
               expect(cleanResult.exitCode, equals(0));
-            }
 
-            print('✅ All screen types working in both templates');
-          } finally {
-            await projects.cleanup();
-          }
-        });
-      });
-
-      // 📊 Performance Comparison
-      group('📊 Performance Comparison', () {
-        test('should demonstrate speed improvement vs real projects', () async {
-          print('🔥 PERFORMANCE DEMONSTRATION:');
-          print('📊 Measuring project creation performance...');
-
-          if (ProjectTestHelpers.isLocalTesting()) {
-            print('🚀 Using fast fake projects (compiled executable found)');
-
-            final times = <int>[];
-            final iterations = 3;
-
-            for (int i = 0; i < iterations; i++) {
-              final stopwatch = Stopwatch()..start();
-              final project = await createProject('getx');
               stopwatch.stop();
-
-              final time = stopwatch.elapsedMilliseconds;
-              times.add(time);
-
-              print('⏱️ Project created in ${time}ms');
-              await project.cleanup();
-              print('🔄 Iteration ${i + 1}/$iterations: ${time}ms');
+              print(
+                '⚡ Cross-template test completed in ${stopwatch.elapsedMilliseconds}ms',
+              );
+              print('✅ Cross-template compatibility verified');
+            } finally {
+              await projects.cleanup();
             }
+          },
+          timeout: const Timeout(Duration(minutes: 8)),
+        );
 
-            final avgTime = times.reduce((a, b) => a + b) / times.length;
-            final minTime = times.reduce((a, b) => a < b ? a : b);
-            final maxTime = times.reduce((a, b) => a > b ? a : b);
+        test(
+          'should handle all screen types in both templates',
+          () async {
+            print('🏗️ Setting up both template projects (smart mode)...');
+            final projects = await createBothProjects();
+            try {
+              final screenTypes = ['basic', 'form', 'withState'];
 
-            print('📊 Performance Metrics (Fake projects):');
-            print('   Average: ${avgTime.round()}ms');
-            print('   Range: ${minTime}ms - ${maxTime}ms');
-            print('   Iterations: $iterations');
-            print('   Speedup: ~10x faster');
-            print('');
-            print('🚀 SUCCESS: Using fast fake projects!');
-            print(
-              '💡 Speed improvement: ~${(25000 / avgTime).round()}x faster than real projects',
-            );
-          } else {
-            print('🏭 Using real projects in CI environment');
-            print(
-              '⏱️ Expected slower performance for comprehensive validation',
-            );
-          }
-        });
+              for (final screenType in screenTypes) {
+                // GetX template
+                final getxResult = await run([
+                  'make',
+                  'screen',
+                  '${screenType.capitalize()}Test',
+                  '--type',
+                  screenType,
+                  '--force',
+                ], projects.getxProject.projectDir);
+                expect(getxResult.exitCode, equals(0));
+
+                // Clean template
+                final cleanResult = await run([
+                  'make',
+                  'screen',
+                  '${screenType.capitalize()}Test',
+                  '--type',
+                  screenType,
+                  '--force',
+                ], projects.cleanProject.projectDir);
+                expect(cleanResult.exitCode, equals(0));
+              }
+
+              print('✅ All screen types working in both templates');
+            } finally {
+              await projects.cleanup();
+            }
+          },
+          timeout: const Timeout(Duration(minutes: 10)),
+        );
       });
     });
   }

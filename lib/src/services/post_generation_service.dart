@@ -18,7 +18,7 @@ class PostGenerationService implements PostGenerationServiceInterface {
   }
 
   /// Format code
-  // @override
+  @override
   Future<void> formatCode(String projectName) async {
     final progress = _logger.progress('Formatting code...');
 
@@ -44,7 +44,7 @@ class PostGenerationService implements PostGenerationServiceInterface {
   }
 
   /// Run final pub get
-  // @override
+  @override
   Future<void> runPubGet(String projectName) async {
     final progress = _logger.progress('Getting final dependencies...');
 
@@ -74,7 +74,7 @@ class PostGenerationService implements PostGenerationServiceInterface {
   }
 
   /// Validate project
-  // @override
+  @override
   Future<void> validateProject(String projectName) async {
     final progress = _logger.progress('Validating project structure...');
 
@@ -119,7 +119,7 @@ class PostGenerationService implements PostGenerationServiceInterface {
   }
 
   /// Run code analysis
-  // @override
+  @override
   Future<void> analyzeCode(String projectName) async {
     final progress = _logger.progress('Analyzing code...');
 
@@ -144,7 +144,7 @@ class PostGenerationService implements PostGenerationServiceInterface {
   }
 
   /// Run tests
-  // @override
+  @override
   Future<void> runTests(String projectName) async {
     final progress = _logger.progress('Running tests...');
 
