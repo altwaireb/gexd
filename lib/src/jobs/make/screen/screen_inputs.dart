@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
-class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
+class ScreenInputs
+    with HasArgResults, HasName, HasInteractiveMode, HasNameInput, HasOnInput {
   @override
   final ArgResults argResults;
   final PromptServiceInterface prompt;
@@ -18,9 +19,21 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
   });
 
   Future<ScreenData> handle() async {
-    final name = await _getName();
+    final name = await getNameInput(
+      prompt: prompt,
+      promptMessage: ScreenConstants.screenNamePrompt,
+      fieldName: 'screen name',
+      exampleName: 'Login',
+    );
     final screenType = await _getScreenType();
-    final onPath = await _getOnPath();
+    final onPath = await getOnInput(
+      prompt: prompt,
+      promptMessage: ScreenConstants.onPathPrompt,
+      fieldName: '--on path',
+      exampleName: 'auth/user',
+      maxDepth: ScreenConstants.maxPathDepth,
+      confirmPrompt: ScreenConstants.askForOnPathPrompt,
+    );
     final skipRoute = await _getSkipRoute();
     final modelName = await _getModelName(screenType);
     final hasModelFlag = await _getHasModelFlag(screenType);
@@ -60,53 +73,6 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
       hasModelFlag: hasModelFlag,
       modelData: modelData,
     );
-  }
-
-  Future<String> _getName() async {
-    final nameArg = nameFromArgs;
-
-    if (nameArg != null && nameArg.isNotEmpty) {
-      _validateName(nameArg);
-      return nameArg;
-    }
-
-    return await prompt.input(
-      ScreenConstants.screenNamePrompt,
-      validator: (value) {
-        _validateName(value, toUserMessage: true);
-        return null;
-      },
-    );
-  }
-
-  Future<String?> _getOnPath() async {
-    final pathArg = argResults['on'] as String?;
-
-    // If not in interactive mode and no path specified, use default (null)
-    if (!isInteractiveMode && (pathArg == null || pathArg.isEmpty)) {
-      return null;
-    }
-
-    if (pathArg != null && pathArg.isNotEmpty) {
-      _validateOnPath(pathArg);
-      return pathArg;
-    }
-
-    final askForPath = await prompt.confirm(
-      ScreenConstants.askForOnPathPrompt,
-      defaultValue: false,
-    );
-
-    if (!askForPath) return null;
-
-    final customPath = await prompt.input(
-      ScreenConstants.onPathPrompt,
-      validator: (value) {
-        _validateOnPath(value);
-        return null;
-      },
-    );
-    return customPath.trim().isEmpty ? null : customPath;
   }
 
   Future<ScreenType> _getScreenType() async {
@@ -223,27 +189,6 @@ class ScreenInputs with HasArgResults, HasName, HasInteractiveMode {
   }
 
   // section for Validations
-
-  void _validateName(String value, {bool toUserMessage = false}) {
-    final exampleName = 'Login';
-    final validator = FieldValidator('screen name', example: exampleName);
-    validator.notEmpty(value, toUserMessage);
-    validator.pascalCase(value, exampleName, toUserMessage);
-    validator.validSuffix(value, exampleName, toUserMessage);
-  }
-
-  void _validateOnPath(String value, {bool toUserMessage = false}) {
-    if (value.isEmpty) return; // Empty is valid
-
-    final pathValidator = FieldValidator('--on path', example: 'auth/user');
-    pathValidator.notEmpty(value, toUserMessage);
-    pathValidator.pathCaseWithDepth(
-      value,
-      maxDepth: ScreenConstants.maxPathDepth,
-      example: 'auth/user/registration',
-      toUserMessage: toUserMessage,
-    );
-  }
 
   Future<void> _validateModelName(
     String value, {

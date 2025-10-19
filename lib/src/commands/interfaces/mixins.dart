@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
 mixin HasTargetDirectory {
@@ -12,19 +11,6 @@ mixin HasTargetDirectory {
     if (!dir.existsSync()) dir.createSync(recursive: true);
     return dir;
   }
-}
-
-mixin HasArgResults {
-  ArgResults get argResults;
-}
-
-mixin HasName on HasArgResults {
-  String? get nameFromArgs =>
-      argResults.rest.isNotEmpty ? argResults.rest.first : null;
-}
-
-mixin HasInteractiveMode on HasName {
-  bool get isInteractiveMode => nameFromArgs == null;
 }
 
 mixin HasProjectData {

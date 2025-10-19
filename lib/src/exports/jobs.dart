@@ -1,3 +1,6 @@
+// helpers
+export '../jobs/helpers/has_input.dart';
+
 // create
 export '../jobs/create/create_data.dart';
 export '../jobs/create/create_inputs.dart';

@@ -126,18 +126,9 @@ Examples:
       );
 
       return create.execute();
-    } on ValidationException catch (error, stackTrace) {
-      _logger.err(error.toString());
-      _logger.detail(stackTrace.toString());
-      return ExitCode.usage.code;
-    } on ModelNotFoundException catch (error, stackTrace) {
-      _logger.err(error.toString());
-      _logger.detail(stackTrace.toString());
-      return ExitCode.usage.code;
-    } catch (error, stackTrace) {
-      _logger.err('❌ Error: $error');
-      _logger.detail(stackTrace.toString());
-      return ExitCode.software.code;
+    } catch (error) {
+      // Log and rethrow error
+      rethrow;
     }
   }
 }

@@ -76,11 +76,10 @@ class CreateCommand extends Command<int> {
         postGenService: factory.createPostGen(),
         logger: _logger,
       );
-      return await create.execute();
-    } catch (e, s) {
-      _logger.err('❌ Error: $e');
-      _logger.detail(s.toString());
-      return ExitCode.software.code;
+      return create.execute();
+    } catch (error) {
+      // Log and rethrow error
+      rethrow;
     }
   }
 }

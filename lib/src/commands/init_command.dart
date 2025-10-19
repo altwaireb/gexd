@@ -64,11 +64,10 @@ class InitCommand extends Command<int> {
         logger: _logger,
       );
 
-      return await init.execute();
-    } catch (error, stackTrace) {
-      _logger.err(error.toString());
-      _logger.err(stackTrace.toString());
-      return ExitCode.software.code;
+      return init.execute();
+    } catch (error) {
+      // Log and rethrow error
+      rethrow;
     }
   }
 }
