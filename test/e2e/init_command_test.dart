@@ -348,19 +348,20 @@ void main() {
         // Verify semantic exception handling
         expect(
           result.exitCode,
-          equals(ExitCode.software.code),
+          equals(ExitCode.config.code),
         ); // ConfigProjectException exit code
 
         final errorOutput = result.stderr as String;
 
-        // Should contain semantic exception details
-        expect(errorOutput.contains('ConfigProjectException'), isTrue);
+        // Should contain configuration error details
+        expect(errorOutput.contains('Configuration error'), isTrue);
         expect(errorOutput.contains('pubspec.yaml'), isTrue);
-        expect(errorOutput.contains('missingConfig'), isTrue);
+        expect(errorOutput.contains('Missing required configuration'), isTrue);
 
         print('✅ Semantic exception handling verified');
         print('   Exception type: ConfigProjectException');
-        print('   Error code: 70');
+        print('   Error code: 78 (config)');
+        print('   Message: Configuration error');
         print('   Field: pubspec.yaml');
       },
       timeout: const Timeout(Duration(minutes: 1)),
