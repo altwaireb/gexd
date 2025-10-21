@@ -2,10 +2,46 @@
 # Created by `dart pub`
 .dart_tool/
 
+# Build artifacts
+build/
+coverage/
+
+# Files and directories created by pub
+.packages
+pubspec.lock
+
+# Test reports (generated on demand)
+reports/
+
 # Test temporary directories
 test_temp/
 **/test_temp/
 
-# Build artifacts
-build/
-coverage/
+# Compiled executables (development only)
+bin/solidx-dev
+bin/solidx_exec
+bin/*-*  # Any compiled executable with version
+
+# IDE/Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Mason configuration (contains sensitive information)
+.mason/
+.mason
+mason-lock.json
+
+# Documentation generation (auto-generated drafts)
+doc/.*

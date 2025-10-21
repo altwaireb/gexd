@@ -2,7 +2,7 @@
 library;
 
 import 'package:test/test.dart';
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 
 void main() {
   group('ProjectTemplate Tests', () {

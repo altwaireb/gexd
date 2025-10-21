@@ -13,6 +13,7 @@ class ScreenData {
   final bool hasModelFlag;
   final bool hasModel;
   final ModelDetectionData? modelData;
+  final bool force;
 
   ScreenData({
     required this.name,
@@ -25,6 +26,7 @@ class ScreenData {
     this.hasModelFlag = false,
     this.hasModel = false,
     this.modelData,
+    this.force = false,
   });
 
   bool get isBasic => screenType == ScreenType.basic;

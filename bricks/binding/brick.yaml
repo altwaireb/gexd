@@ -1,0 +1,32 @@
+name: binding
+description: Generate GetX binding files for dependency injection
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Binding name
+    prompt: What is the binding name?
+  
+  is_core:
+    type: boolean
+    description: Is this a core binding?
+    default: false
+  
+  is_shared:
+    type: boolean  
+    description: Is this a shared binding?
+    default: true
+    
+  is_screen:
+    type: boolean
+    description: Is this a screen binding?
+    default: false
+  
+  screenName:
+    type: string
+    description: Screen name for screen bindings
+    prompt: What is the screen name?

@@ -1,5 +1,5 @@
 // lib/src/templates/component_metadata.dart
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:meta/meta.dart';
 
 /// Metadata for a single component (e.g. routes, core, models).

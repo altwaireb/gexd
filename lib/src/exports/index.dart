@@ -1,5 +1,6 @@
 export 'commands.dart';
 export 'core.dart';
+export 'enums.dart';
 export 'jobs.dart';
 export 'utils.dart';
 export 'services.dart';

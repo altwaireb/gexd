@@ -3,7 +3,7 @@
 library;
 
 import 'dart:io';
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:path/path.dart' as path;
 import 'package:yaml/yaml.dart';
 import '../models/project_config.dart';

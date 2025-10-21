@@ -10,13 +10,8 @@ export '../core/messages/command_messages.dart';
 export '../core/messages/job_messages.dart';
 export '../core/messages/validation_messages.dart';
 
-// enums
-export '../core/enums/project/project_template.dart';
-export '../core/enums/project/name_component.dart';
-export '../core/enums/commands/screen/screen_type.dart';
-
 // constants
-export '../core/constants/screen_constants.dart';
+export '../core/constants/main_constants.dart';
 
 // helpers
 export '../core/helpers/project_helpers.dart';

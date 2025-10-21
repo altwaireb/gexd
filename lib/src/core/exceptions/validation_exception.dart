@@ -37,6 +37,9 @@ enum ValidationErrorCode {
 
   /// Required dependency is missing
   missingDependency,
+
+  /// Required option is missing
+  missingRequiredOption,
 }
 
 class ValidationException implements Exception {
@@ -166,6 +169,21 @@ class ValidationException implements Exception {
       field: field,
       value: value,
       details: {'validOptions': validOptions},
+    );
+  }
+
+  factory ValidationException.missingRequiredOption(
+    String field,
+    String value,
+  ) {
+    return ValidationException(
+      ValidationMessages.missingRequiredOption.format({
+        'field': field,
+        'value': value,
+      }),
+      code: ValidationErrorCode.missingRequiredOption,
+      field: field,
+      value: value,
     );
   }
 

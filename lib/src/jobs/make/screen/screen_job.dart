@@ -68,11 +68,16 @@ class ScreenJob {
       logger.info('No files were generated.');
     }
     logger.info('');
+    logger.info(
+      MainConstants.generatedFilesSuccess.formatWith({'name': 'Screen'}),
+    );
   }
 
   /// Generate screen files using Mason brick
   Future<List<String>> _generate(ScreenData screenData) async {
-    final progress = logger.progress(ScreenConstants.generatingFiles);
+    final progress = logger.progress(
+      MainConstants.generatingFiles.formatWith({'component': 'screen'}),
+    );
 
     try {
       final targetDir = await _prepareTargetDirectory(screenData);
@@ -84,11 +89,15 @@ class ScreenJob {
         overwrite: true,
       );
 
-      progress.complete(ScreenConstants.filesGeneratedSuccess);
+      progress.complete(
+        MainConstants.generatedFilesSuccess.formatWith({'name': 'Screen'}),
+      );
 
       return _buildGeneratedFilesList(screenData);
     } catch (e) {
-      progress.fail(ScreenConstants.generationFailed);
+      progress.fail(
+        MainConstants.generationFilesFailed.formatWith({'name': 'screen'}),
+      );
       rethrow;
     }
   }
@@ -125,12 +134,13 @@ class ScreenJob {
     final screenSnakeCase = StringHelpers.toSnakeCase(screenData.name);
 
     return [
-      '$basePath$screenSnakeCase/${ScreenConstants.controllerSuffix}'
-          .formatWith({'name': screenSnakeCase}),
-      '$basePath$screenSnakeCase/${ScreenConstants.viewSuffix}'.formatWith({
+      '$basePath$screenSnakeCase/${MainConstants.controllerSuffix}'.formatWith({
         'name': screenSnakeCase,
       }),
-      '$basePath$screenSnakeCase/${ScreenConstants.bindingSuffix}'.formatWith({
+      '$basePath$screenSnakeCase/${MainConstants.viewSuffix}'.formatWith({
+        'name': screenSnakeCase,
+      }),
+      '$basePath$screenSnakeCase/${MainConstants.bindingSuffix}'.formatWith({
         'name': screenSnakeCase,
       }),
     ];
@@ -138,7 +148,7 @@ class ScreenJob {
 
   /// Try to update routes automatically
   Future<bool> _tryUpdateRoutes(ScreenData screenData) async {
-    final progress = logger.progress(ScreenConstants.updatingRoutes);
+    final progress = logger.progress(MainConstants.updatingRoutes);
 
     try {
       final success = await routeUpdateService.addScreenRoute(
@@ -148,15 +158,15 @@ class ScreenJob {
       );
 
       if (success) {
-        progress.complete(ScreenConstants.routesUpdatedSuccess);
+        progress.complete(MainConstants.routesUpdatedSuccess);
         return true;
       } else {
-        progress.fail(ScreenConstants.routeUpdateFailed);
+        progress.fail(MainConstants.routeUpdateFailed);
         logger.detail('Routes were not updated automatically');
         return false;
       }
     } catch (e) {
-      progress.fail(ScreenConstants.routeUpdateFailed);
+      progress.fail(MainConstants.routeUpdateFailed);
       logger.detail('Route update failed: $e');
       return false;
     }

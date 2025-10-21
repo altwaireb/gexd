@@ -4,7 +4,13 @@ import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
 class ScreenInputs
-    with HasArgResults, HasName, HasInteractiveMode, HasNameInput, HasOnInput {
+    with
+        HasArgResults,
+        HasName,
+        HasInteractiveMode,
+        HasNameInput,
+        HasOnInput,
+        HasForceFlag {
   @override
   final ArgResults argResults;
   final PromptServiceInterface prompt;
@@ -21,22 +27,44 @@ class ScreenInputs
   Future<ScreenData> handle() async {
     final name = await getNameInput(
       prompt: prompt,
-      promptMessage: ScreenConstants.screenNamePrompt,
+      promptMessage: MainConstants.nameInput.formatWith({'input': 'screen'}),
       fieldName: 'screen name',
       exampleName: 'Login',
     );
     final screenType = await _getScreenType();
     final onPath = await getOnInput(
       prompt: prompt,
-      promptMessage: ScreenConstants.onPathPrompt,
+      promptMessage: MainConstants.onPathInput,
       fieldName: '--on path',
       exampleName: 'auth/user',
-      maxDepth: ScreenConstants.maxPathDepth,
-      confirmPrompt: ScreenConstants.askForOnPathPrompt,
+      maxDepth: MainConstants.maxPathDepth,
+      confirmPrompt: MainConstants.askForOnPathPrompt,
     );
     final skipRoute = await _getSkipRoute();
     final modelName = await _getModelName(screenType);
     final hasModelFlag = await _getHasModelFlag(screenType);
+    final force = await getForceInput(
+      prompt: prompt,
+      confirmationMessage: MainConstants.askForOverwriteInput,
+      defaultConfirmation: false,
+      name: name,
+      on: onPath,
+      template: template,
+      component: NameComponent.screen,
+      targetDir: targetDir,
+      expectedFiles: [
+        MainConstants.controllerSuffix.formatWith({
+          'name': StringHelpers.toSnakeCase(name),
+        }),
+        MainConstants.viewSuffix.formatWith({
+          'name': StringHelpers.toSnakeCase(name),
+        }),
+        MainConstants.bindingSuffix.formatWith({
+          'name': StringHelpers.toSnakeCase(name),
+        }),
+      ],
+      commandName: 'screen',
+    );
 
     ModelDetectionData? modelData;
 
@@ -72,6 +100,7 @@ class ScreenInputs
       modelName: modelName,
       hasModelFlag: hasModelFlag,
       modelData: modelData,
+      force: force,
     );
   }
 
@@ -96,7 +125,7 @@ class ScreenInputs
 
     final options = ScreenType.toList;
     final selection = await prompt.select(
-      ScreenConstants.screenTypePrompt,
+      MainConstants.chooseInput.formatWith({'input': 'screen type'}),
       options,
       initialIndex: ScreenType.basic.index,
     );
@@ -116,7 +145,7 @@ class ScreenInputs
     if (!isInteractiveMode) return false;
 
     final confirm = await prompt.confirm(
-      ScreenConstants.defaultRoutePrompt,
+      MainConstants.defaultRoutePrompt,
       defaultValue: true,
     );
 
@@ -145,14 +174,14 @@ class ScreenInputs
     if (screenType != ScreenType.withState) return null;
 
     final askForModel = await prompt.confirm(
-      ScreenConstants.askForModelNamePrompt,
+      MainConstants.askForModelNameInput,
       defaultValue: false,
     );
 
     if (!askForModel) return null;
 
     final nameModel = await prompt.input(
-      ScreenConstants.modelNamePrompt,
+      MainConstants.nameInput.formatWith({'input': 'model'}),
       validator: (value) {
         if (value.trim().isEmpty) return null; // Allow empty
         _validateModelName(value, toUserMessage: true);
@@ -181,7 +210,7 @@ class ScreenInputs
     if (screenType != ScreenType.withState) return false;
 
     final confirm = await prompt.confirm(
-      ScreenConstants.askForHasModelPrompt,
+      MainConstants.askForHasModelInput,
       defaultValue: false,
     );
 

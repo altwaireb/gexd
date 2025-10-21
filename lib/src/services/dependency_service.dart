@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:gexd/src/core/exceptions/project_creation_exception.dart';
 import 'package:gexd/src/services/interfaces/dependency_service_interface.dart';
 import 'package:mason_logger/mason_logger.dart';

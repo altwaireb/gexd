@@ -701,10 +701,7 @@ class FieldValidator {
     }
 
     // Convert to snake_case for path checking
-    final snakeCaseName = screenName
-        .replaceAllMapped(RegExp(r'[A-Z]'), (match) => '_${match.group(0)!}')
-        .toLowerCase()
-        .replaceFirst(RegExp(r'^_'), '');
+    final snakeCaseName = StringHelpers.toSnakeCase(screenName);
 
     // Check if screen directory exists using the template-specific path
     final screenPath = '$projectRoot/$screenBasePath/$snakeCaseName';

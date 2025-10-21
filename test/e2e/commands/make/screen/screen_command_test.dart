@@ -741,8 +741,13 @@ class Product {
               'OverwriteTest',
             ], project.projectDir);
 
-            expect(result.exitCode, equals(ExitCode.success.code));
-            print('✅ File overwrite allowed (fake project behavior)');
+            expect(
+              result.exitCode,
+              equals(ExitCode.usage.code),
+            ); // Should fail with usage error
+            expect(result.stderr, contains('Screen files already exist'));
+            expect(result.stderr, contains('Use --force flag to overwrite'));
+            print('✅ Properly prevented overwrite without force flag');
           } finally {
             await project.cleanup();
           }

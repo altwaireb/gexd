@@ -6,10 +6,7 @@ class MakeCommand extends Command<int> {
   final Logger _logger;
 
   MakeCommand({Logger? logger}) : _logger = logger ?? Logger() {
-    _setupSubcommands();
-  }
-
-  void _setupSubcommands() {
+    addSubcommand(BindingCommand(logger: _logger));
     addSubcommand(ScreenCommand(logger: _logger));
   }
 

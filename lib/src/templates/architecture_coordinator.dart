@@ -1,7 +1,7 @@
 // lib/src/templates/architecture_coordinator.dart
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 
-import '../core/enums/project/name_component.dart';
+import '../core/enums/name_component.dart';
 import 'component_registry.dart';
 import '../services/config_service.dart';
 

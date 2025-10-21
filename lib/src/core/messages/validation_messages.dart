@@ -42,6 +42,10 @@ class ValidationMessages {
     "Invalid {field} \"{value}\". Valid options are: {validOptions}",
   );
 
+  static const missingRequiredOption = Message(
+    "The required option {field} ({value}) is missing",
+  );
+
   /// Message for not found validation
   /// Parameters: {item}, {identifier} (optional suffix)
   static const notFound = Message("{item} not found{identifier}");

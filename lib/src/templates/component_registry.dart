@@ -1,11 +1,11 @@
 // ComponentRegistry — maps NameComponent -> ComponentMetadata
 // Focused on two templates: ProjectTemplate.getx and ProjectTemplate.clean.
 
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:meta/meta.dart';
 
 import 'component_metadata.dart';
-import '../core/enums/project/name_component.dart';
+import '../core/enums/name_component.dart';
 import 'architecture_template.dart';
 
 @immutable

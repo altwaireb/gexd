@@ -16,3 +16,7 @@ export '../jobs/init/init_job.dart';
 export '../jobs/make/screen/screen_data.dart';
 export '../jobs/make/screen/screen_inputs.dart';
 export '../jobs/make/screen/screen_job.dart';
+
+// binding
+export '../jobs/make/binding/binding_data.dart';
+export '../jobs/make/binding/binding_inputs.dart';

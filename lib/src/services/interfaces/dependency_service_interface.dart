@@ -1,4 +1,4 @@
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 
 abstract class DependencyServiceInterface {
   Future<void> addDependencies({

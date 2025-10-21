@@ -5,3 +5,5 @@ bricks:
     path: bricks/clean
   screen:
     path: bricks/screen
+  binding:
+    path: bricks/binding

@@ -4,7 +4,7 @@ library;
 import 'package:test/test.dart';
 import 'package:args/args.dart';
 import 'package:gexd/src/jobs/create/create_inputs.dart';
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 import '../helpers/test_environment.dart';
 import '../mocks/prompt_service_mock.dart';
 

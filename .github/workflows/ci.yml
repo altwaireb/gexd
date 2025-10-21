@@ -103,7 +103,8 @@ jobs:
         test_group: [
           'CreateCommand E2E Tests',
           'InitCommand E2E Tests',
-          'ScreenCommand E2E Tests'
+          'ScreenCommand E2E Tests',
+          'BindingCommand E2E Tests'
         ]
     steps:
       - name: Checkout

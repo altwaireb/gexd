@@ -19,12 +19,6 @@ class ScreenCommand extends Command<int>
   void _setupArgs() {
     argParser
       ..addOption(
-        'on',
-        help:
-            'Specify subdirectory path (max ${ScreenConstants.maxPathDepth} levels)',
-        valueHelp: 'auth/user',
-      )
-      ..addOption(
         'type',
         abbr: 't',
         help: 'Screen type to generate',
@@ -48,6 +42,12 @@ class ScreenCommand extends Command<int>
         'skip-route',
         help: 'Skip automatic route generation',
         negatable: false,
+      )
+      ..addOption(
+        'on',
+        help:
+            'Specify subdirectory path (max ${MainConstants.maxPathDepth} levels)',
+        valueHelp: 'auth/user',
       )
       ..addFlag(
         'force',

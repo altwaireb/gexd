@@ -37,7 +37,8 @@ class PostGenerationService implements PostGenerationServiceInterface {
         _logger.warn('Format warnings: ${result.stderr}');
       }
     } catch (e) {
-      progress.update('Code formatting skipped');
+      progress.fail('Code formatting skipped');
+      _logger.info('');
       _logger.warn('Code formatting failed: $e');
       // Don't throw exception here because formatting is not critical
     }

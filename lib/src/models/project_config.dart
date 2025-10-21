@@ -2,7 +2,7 @@
 /// Represents a Gexd project configuration from .gexd/config.yaml
 library;
 
-import 'package:gexd/src/core/enums/project/project_template.dart';
+import 'package:gexd/src/core/enums/project_template.dart';
 
 /// Project configuration data model
 class ProjectConfig {
