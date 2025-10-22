@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
-class BindingInputs
+class ControllerInputs
     with
         HasArgResults,
         HasName,
@@ -17,24 +17,26 @@ class BindingInputs
   final ProjectTemplate template;
   final Directory targetDir;
 
-  BindingInputs(
+  ControllerInputs(
     this.argResults, {
     required this.prompt,
     required this.template,
     required this.targetDir,
   });
 
-  Future<BindingData> handle() async {
+  Future<ControllerData> handle() async {
     // Get name
     final String name = await getNameInput(
       prompt: prompt,
-      promptMessage: MainConstants.nameInput.formatWith({'input': 'binding'}),
-      fieldName: 'binding name',
+      promptMessage: MainConstants.nameInput.formatWith({
+        'input': 'controller',
+      }),
+      fieldName: 'controller name',
       exampleName: 'Auth',
     );
 
     // Get location
-    final BindingLocation location = await _getLocation();
+    final ControllerLocation location = await _getLocation();
 
     // Get onPath
     final String? onPath = await getOnInput(
@@ -47,7 +49,7 @@ class BindingInputs
     );
 
     // Validate incompatible options
-    if (location == BindingLocation.screen &&
+    if (location == ControllerLocation.screen &&
         onPath != null &&
         onPath.isNotEmpty) {
       throw ValidationException.custom(
@@ -79,13 +81,13 @@ class BindingInputs
           'name': StringHelpers.toSnakeCase(name),
         }),
       ],
-      commandName: 'binding',
-      hasSubPath: location == BindingLocation.screen,
-      nameSubPath: location == BindingLocation.screen ? 'bindings' : null,
+      commandName: 'controller',
+      hasSubPath: location == ControllerLocation.screen,
+      nameSubPath: location == ControllerLocation.screen ? 'controllers' : null,
       baseName: screenName, // Pass screen name for path calculation
     );
 
-    return BindingData(
+    return ControllerData(
       name: name,
       onPath: onPath,
       force: force,
@@ -97,54 +99,52 @@ class BindingInputs
     );
   }
 
-  Future<BindingLocation> _getLocation() async {
+  Future<ControllerLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
     // If not in interactive mode and no type specified, use default
     if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return BindingLocation.shared;
+      return ControllerLocation.shared;
     }
 
     if (argLocation != null && argLocation.isNotEmpty) {
-      if (!BindingLocation.isValidKey(argLocation)) {
+      if (!ControllerLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
-          'binding location',
+          'controller location',
           argLocation,
-          BindingLocation.allKeys,
+          ControllerLocation.allKeys,
         );
       }
-      return BindingLocation.fromKey(argLocation);
+      return ControllerLocation.fromKey(argLocation);
     }
 
-    final options = BindingLocation.toList;
+    final options = ControllerLocation.toList;
     final selection = await prompt.select(
-      MainConstants.chooseInput.formatWith({'input': 'binding location'}),
+      MainConstants.chooseInput.formatWith({'input': 'controller location'}),
       options,
-      initialIndex: BindingLocation.core.index,
+      initialIndex: ControllerLocation.shared.index,
     );
 
-    return BindingLocation.values[selection];
+    return ControllerLocation.values[selection];
   }
 
   Future<NameComponent> _getComponent({
-    required BindingLocation location,
+    required ControllerLocation location,
   }) async {
     switch (location) {
-      case BindingLocation.core:
-        return NameComponent.coreBindings;
-      case BindingLocation.shared:
-        return NameComponent.bindings;
-      case BindingLocation.screen:
-        return NameComponent.screenBindings;
+      case ControllerLocation.shared:
+        return NameComponent.screenControllers;
+      case ControllerLocation.screen:
+        return NameComponent.screen;
     }
   }
 
   Future<String?> _getScreenNameInput({
-    required BindingLocation location,
+    required ControllerLocation location,
     required NameComponent component,
   }) async {
     final argScreenName = argResults['on-screen'] as String?;
-    if (location == BindingLocation.screen) {
+    if (location == ControllerLocation.screen) {
       // If not in interactive mode and no screen name specified, throw error
       if (!isInteractiveMode &&
           (argScreenName == null || argScreenName.isEmpty)) {

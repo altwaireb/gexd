@@ -7,3 +7,5 @@ bricks:
     path: bricks/screen
   binding:
     path: bricks/binding
+  controller:
+    path: bricks/controller

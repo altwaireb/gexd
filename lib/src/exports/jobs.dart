@@ -20,3 +20,9 @@ export '../jobs/make/screen/screen_job.dart';
 // binding
 export '../jobs/make/binding/binding_data.dart';
 export '../jobs/make/binding/binding_inputs.dart';
+export '../jobs/make/binding/binding_job.dart';
+
+// controller
+export '../jobs/make/controller/controller_data.dart';
+export '../jobs/make/controller/controller_inputs.dart';
+export '../jobs/make/controller/controller_job.dart';

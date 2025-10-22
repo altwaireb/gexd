@@ -4,13 +4,13 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
-class BindingJob {
-  final BindingData data;
+class ControllerJob {
+  final ControllerData data;
   final Logger logger;
   final MasonServiceInterface masonService;
   final PostGenerationServiceInterface postGenerationService;
 
-  BindingJob(
+  ControllerJob(
     this.data, {
     required this.masonService,
     required this.postGenerationService,
@@ -58,45 +58,45 @@ class BindingJob {
     }
     logger.info('');
     logger.info(
-      MainConstants.generatedFileSuccess.formatWith({'name': 'Binding'}),
+      MainConstants.generatedFileSuccess.formatWith({'name': 'controller'}),
     );
   }
 
   /// Generate files using Mason brick
-  Future<List<String>> _generate(BindingData data) async {
+  Future<List<String>> _generate(ControllerData data) async {
     final progress = logger.progress(
-      MainConstants.generatingFile.formatWith({'component': 'binding'}),
+      MainConstants.generatingFile.formatWith({'component': 'controller'}),
     );
 
     try {
       final targetDir = await _prepareTargetDirectory(data);
 
       await masonService.generateFromPackageBrick(
-        brickName: 'binding',
+        brickName: 'controller',
         targetDir: targetDir,
         vars: data.toVars(),
         overwrite: true,
       );
 
       progress.complete(
-        MainConstants.generatedFilesSuccess.formatWith({'name': 'Binding'}),
+        MainConstants.generatedFilesSuccess.formatWith({'name': 'controller'}),
       );
 
       return _buildGeneratedFilesList(data);
     } catch (e) {
       progress.fail(
-        MainConstants.generationFilesFailed.formatWith({'name': 'Binding'}),
+        MainConstants.generationFilesFailed.formatWith({'name': 'controller'}),
       );
       rethrow;
     }
   }
 
-  Future<Directory> _prepareTargetDirectory(BindingData data) async {
+  Future<Directory> _prepareTargetDirectory(ControllerData data) async {
     final currentDir = data.targetDir;
 
     String targetPath;
-    if (data.location == BindingLocation.screen && data.screenName != null) {
-      // For screen bindings, place in the specific screen's bindings folder
+    if (data.location == ControllerLocation.screen && data.screenName != null) {
+      // For screen controllers, place in the specific screen's controllers folder
       final screenBasePath = ArchitectureCoordinator.getComponentPath(
         NameComponent.screen,
         data.template,
@@ -108,11 +108,16 @@ class BindingJob {
               screenBasePath,
               data.onPath!,
               screenPath,
-              'bindings',
+              'controllers',
             )
-          : path.join(currentDir.path, screenBasePath, screenPath, 'bindings');
+          : path.join(
+              currentDir.path,
+              screenBasePath,
+              screenPath,
+              'controllers',
+            );
     } else {
-      // For core and shared bindings
+      // For core and shared controllers
       final basePath = ArchitectureCoordinator.getComponentPath(
         data.component,
         data.template,
@@ -133,20 +138,20 @@ class BindingJob {
   }
 
   /// Build list of generated files for reporting
-  List<String> _buildGeneratedFilesList(BindingData data) {
+  List<String> _buildGeneratedFilesList(ControllerData data) {
     String basePath;
-    if (data.location == BindingLocation.screen && data.screenName != null) {
-      // For screen bindings, show path in the screen's bindings folder
+    if (data.location == ControllerLocation.screen && data.screenName != null) {
+      // For screen controllers, show path in the screen's controllers folder
       final screenBasePath = ArchitectureCoordinator.getComponentPath(
         NameComponent.screen,
         data.template,
       );
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
       basePath = data.onPath != null
-          ? '$screenBasePath/${data.onPath}/$screenPath/bindings/'
-          : '$screenBasePath/$screenPath/bindings/';
+          ? '$screenBasePath/${data.onPath}/$screenPath/controllers/'
+          : '$screenBasePath/$screenPath/controllers/';
     } else {
-      // For core and shared bindings
+      // For core and shared controllers
       final componentBasePath = ArchitectureCoordinator.getComponentPath(
         data.component,
         data.template,

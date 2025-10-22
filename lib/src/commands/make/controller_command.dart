@@ -2,12 +2,12 @@ import 'package:args/command_runner.dart';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
-class BindingCommand extends Command<int>
+class ControllerCommand extends Command<int>
     with HasProjectData, HasTargetDirectory {
   final Logger _logger;
   final PromptServiceInterface _prompt;
 
-  BindingCommand({Logger? logger, PromptServiceInterface? prompt})
+  ControllerCommand({Logger? logger, PromptServiceInterface? prompt})
     : _logger = logger ?? Logger(),
       _prompt = prompt ?? PromptService() {
     _setupArgs();
@@ -18,16 +18,16 @@ class BindingCommand extends Command<int>
       ..addOption(
         'location',
         abbr: 'l',
-        help: 'Binding location in project structure',
-        valueHelp: 'core|shared|screen',
-        allowed: BindingLocation.allKeys,
-        allowedHelp: BindingLocation.allowedHelp,
-        defaultsTo: BindingLocation.shared.key,
+        help: 'Controller location in project structure',
+        valueHelp: 'shared|screen',
+        allowed: ControllerLocation.allKeys,
+        allowedHelp: ControllerLocation.allowedHelp,
+        defaultsTo: ControllerLocation.shared.key,
       )
       ..addOption(
         'on-screen',
         help:
-            'Screen name for screen-specific bindings (required for screen location)',
+            'Screen name for screen-specific controllers (required for screen location)',
         valueHelp: 'login',
       )
       ..addOption(
@@ -45,10 +45,10 @@ class BindingCommand extends Command<int>
   }
 
   @override
-  String get name => 'binding';
+  String get name => 'controller';
 
   @override
-  String get description => 'Generate binding files for dependency injection';
+  String get description => 'Generate controller files';
 
   @override
   String get usage =>
@@ -58,28 +58,26 @@ $description
 Usage: $invocation
 
 Arguments:
-  <name>          Binding name (e.g., Auth, Profile)
+  <name>          Controller name (e.g., Auth, Profile)
                   [Optional: Run without arguments for interactive mode]
 
 Options:
 ${argParser.usage}
 
-Binding Locations:
-  core            Global application bindings (core/bindings/)
-  shared          Shared module bindings (<modules|presentation>/bindings/)
-  screen          Screen-specific bindings (linked to specific screen)
+Controller Locations:
+  shared          Shared module controllers (<modules|presentation>/controllers/)
+  screen          Screen-specific controllers (linked to specific screen)
 
 Examples:
-  gexd make binding                                      # Interactive mode
-  gexd make binding App                                  # Smart mode (interactive if exists)
+  gexd make controller                                      # Interactive mode
+  gexd make controller App                                  # Smart mode (interactive if exists)
 
-  # Core/Shared bindings (use --on for custom subdirectory):
-  gexd make binding Auth --location core                 # Core binding
-  gexd make binding Utils --location shared              # Shared binding
-  gexd make binding Auth --location core --on user       # Core binding in subdirectory
+  # Core/Shared controllers (use --on for custom subdirectory):
+  gexd make controller Auth --location shared               # Shared controller
+  gexd make controller Settings --location shared --on user # Core controller in subdirectory
 
-  # Screen bindings (use --on-screen, --on not allowed):
-  gexd make binding Profile --location screen --on-screen login
+  # Screen controllers (use --on-screen, --on not allowed):
+  gexd make controller Profile --location screen --on-screen login
 ''';
 
   @override
@@ -93,14 +91,14 @@ Examples:
         return ExitCode.config.code;
       }
 
-      final BindingData inputs = await BindingInputs(
+      final ControllerData inputs = await ControllerInputs(
         argResults!,
         prompt: _prompt,
         template: template,
         targetDir: targetDirectory,
       ).handle();
 
-      final create = BindingJob(
+      final create = ControllerJob(
         inputs,
         masonService: MasonService(logger: _logger),
         postGenerationService: PostGenerationService(logger: _logger),

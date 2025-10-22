@@ -8,5 +8,6 @@ export '../commands/init_command.dart';
 
 // make
 export '../commands/make_command.dart';
-export '../commands/make/screen_command.dart';
 export '../commands/make/binding_command.dart';
+export '../commands/make/controller_command.dart';
+export '../commands/make/screen_command.dart';
