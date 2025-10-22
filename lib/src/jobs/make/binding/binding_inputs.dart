@@ -46,6 +46,16 @@ class BindingInputs
       confirmPrompt: MainConstants.askForOnPathPrompt,
     );
 
+    // Validate incompatible options
+    if (location == BindingLocation.screen &&
+        onPath != null &&
+        onPath.isNotEmpty) {
+      throw ValidationException.custom(
+        'The --on option cannot be used with screen location. '
+        'Use --on-screen to specify the screen name instead.',
+      );
+    }
+
     // Get component
     final NameComponent component = await _getComponent(location: location);
 

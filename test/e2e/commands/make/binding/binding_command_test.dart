@@ -160,6 +160,7 @@ class BindingCommandTest extends E2ETestBase {
             expect(
               result.stderr,
               anyOf([
+                contains('--on option cannot be used with screen location'),
                 contains('--on cannot be used with screen location'),
                 contains('invalid format'),
               ]),
