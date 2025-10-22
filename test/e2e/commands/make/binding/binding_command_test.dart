@@ -151,7 +151,7 @@ class BindingCommandTest extends E2ETestBase {
               '--location',
               'screen',
               '--on-screen',
-              'Home',
+              'home', // Use snake_case/path_case format
               '--on',
               'subfolder',
               '--force',
@@ -455,7 +455,7 @@ class BindingCommandTest extends E2ETestBase {
               '--location',
               'screen',
               '--on-screen',
-              'Profile',
+              'profile', // Use snake_case/path_case format
               '--force',
             ], project.projectDir);
 
@@ -493,7 +493,7 @@ class BindingCommandTest extends E2ETestBase {
               '--location',
               'screen',
               '--on-screen',
-              'NonExistentScreen',
+              'nonexistent', // Use snake_case/path_case format
               '--force',
             ], project.projectDir);
 
@@ -536,7 +536,7 @@ class BindingCommandTest extends E2ETestBase {
               '--location',
               'screen',
               '--on-screen',
-              'Settings',
+              'settings', // Use snake_case/path_case format
               '--force',
             ], project.projectDir);
 
