@@ -26,3 +26,8 @@ export '../jobs/make/binding/binding_job.dart';
 export '../jobs/make/controller/controller_data.dart';
 export '../jobs/make/controller/controller_inputs.dart';
 export '../jobs/make/controller/controller_job.dart';
+
+// view
+export '../jobs/make/view/view_data.dart';
+export '../jobs/make/view/view_inputs.dart';
+export '../jobs/make/view/view_job.dart';

@@ -6,6 +6,9 @@ abstract class PostGenerationServiceInterface {
 
   /// Format code
   Future<void> formatCode(String projectName);
+
+  /// Format specific files only
+  Future<void> formatSpecificFiles(List<String> filePaths, String projectPath);
   // Run final pub get
   Future<void> runPubGet(String projectName);
 

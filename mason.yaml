@@ -9,3 +9,5 @@ bricks:
     path: bricks/binding
   controller:
     path: bricks/controller
+  view:
+    path: bricks/view 

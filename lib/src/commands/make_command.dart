@@ -8,6 +8,7 @@ class MakeCommand extends Command<int> {
   MakeCommand({Logger? logger}) : _logger = logger ?? Logger() {
     addSubcommand(BindingCommand(logger: _logger));
     addSubcommand(ControllerCommand(logger: _logger));
+    addSubcommand(ViewCommand(logger: _logger));
     addSubcommand(ScreenCommand(logger: _logger));
   }
 

@@ -7,31 +7,31 @@ import 'package:test/test.dart';
 import '../../../../helpers/e2e_test_base.dart';
 import '../../../../helpers/optimized_test_manager.dart';
 
-/// Binding Command E2E Test Suite
+/// View Command E2E Test Suite
 ///
-/// Comprehensive end-to-end testing for binding generation functionality.
-/// Tests cover all binding locations, validation, error handling, and template compatibility.
+/// Comprehensive end-to-end testing for view generation functionality.
+/// Tests cover all view locations, validation, error handling, and template compatibility.
 ///
 /// Features tested:
-/// - Binding creation with different locations (core, shared, screen)
+/// - View creation with different locations (shared, screen)
 /// - Template compatibility (GetX and Clean Architecture)
-/// - Screen-specific binding integration
+/// - Screen-specific view integration
 /// - Subdirectory organization and validation
 /// - Error handling and edge cases
-class BindingCommandTest extends E2ETestBase {
+class ViewCommandTest extends E2ETestBase {
   void runTests() {
-    group('BindingCommand E2E Tests', () {
+    group('ViewCommand E2E Tests', () {
       setUpAll(() async {
         await super.setUpAll();
         await OptimizedTestManager.initialize();
-        print('🚀 Starting binding command tests...');
+        print('🚀 Starting view command tests...');
         print('⚡ Using OptimizedTestManager for fast execution');
       });
 
       tearDownAll(() async {
         OptimizedTestManager.clearCache();
         await super.tearDownAll();
-        print('🎉 Binding command tests completed!');
+        print('🎉 View command tests completed!');
       });
 
       // Pre-conditions & Validation Tests
@@ -41,7 +41,7 @@ class BindingCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'binding', 'Test'], tempDir);
+            final result = await run(['make', 'view', 'Test'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -63,11 +63,11 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               '--help',
             ], project.projectDir);
             expect(result.exitCode, equals(ExitCode.success.code));
-            expect(result.stdout, contains('Generate binding files'));
+            expect(result.stdout, contains('Generate view files'));
             expect(result.stdout, contains('--location'));
             expect(result.stdout, contains('--on-screen'));
             expect(result.stdout, contains('--on'));
@@ -78,33 +78,33 @@ class BindingCommandTest extends E2ETestBase {
           }
         });
 
-        test('should validate binding name format', () async {
+        test('should validate view name format', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'invalidname',
               '--force',
             ], project.projectDir);
             expect(result.exitCode, equals(ExitCode.usage.code));
             expect(result.stderr, contains('invalid format'));
-            print('✅ Binding name validation working correctly');
+            print('✅ View name validation working correctly');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should validate binding location', () async {
+        test('should validate view location', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'Test',
               '--location',
               'invalidlocation',
@@ -112,7 +112,7 @@ class BindingCommandTest extends E2ETestBase {
             ], project.projectDir);
             expect(result.exitCode, equals(ExitCode.software.code));
             expect(result.stderr, contains('not an allowed value'));
-            print('✅ Binding location validation working correctly');
+            print('✅ View location validation working correctly');
           } finally {
             await project.cleanup();
           }
@@ -125,14 +125,20 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
-              'TestBind',
+              'view',
+              'Test',
               '--location',
               'screen',
               '--force',
             ], project.projectDir);
             expect(result.exitCode, equals(ExitCode.usage.code));
-            expect(result.stderr, contains('--on-screen) is missing'));
+            expect(
+              result.stderr,
+              anyOf([
+                contains('--on-screen) is missing'),
+                contains('view name should not end with "view"'),
+              ]),
+            );
             print('✅ Screen location validation working correctly');
           } finally {
             await project.cleanup();
@@ -146,8 +152,8 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
-              'TestBind',
+              'view',
+              'Test',
               '--location',
               'screen',
               '--on-screen',
@@ -163,6 +169,7 @@ class BindingCommandTest extends E2ETestBase {
                 contains('--on option cannot be used with screen location'),
                 contains('--on cannot be used with screen location'),
                 contains('invalid format'),
+                contains('view name should not end with "view"'),
               ]),
             );
             print('✅ Screen location with --on properly rejected');
@@ -172,155 +179,19 @@ class BindingCommandTest extends E2ETestBase {
         });
       });
 
-      // Core Binding Creation Tests
-      group('🏗️ Core Binding Creation', () {
-        test('should create core binding in GetX template', () async {
-          final stopwatch = Stopwatch()..start();
+      // Shared View Creation Tests
+      group('🤝 Shared View Creation', () {
+        test('should create shared view in GetX template', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
 
           try {
-            final bindingName = 'Auth';
+            final viewName = 'ApiClient';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
-              '--location',
-              'core',
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            // Validate GetX project structure exists
-            final basePath = project.projectDir.path;
-            expect(Directory('$basePath/lib/app/core').existsSync(), isTrue);
-
-            // Validate binding file is created in core location
-            final bindingFile = File(
-              '$basePath/lib/app/core/bindings/auth_binding.dart',
-            );
-            expect(bindingFile.existsSync(), isTrue);
-
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class AuthBinding'));
-            expect(bindingContent, contains('extends Bindings'));
-            expect(bindingContent, contains('@override'));
-            expect(bindingContent, contains('void dependencies()'));
-
-            stopwatch.stop();
-            print(
-              '✅ Core binding created successfully in GetX template (${stopwatch.elapsedMilliseconds}ms)',
-            );
-            print(
-              '✅ Verified: Core binding file created with correct structure',
-            );
-          } finally {
-            await project.cleanup();
-          }
-        });
-
-        test('should create core binding in Clean template', () async {
-          final stopwatch = Stopwatch()..start();
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'clean',
-          );
-
-          try {
-            final bindingName = 'Network';
-            final result = await run([
-              'make',
-              'binding',
-              bindingName,
-              '--location',
-              'core',
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            // Validate Clean Architecture project structure
-            final basePath = project.projectDir.path;
-            expect(Directory('$basePath/lib/core').existsSync(), isTrue);
-
-            // Validate binding file is created in core location
-            final bindingFile = File(
-              '$basePath/lib/core/bindings/network_binding.dart',
-            );
-            expect(bindingFile.existsSync(), isTrue);
-
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class NetworkBinding'));
-            expect(bindingContent, contains('extends Bindings'));
-            expect(bindingContent, contains('@override'));
-            expect(bindingContent, contains('void dependencies()'));
-
-            stopwatch.stop();
-            print(
-              '✅ Core binding created successfully in Clean template (${stopwatch.elapsedMilliseconds}ms)',
-            );
-            print(
-              '✅ Verified: Core binding file created with correct structure',
-            );
-          } finally {
-            await project.cleanup();
-          }
-        });
-
-        test('should create core binding with subdirectory', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final bindingName = 'Database';
-            final result = await run([
-              'make',
-              'binding',
-              bindingName,
-              '--location',
-              'core',
-              '--on',
-              'services',
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            // Validate binding file is created in subdirectory
-            final bindingFile = File(
-              '${project.projectDir.path}/lib/app/core/bindings/services/database_binding.dart',
-            );
-            expect(bindingFile.existsSync(), isTrue);
-
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class DatabaseBinding'));
-            expect(bindingContent, contains('extends Bindings'));
-
-            print('✅ Core binding created in subdirectory successfully');
-          } finally {
-            await project.cleanup();
-          }
-        });
-      });
-
-      // Shared Binding Creation Tests
-      group('🤝 Shared Binding Creation', () {
-        test('should create shared binding in GetX template', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final bindingName = 'ApiClient';
-            final result = await run([
-              'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'shared',
               '--force',
@@ -330,41 +201,57 @@ class BindingCommandTest extends E2ETestBase {
 
             // Check for shared/modules directory structure
             final basePath = project.projectDir.path;
-            var bindingFile = File(
-              '$basePath/lib/app/modules/bindings/api_client_binding.dart',
+            var viewFile = File(
+              '$basePath/lib/app/modules/bindings/api_client_view.dart',
             );
 
-            // If modules structure doesn't exist, try presentation structure
-            if (!bindingFile.existsSync()) {
-              bindingFile = File(
-                '$basePath/lib/app/presentation/bindings/api_client_binding.dart',
-              );
+            // If modules structure doesn't exist, try other possible paths
+            if (!viewFile.existsSync()) {
+              final possiblePaths = [
+                '$basePath/lib/app/modules/views/api_client_view.dart',
+                '$basePath/lib/presentation/views/api_client_view.dart',
+                '$basePath/lib/presentation/pages/views/api_client_view.dart',
+              ];
+
+              for (final path in possiblePaths) {
+                final file = File(path);
+                if (file.existsSync()) {
+                  viewFile = file;
+                  break;
+                }
+              }
             }
 
-            expect(bindingFile.existsSync(), isTrue);
+            expect(viewFile.existsSync(), isTrue);
 
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class ApiClientBinding'));
-            expect(bindingContent, contains('extends Bindings'));
+            // Check view content
+            final viewContent = await viewFile.readAsString();
+            expect(viewContent, contains('class ApiClientView'));
+            expect(
+              viewContent,
+              anyOf([
+                contains('extends GetView'),
+                contains('extends StatelessWidget'),
+              ]),
+            );
 
-            print('✅ Shared binding created successfully in GetX template');
+            print('✅ Shared view created successfully in GetX template');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should create shared binding in Clean template', () async {
+        test('should create shared view in Clean template', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'clean',
           );
 
           try {
-            final bindingName = 'Shared';
+            final viewName = 'SharedUtil';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'shared',
               '--force',
@@ -374,33 +261,58 @@ class BindingCommandTest extends E2ETestBase {
 
             // Check for presentation directory structure
             final basePath = project.projectDir.path;
-            final bindingFile = File(
-              '$basePath/lib/presentation/bindings/shared_binding.dart',
+            var viewFile = File(
+              '$basePath/lib/presentation/views/shared_util_view.dart',
             );
-            expect(bindingFile.existsSync(), isTrue);
 
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class SharedBinding'));
-            expect(bindingContent, contains('extends Bindings'));
+            // If views folder doesn't exist, check if file was generated elsewhere
+            if (!viewFile.existsSync()) {
+              final possiblePaths = [
+                '$basePath/lib/presentation/pages/views/shared_util_view.dart',
+                '$basePath/lib/app/modules/bindings/shared_util_view.dart',
+                '$basePath/lib/app/modules/views/shared_util_view.dart',
+              ];
 
-            print('✅ Shared binding created successfully in Clean template');
+              for (final path in possiblePaths) {
+                final file = File(path);
+                if (file.existsSync()) {
+                  viewFile = file;
+                  break;
+                }
+              }
+            }
+
+            // Accept if either location exists
+            expect(viewFile.existsSync(), isTrue);
+
+            // Check view content
+            final viewContent = await viewFile.readAsString();
+            expect(viewContent, contains('class SharedUtilView'));
+            expect(
+              viewContent,
+              anyOf([
+                contains('extends GetView'),
+                contains('extends StatelessWidget'),
+              ]),
+            );
+
+            print('✅ Shared view created successfully in Clean template');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should create shared binding with subdirectory', () async {
+        test('should create shared view with subdirectory', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
 
           try {
-            final bindingName = 'FormValidator';
+            final viewName = 'Loading';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'shared',
               '--on',
@@ -410,30 +322,40 @@ class BindingCommandTest extends E2ETestBase {
 
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Check for binding in subdirectory
+            // Check for view in subdirectory
             final basePath = project.projectDir.path;
-            var bindingFile = File(
-              '$basePath/lib/app/modules/bindings/components/form_validator_binding.dart',
+            var viewFile = File(
+              '$basePath/lib/app/modules/bindings/components/loading_view.dart',
             );
 
-            // If modules structure doesn't exist, try presentation structure
-            if (!bindingFile.existsSync()) {
-              bindingFile = File(
-                '$basePath/lib/app/presentation/bindings/components/form_validator_binding.dart',
-              );
+            // If main path doesn't exist, try other possible paths
+            if (!viewFile.existsSync()) {
+              final possiblePaths = [
+                '$basePath/lib/app/modules/views/components/loading_view.dart',
+                '$basePath/lib/presentation/views/components/loading_view.dart',
+                '$basePath/lib/presentation/pages/views/components/loading_view.dart',
+              ];
+
+              for (final path in possiblePaths) {
+                final file = File(path);
+                if (file.existsSync()) {
+                  viewFile = file;
+                  break;
+                }
+              }
             }
 
-            expect(bindingFile.existsSync(), isTrue);
-            print('✅ Shared binding created in subdirectory successfully');
+            expect(viewFile.existsSync(), isTrue);
+            print('✅ Shared view created in subdirectory successfully');
           } finally {
             await project.cleanup();
           }
         });
       });
 
-      // Screen-Specific Binding Creation Tests
-      group('📱 Screen-Specific Binding Creation', () {
-        test('should create screen binding linked to existing screen', () async {
+      // Screen-Specific View Creation Tests
+      group('📱 Screen-Specific View Creation', () {
+        test('should create screen view linked to existing screen', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -447,12 +369,12 @@ class BindingCommandTest extends E2ETestBase {
               '--force',
             ], project.projectDir);
 
-            // Then create screen-specific binding
-            final bindingName = 'ProfileExtra';
+            // Then create screen-specific view
+            final viewName = 'ProfileHeader';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'screen',
               '--on-screen',
@@ -462,35 +384,41 @@ class BindingCommandTest extends E2ETestBase {
 
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Validate binding is created in screen directory
+            // Validate view is created in screen directory
             final basePath = project.projectDir.path;
-            final bindingFile = File(
-              '$basePath/lib/app/modules/profile/bindings/profile_extra_binding.dart',
+            final viewFile = File(
+              '$basePath/lib/app/modules/profile/views/profile_header_view.dart',
             );
-            expect(bindingFile.existsSync(), isTrue);
+            expect(viewFile.existsSync(), isTrue);
 
-            // Check binding content
-            final bindingContent = await bindingFile.readAsString();
-            expect(bindingContent, contains('class ProfileExtraBinding'));
-            expect(bindingContent, contains('extends Bindings'));
+            // Check view content
+            final viewContent = await viewFile.readAsString();
+            expect(viewContent, contains('class ProfileHeaderView'));
+            expect(
+              viewContent,
+              anyOf([
+                contains('extends GetView'),
+                contains('extends StatelessWidget'),
+              ]),
+            );
 
-            print('✅ Screen-specific binding created successfully');
+            print('✅ Screen-specific view created successfully');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should handle screen binding for non-existent screen', () async {
+        test('should handle screen view for non-existent screen', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
 
           try {
-            final bindingName = 'NonExistentExtra';
+            final viewName = 'NonExistent';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'screen',
               '--on-screen',
@@ -514,7 +442,7 @@ class BindingCommandTest extends E2ETestBase {
           }
         });
 
-        test('should create screen binding in Clean template', () async {
+        test('should create screen view in Clean template', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'clean',
           );
@@ -528,12 +456,12 @@ class BindingCommandTest extends E2ETestBase {
               '--force',
             ], project.projectDir);
 
-            // Then create screen-specific binding
-            final bindingName = 'SettingsExtra';
+            // Then create screen-specific view
+            final viewName = 'SettingsForm';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
               'screen',
               '--on-screen',
@@ -543,14 +471,14 @@ class BindingCommandTest extends E2ETestBase {
 
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Validate binding is created in screen directory (Clean Architecture)
+            // Validate view is created in screen directory (Clean Architecture)
             final basePath = project.projectDir.path;
-            final bindingFile = File(
-              '$basePath/lib/presentation/pages/settings/bindings/settings_extra_binding.dart',
+            final viewFile = File(
+              '$basePath/lib/presentation/pages/settings/views/settings_form_view.dart',
             );
-            expect(bindingFile.existsSync(), isTrue);
+            expect(viewFile.existsSync(), isTrue);
 
-            print('✅ Screen-specific binding created in Clean template');
+            print('✅ Screen-specific view created in Clean template');
           } finally {
             await project.cleanup();
           }
@@ -569,10 +497,10 @@ class BindingCommandTest extends E2ETestBase {
             // For testing, we simulate with force flag
             final result = await run([
               'make',
-              'binding',
+              'view',
               'Interactive', // Provide name to avoid interactive prompt
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
@@ -598,22 +526,22 @@ class BindingCommandTest extends E2ETestBase {
             try {
               final result = await run([
                 'make',
-                'binding',
-                'Deep',
+                'view',
+                'DeepForm',
                 '--location',
-                'core',
+                'shared',
                 '--on',
-                'services/auth/providers',
+                'widgets/forms/inputs',
                 '--force',
               ], project.projectDir);
 
               expect(result.exitCode, equals(ExitCode.success.code));
 
               // Validate deep directory structure
-              final bindingFile = File(
-                '${project.projectDir.path}/lib/app/core/bindings/services/auth/providers/deep_binding.dart',
+              final viewFile = File(
+                '${project.projectDir.path}/lib/app/modules/views/widgets/forms/inputs/deep_form_view.dart',
               );
-              expect(bindingFile.existsSync(), isTrue);
+              expect(viewFile.existsSync(), isTrue);
 
               print('✅ Maximum nested subdirectory (3 levels) handled');
             } finally {
@@ -632,12 +560,12 @@ class BindingCommandTest extends E2ETestBase {
             try {
               final result = await run([
                 'make',
-                'binding',
+                'view',
                 'TooDeep',
                 '--location',
-                'core',
+                'shared',
                 '--on',
-                'services/auth/providers/deep',
+                'widgets/forms/inputs/deep',
                 '--force',
               ], project.projectDir);
 
@@ -658,10 +586,10 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'InvalidPath',
               '--location',
-              'core',
+              'shared',
               '--on',
               'Invalid-Path/With_Special@Chars',
               '--force',
@@ -678,37 +606,37 @@ class BindingCommandTest extends E2ETestBase {
 
       // Force Flag & Overwrite Tests
       group('🔒 Force Flag & Overwrite Tests', () {
-        test('should handle binding file creation properly', () async {
+        test('should handle view file creation properly', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
 
           try {
-            // Create binding first time
+            // Create view first time
             final firstResult = await run([
               'make',
-              'binding',
+              'view',
               'OverwriteTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             expect(firstResult.exitCode, equals(ExitCode.success.code));
-            print('✅ First binding creation successful');
+            print('✅ First view creation successful');
 
             // Create again with force flag (should work)
             final secondResult = await run([
               'make',
-              'binding',
+              'view',
               'OverwriteTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             expect(secondResult.exitCode, equals(ExitCode.success.code));
-            print('✅ Binding overwrite with force flag successful');
+            print('✅ View overwrite with force flag successful');
           } finally {
             await project.cleanup();
           }
@@ -720,23 +648,23 @@ class BindingCommandTest extends E2ETestBase {
           );
 
           try {
-            // Create binding first time
+            // Create view first time
             await run([
               'make',
-              'binding',
+              'view',
               'ForceTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             // Create again with force flag
             final result = await run([
               'make',
-              'binding',
+              'view',
               'ForceTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
@@ -756,41 +684,50 @@ class BindingCommandTest extends E2ETestBase {
           );
 
           try {
-            final bindingName = 'Api';
+            final viewName = 'CustomButton';
             final result = await run([
               'make',
-              'binding',
-              bindingName,
+              'view',
+              viewName,
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            final bindingFile = File(
-              '${project.projectDir.path}/lib/app/core/bindings/api_binding.dart',
+            // Check for shared/modules directory structure
+            final basePath = project.projectDir.path;
+            var viewFile = File(
+              '$basePath/lib/app/modules/views/custom_button_view.dart',
             );
-            expect(bindingFile.existsSync(), isTrue);
+
+            // If modules structure doesn't exist, try presentation structure
+            if (!viewFile.existsSync()) {
+              viewFile = File(
+                '$basePath/lib/app/presentation/views/custom_button_view.dart',
+              );
+            }
+
+            expect(viewFile.existsSync(), isTrue);
 
             // Verify file content structure
-            final content = await bindingFile.readAsString();
+            final content = await viewFile.readAsString();
 
             // Check imports
+            expect(
+              content,
+              contains("import 'package:flutter/material.dart';"),
+            );
             expect(content, contains("import 'package:get/get.dart';"));
 
             // Check class structure
-            expect(content, contains('class ApiBinding extends Bindings'));
+            expect(content, contains('class CustomButtonView extends GetView'));
             expect(content, contains('@override'));
-            expect(content, contains('void dependencies() {'));
-            expect(content, contains('// Add your dependency injections here'));
-            expect(
-              content,
-              contains('// Get.lazyPut<YourService>(() => YourService());'),
-            );
+            expect(content, contains('Widget build(BuildContext context)'));
 
             // Verify file naming convention
-            expect(bindingFile.path, contains('api_binding.dart'));
+            expect(viewFile.path, contains('custom_button_view.dart'));
 
             print('✅ File structure and content verified');
             print('✅ Verified: Proper imports and class structure');
@@ -808,7 +745,7 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'FormattingTest',
               '--location',
               'shared',
@@ -819,27 +756,24 @@ class BindingCommandTest extends E2ETestBase {
 
             // Check generated file has consistent indentation and formatting
             final basePath = project.projectDir.path;
-            var bindingFile = File(
-              '$basePath/lib/app/modules/bindings/formatting_test_binding.dart',
+            var viewFile = File(
+              '$basePath/lib/app/modules/views/formatting_test_view.dart',
             );
 
-            if (!bindingFile.existsSync()) {
-              bindingFile = File(
-                '$basePath/lib/app/presentation/bindings/formatting_test_binding.dart',
+            if (!viewFile.existsSync()) {
+              viewFile = File(
+                '$basePath/lib/app/presentation/views/formatting_test_view.dart',
               );
             }
 
-            expect(bindingFile.existsSync(), isTrue);
+            expect(viewFile.existsSync(), isTrue);
 
-            final content = await bindingFile.readAsString();
+            final content = await viewFile.readAsString();
 
             // Verify proper indentation (2 spaces standard)
             expect(content, contains('  @override'));
-            expect(content, contains('  void dependencies() {'));
-            expect(
-              content,
-              contains('    // Add your dependency injections here'),
-            );
+            expect(content, contains('  Widget build(BuildContext context) {'));
+            expect(content, contains('    return'));
 
             print('✅ Code formatting consistency verified');
           } finally {
@@ -850,7 +784,7 @@ class BindingCommandTest extends E2ETestBase {
 
       // Performance & Quality Tests
       group('⚡ Performance & Quality Tests', () {
-        test('should create binding within reasonable time', () async {
+        test('should create view within reasonable time', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -860,10 +794,10 @@ class BindingCommandTest extends E2ETestBase {
 
             final result = await run([
               'make',
-              'binding',
+              'view',
               'PerformanceTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
@@ -871,21 +805,21 @@ class BindingCommandTest extends E2ETestBase {
 
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Binding creation should complete within reasonable time
+            // View creation should complete within reasonable time
             expect(
               stopwatch.elapsedMilliseconds,
               lessThan(30000),
             ); // 30 seconds maximum
 
             print(
-              '✅ Binding created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',
+              '✅ View created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',
             );
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should handle multiple binding creation efficiently', () async {
+        test('should handle multiple view creation efficiently', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -893,20 +827,20 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final stopwatch = Stopwatch()..start();
 
-            // Create multiple bindings to test batch performance
-            final bindings = [
-              {'name': 'Multi1', 'location': 'core'},
+            // Create multiple views to test batch performance
+            final views = [
+              {'name': 'Multi1', 'location': 'shared'},
               {'name': 'Multi2', 'location': 'shared'},
-              {'name': 'Multi3', 'location': 'core'},
+              {'name': 'Multi3', 'location': 'shared'},
             ];
 
-            for (final binding in bindings) {
+            for (final view in views) {
               final result = await run([
                 'make',
-                'binding',
-                binding['name']!,
+                'view',
+                view['name']!,
                 '--location',
-                binding['location']!,
+                view['location']!,
                 '--force',
               ], project.projectDir);
 
@@ -916,13 +850,13 @@ class BindingCommandTest extends E2ETestBase {
             stopwatch.stop();
 
             print(
-              '⚡ Multiple binding test completed in ${stopwatch.elapsedMilliseconds}ms',
+              '⚡ Multiple view test completed in ${stopwatch.elapsedMilliseconds}ms',
             );
             print(
-              '📊 Created ${bindings.length} bindings in ${stopwatch.elapsedMilliseconds}ms',
+              '📊 Created ${views.length} views in ${stopwatch.elapsedMilliseconds}ms',
             );
             print(
-              '📊 Average: ${(stopwatch.elapsedMilliseconds / bindings.length).round()}ms per binding',
+              '📊 Average: ${(stopwatch.elapsedMilliseconds / views.length).round()}ms per view',
             );
           } finally {
             await project.cleanup();
@@ -932,32 +866,32 @@ class BindingCommandTest extends E2ETestBase {
 
       // Cross-Template Compatibility Tests
       group('🔄 Cross-Template Compatibility', () {
-        test('should create bindings in both templates successfully', () async {
+        test('should create views in both templates successfully', () async {
           final stopwatch = Stopwatch()..start();
 
           final projects =
               await OptimizedTestManager.createOptimizedBothProjects();
 
           try {
-            // Test binding creation in GetX template
+            // Test view creation in GetX template
             final getxResult = await run([
               'make',
-              'binding',
+              'view',
               'CrossTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], projects.getxProject.projectDir);
 
             expect(getxResult.exitCode, equals(ExitCode.success.code));
 
-            // Test binding creation in Clean template
+            // Test view creation in Clean template
             final cleanResult = await run([
               'make',
-              'binding',
+              'view',
               'CrossTest',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], projects.cleanProject.projectDir);
 
@@ -973,24 +907,23 @@ class BindingCommandTest extends E2ETestBase {
           }
         });
 
-        test('should handle all binding locations in both templates', () async {
+        test('should handle all view locations in both templates', () async {
           final projects =
               await OptimizedTestManager.createOptimizedBothProjects();
 
           try {
-            final bindingLocations = [
-              {'location': 'core', 'name': 'CoreTest'},
+            final viewLocations = [
               {'location': 'shared', 'name': 'SharedTest'},
             ];
 
-            for (final binding in bindingLocations) {
-              final location = binding['location']!;
-              final name = binding['name']!;
+            for (final view in viewLocations) {
+              final location = view['location']!;
+              final name = view['name']!;
 
-              // Test binding creation in GetX template
+              // Test view creation in GetX template
               final getxResult = await run([
                 'make',
-                'binding',
+                'view',
                 '${name}GetX',
                 '--location',
                 location,
@@ -999,10 +932,10 @@ class BindingCommandTest extends E2ETestBase {
 
               expect(getxResult.exitCode, equals(ExitCode.success.code));
 
-              // Test binding creation in Clean template
+              // Test view creation in Clean template
               final cleanResult = await run([
                 'make',
-                'binding',
+                'view',
                 '${name}Clean',
                 '--location',
                 location,
@@ -1012,7 +945,7 @@ class BindingCommandTest extends E2ETestBase {
               expect(cleanResult.exitCode, equals(ExitCode.success.code));
             }
 
-            print('✅ All binding locations working in both templates');
+            print('✅ All view locations working in both templates');
           } finally {
             await projects.cleanup();
           }
@@ -1021,7 +954,7 @@ class BindingCommandTest extends E2ETestBase {
 
       // Edge Cases & Error Handling Tests
       group('⚠️ Edge Cases & Error Handling', () {
-        test('should handle invalid binding name gracefully', () async {
+        test('should handle invalid view name gracefully', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -1029,22 +962,22 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'invalid-name-format',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.usage.code));
             expect(result.stderr, contains('invalid format'));
-            print('✅ Invalid binding name properly handled');
+            print('✅ Invalid view name properly handled');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should handle special characters in binding name', () async {
+        test('should handle special characters in view name', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -1052,34 +985,34 @@ class BindingCommandTest extends E2ETestBase {
           try {
             final result = await run([
               'make',
-              'binding',
+              'view',
               'Special@#',
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.usage.code));
             expect(result.stderr, contains('invalid format'));
-            print('✅ Special characters in binding name properly rejected');
+            print('✅ Special characters in view name properly rejected');
           } finally {
             await project.cleanup();
           }
         });
 
-        test('should handle very long binding names', () async {
+        test('should handle very long view names', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
 
           try {
-            final longName = 'Very${'Long' * 20}BindingName';
+            final longName = 'Very${'Long' * 20}ViewName';
             final result = await run([
               'make',
-              'binding',
+              'view',
               longName,
               '--location',
-              'core',
+              'shared',
               '--force',
             ], project.projectDir);
 
@@ -1092,7 +1025,33 @@ class BindingCommandTest extends E2ETestBase {
               ]),
             );
 
-            print('✅ Very long binding name handled appropriately');
+            print('✅ Very long view name handled appropriately');
+          } finally {
+            await project.cleanup();
+          }
+        });
+
+        test('should handle view names ending with "View"', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            final result = await run([
+              'make',
+              'view',
+              'CustomView',
+              '--location',
+              'shared',
+              '--force',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.usage.code));
+            expect(
+              result.stderr,
+              contains('view name should not end with "view"'),
+            );
+            print('✅ View names ending with "View" properly rejected');
           } finally {
             await project.cleanup();
           }
@@ -1103,5 +1062,5 @@ class BindingCommandTest extends E2ETestBase {
 }
 
 void main() {
-  BindingCommandTest().runTests();
+  ViewCommandTest().runTests();
 }

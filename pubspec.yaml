@@ -1,6 +1,6 @@
 name: gexd
 description: A powerful CLI tool to scaffold Flutter projects using GetX with SOLID principles and Clean Architecture patterns.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/altwaireb/gexd
 repository: https://github.com/altwaireb/gexd
 

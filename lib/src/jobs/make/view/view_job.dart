@@ -4,13 +4,13 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
-class ControllerJob {
-  final ControllerData data;
+class ViewJob {
+  final ViewData data;
   final Logger logger;
   final MasonServiceInterface masonService;
   final PostGenerationServiceInterface postGenerationService;
 
-  ControllerJob(
+  ViewJob(
     this.data, {
     required this.masonService,
     required this.postGenerationService,
@@ -40,7 +40,7 @@ class ControllerJob {
 
   void _logSummary(List<String> generatedFiles) {
     logger.info('');
-    logger.info('Screen generation summary:');
+    logger.info('View generation summary:');
     logger.info('  Name: ${data.name}');
     logger.info('  Location: ${data.location.key}');
     if (data.onPath != null && data.onPath!.isNotEmpty) {
@@ -61,45 +61,45 @@ class ControllerJob {
     }
     logger.info('');
     logger.info(
-      MainConstants.generatedFileSuccess.formatWith({'name': 'controller'}),
+      MainConstants.generatedFileSuccess.formatWith({'name': 'view'}),
     );
   }
 
   /// Generate files using Mason brick
-  Future<List<String>> _generate(ControllerData data) async {
+  Future<List<String>> _generate(ViewData data) async {
     final progress = logger.progress(
-      MainConstants.generatingFile.formatWith({'component': 'controller'}),
+      MainConstants.generatingFile.formatWith({'component': 'view'}),
     );
 
     try {
       final targetDir = await _prepareTargetDirectory(data);
 
       await masonService.generateFromPackageBrick(
-        brickName: 'controller',
+        brickName: 'view',
         targetDir: targetDir,
         vars: data.toVars(),
         overwrite: true,
       );
 
       progress.complete(
-        MainConstants.generatedFilesSuccess.formatWith({'name': 'controller'}),
+        MainConstants.generatedFilesSuccess.formatWith({'name': 'view'}),
       );
 
       return _buildGeneratedFilesList(data);
     } catch (e) {
       progress.fail(
-        MainConstants.generationFilesFailed.formatWith({'name': 'controller'}),
+        MainConstants.generationFilesFailed.formatWith({'name': 'view'}),
       );
       rethrow;
     }
   }
 
-  Future<Directory> _prepareTargetDirectory(ControllerData data) async {
+  Future<Directory> _prepareTargetDirectory(ViewData data) async {
     final currentDir = data.targetDir;
 
     String targetPath;
-    if (data.location == ControllerLocation.screen && data.screenName != null) {
-      // For screen controllers, place in the specific screen's controllers folder
+    if (data.location == ViewLocation.screen && data.screenName != null) {
+      // For screen views, place in the specific screen's views folder
       final screenBasePath = ArchitectureCoordinator.getComponentPath(
         NameComponent.screen,
         data.template,
@@ -111,23 +111,18 @@ class ControllerJob {
               screenBasePath,
               data.onPath!,
               screenPath,
-              'controllers',
+              'views',
             )
-          : path.join(
-              currentDir.path,
-              screenBasePath,
-              screenPath,
-              'controllers',
-            );
+          : path.join(currentDir.path, screenBasePath, screenPath, 'views');
     } else {
-      // For shared controllers
-      final basePath = ArchitectureCoordinator.getComponentPath(
+      // For shared views
+      final componentBasePath = ArchitectureCoordinator.getComponentPath(
         data.component,
         data.template,
       );
       targetPath = data.onPath != null
-          ? path.join(currentDir.path, basePath, data.onPath!)
-          : path.join(currentDir.path, basePath);
+          ? path.join(currentDir.path, componentBasePath, data.onPath!)
+          : path.join(currentDir.path, componentBasePath);
     }
 
     final targetDir = Directory(targetPath);
@@ -141,30 +136,27 @@ class ControllerJob {
   }
 
   /// Build full file paths for formatting
-  List<String> _buildFullFilePaths(
-    List<String> relativePaths,
-    ControllerData data,
-  ) {
+  List<String> _buildFullFilePaths(List<String> relativePaths, ViewData data) {
     return relativePaths.map((relativePath) {
       return path.join(data.targetDir.path, relativePath);
     }).toList();
   }
 
   /// Build list of generated files for reporting
-  List<String> _buildGeneratedFilesList(ControllerData data) {
+  List<String> _buildGeneratedFilesList(ViewData data) {
     String basePath;
-    if (data.location == ControllerLocation.screen && data.screenName != null) {
-      // For screen controllers, show path in the screen's controllers folder
+    if (data.location == ViewLocation.screen && data.screenName != null) {
+      // For screen views, show path in the screen's views folder
       final screenBasePath = ArchitectureCoordinator.getComponentPath(
         NameComponent.screen,
         data.template,
       );
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
       basePath = data.onPath != null
-          ? '$screenBasePath/${data.onPath}/$screenPath/controllers/'
-          : '$screenBasePath/$screenPath/controllers/';
+          ? '$screenBasePath/${data.onPath}/$screenPath/views/'
+          : '$screenBasePath/$screenPath/views/';
     } else {
-      // For shared controllers
+      // For shared views
       final componentBasePath = ArchitectureCoordinator.getComponentPath(
         data.component,
         data.template,
@@ -176,7 +168,7 @@ class ControllerJob {
     final nameSnakeCase = StringHelpers.toSnakeCase(data.name);
 
     return [
-      '$basePath${MainConstants.controllerSuffix}'.formatWith({
+      '$basePath${MainConstants.viewSuffix}'.formatWith({
         'name': nameSnakeCase,
       }),
     ];

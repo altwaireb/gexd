@@ -17,17 +17,34 @@ class PostGenerationService implements PostGenerationServiceInterface {
     await runPubGet(projectName);
   }
 
-  /// Format code
+  /// Format code for entire project
   @override
-  Future<void> formatCode(String projectName) async {
+  Future<void> formatCode(String projectPath) async {
     final progress = _logger.progress('Formatting code...');
 
     try {
+      // Check if dart is available in PATH
+      final dartExists = await _isDartAvailable();
+      if (!dartExists) {
+        progress.update('Code formatting skipped (Dart SDK not found in PATH)');
+        _logger.detail('Dart SDK not found in PATH. Code formatting skipped.');
+        return;
+      }
+
+      // Check if we're in a valid Flutter/Dart project
+      final projectDir = Directory(projectPath);
+      final pubspecFile = File('${projectDir.path}/pubspec.yaml');
+      if (!await pubspecFile.exists()) {
+        progress.update('Code formatting skipped (not in project root)');
+        _logger.detail('pubspec.yaml not found. Code formatting skipped.');
+        return;
+      }
+
       final result = await Process.run(
         'dart',
         ['format', '.'],
         runInShell: true,
-        workingDirectory: projectName,
+        workingDirectory: projectPath,
       );
 
       if (result.exitCode == 0) {
@@ -41,6 +58,73 @@ class PostGenerationService implements PostGenerationServiceInterface {
       _logger.info('');
       _logger.warn('Code formatting failed: $e');
       // Don't throw exception here because formatting is not critical
+    }
+  }
+
+  /// Format specific files only (more efficient for generated files)
+  @override
+  Future<void> formatSpecificFiles(
+    List<String> filePaths,
+    String projectPath,
+  ) async {
+    if (filePaths.isEmpty) return;
+
+    final progress = _logger.progress('Formatting generated files...');
+
+    try {
+      // Check if dart is available in PATH
+      final dartExists = await _isDartAvailable();
+      if (!dartExists) {
+        progress.update('Code formatting skipped (Dart SDK not found in PATH)');
+        _logger.detail('Dart SDK not found in PATH. Code formatting skipped.');
+        return;
+      }
+
+      // Filter existing files
+      final existingFiles = <String>[];
+      for (final filePath in filePaths) {
+        final file = File(filePath);
+        if (await file.exists()) {
+          existingFiles.add(filePath);
+        }
+      }
+
+      if (existingFiles.isEmpty) {
+        progress.update('No files to format');
+        return;
+      }
+
+      // Format each file individually
+      final result = await Process.run(
+        'dart',
+        ['format', ...existingFiles],
+        runInShell: true,
+        workingDirectory: projectPath,
+      );
+
+      if (result.exitCode == 0) {
+        progress.complete(
+          'Generated files formatted successfully (${existingFiles.length} file${existingFiles.length != 1 ? 's' : ''})',
+        );
+      } else {
+        progress.update('File formatting completed with warnings');
+        _logger.warn('Format warnings: ${result.stderr}');
+      }
+    } catch (e) {
+      progress.fail('File formatting skipped');
+      _logger.info('');
+      _logger.warn('File formatting failed: $e');
+      // Don't throw exception here because formatting is not critical
+    }
+  }
+
+  /// Check if dart command is available
+  Future<bool> _isDartAvailable() async {
+    try {
+      final result = await Process.run('dart', ['--version'], runInShell: true);
+      return result.exitCode == 0;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -121,15 +205,22 @@ class PostGenerationService implements PostGenerationServiceInterface {
 
   /// Run code analysis
   @override
-  Future<void> analyzeCode(String projectName) async {
+  Future<void> analyzeCode(String projectPath) async {
     final progress = _logger.progress('Analyzing code...');
 
     try {
+      // Check if dart is available in PATH
+      final dartExists = await _isDartAvailable();
+      if (!dartExists) {
+        progress.update('Code analysis skipped (Dart SDK not found in PATH)');
+        return;
+      }
+
       final result = await Process.run(
         'dart',
         ['analyze', '.'],
         runInShell: true,
-        workingDirectory: projectName,
+        workingDirectory: projectPath,
       );
 
       if (result.exitCode == 0) {

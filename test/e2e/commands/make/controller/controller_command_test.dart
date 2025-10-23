@@ -1001,14 +1001,6 @@ class ControllerCommandTest extends E2ETestBase {
   }
 }
 
-// String extension utility for capitalizing text
-extension StringExtension on String {
-  String capitalize() {
-    if (this.isEmpty) return this;
-    return this[0].toUpperCase() + substring(1);
-  }
-}
-
 void main() {
   ControllerCommandTest().runTests();
 }

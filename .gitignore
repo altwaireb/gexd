@@ -8,7 +8,7 @@ coverage/
 
 # Files and directories created by pub
 .packages
-pubspec.lock
+# pubspec.lock - Keep for reproducible builds
 
 # Test reports (generated on demand)
 reports/
@@ -38,10 +38,11 @@ bin/*-*  # Any compiled executable with version
 ehthumbs.db
 Thumbs.db
 
-# Mason configuration (contains sensitive information)
-.mason/
-.mason
-mason-lock.json
+# Mason configuration 
+# .mason/ - Keep bricks.json for reproducible builds
+.mason/cached_packages/
+.mason/build/
+mason-lock.json  # Contains local paths and sensitive info
 
 # Documentation generation (auto-generated drafts)
 doc/.*

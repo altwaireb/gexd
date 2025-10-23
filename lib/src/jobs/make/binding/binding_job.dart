@@ -20,13 +20,16 @@ class BindingJob {
   Future<int> execute() async {
     try {
       // Generate files
-      final List<String> generatedFile = await _generate(data);
+      final List<String> generatedFiles = await _generate(data);
 
-      // Format generated file code for better quality
-      final fileDir = Directory(path.join(data.targetDir.path, data.name));
-      await postGenerationService.formatCode(fileDir.path);
+      // Format only the generated files for better performance
+      final fullFilePaths = _buildFullFilePaths(generatedFiles, data);
+      await postGenerationService.formatSpecificFiles(
+        fullFilePaths,
+        data.targetDir.path,
+      );
 
-      _logSummary(generatedFile);
+      _logSummary(generatedFiles);
 
       return ExitCode.success.code;
     } catch (e) {
@@ -37,7 +40,7 @@ class BindingJob {
 
   void _logSummary(List<String> generatedFiles) {
     logger.info('');
-    logger.info('Screen generation summary:');
+    logger.info('Binding generation summary:');
     logger.info('  Name: ${data.name}');
     logger.info('  Location: ${data.location.key}');
     if (data.onPath != null && data.onPath!.isNotEmpty) {
@@ -132,6 +135,16 @@ class BindingJob {
     return targetDir;
   }
 
+  /// Build full file paths for formatting
+  List<String> _buildFullFilePaths(
+    List<String> relativePaths,
+    BindingData data,
+  ) {
+    return relativePaths.map((relativePath) {
+      return path.join(data.targetDir.path, relativePath);
+    }).toList();
+  }
+
   /// Build list of generated files for reporting
   List<String> _buildGeneratedFilesList(BindingData data) {
     String basePath;
@@ -141,16 +154,17 @@ class BindingJob {
         NameComponent.screen,
         data.template,
       );
+      // get screen name in snake_case
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
       basePath = data.onPath != null
           ? '$screenBasePath/${data.onPath}/$screenPath/bindings/'
           : '$screenBasePath/$screenPath/bindings/';
     } else {
-      // For core and shared bindings
       final componentBasePath = ArchitectureCoordinator.getComponentPath(
         data.component,
         data.template,
       );
+
       basePath = data.onPath != null
           ? '$componentBasePath/${data.onPath}/'
           : '$componentBasePath/';

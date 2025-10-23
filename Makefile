@@ -63,7 +63,7 @@ deps:
 # Code formatting (excludes bricks/ to avoid modifying templates)
 format:
 	@echo "🎨 Formatting code..."
-	dart format lib/ test/ bin/
+	dart format lib/ test/ bin/ tool/
 
 # Format templates (use with caution)
 format-bricks:

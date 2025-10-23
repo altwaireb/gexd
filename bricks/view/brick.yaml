@@ -1,0 +1,34 @@
+name: view
+description: Generate GetX view files for dependency injection
+
+version: 0.1.0+1
+
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: View name (e.g., home, auth, profile)
+    prompt: What is the view name?
+
+  is_core:
+    type: boolean
+    description: Is this a core view?
+    default: false
+  
+  is_shared:
+    type: boolean
+    description: Is this a shared view?
+    default: true
+    
+  is_screen:
+    type: boolean
+    description: Is this a screen view?
+    default: false
+  
+  screenName:
+    type: string
+    description: Screen name for screen views
+    prompt: What is the screen name?

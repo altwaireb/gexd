@@ -30,9 +30,12 @@ class ScreenJob {
         routesUpdated = await _tryUpdateRoutes(data);
       }
 
-      // Format generated screen code for better quality
-      final screenDir = Directory(path.join(data.targetDir.path, data.name));
-      await postGenerationService.formatCode(screenDir.path);
+      // Format only the generated files for better performance
+      final fullFilePaths = _buildFullFilePaths(generatedFiles, data);
+      await postGenerationService.formatSpecificFiles(
+        fullFilePaths,
+        data.targetDir.path,
+      );
 
       _logSummary(generatedFiles, routesUpdated);
       return ExitCode.success.code;
@@ -122,16 +125,26 @@ class ScreenJob {
     return targetDir;
   }
 
+  /// Build full file paths for formatting
+  List<String> _buildFullFilePaths(
+    List<String> relativePaths,
+    ScreenData data,
+  ) {
+    return relativePaths.map((relativePath) {
+      return path.join(data.targetDir.path, relativePath);
+    }).toList();
+  }
+
   /// Build list of generated files for reporting
-  List<String> _buildGeneratedFilesList(ScreenData screenData) {
+  List<String> _buildGeneratedFilesList(ScreenData data) {
     final componentBasePath = ArchitectureCoordinator.getComponentPath(
       NameComponent.screen,
-      screenData.template,
+      data.template,
     );
-    final basePath = screenData.onPath != null
-        ? '$componentBasePath/${screenData.onPath}/'
+    final basePath = data.onPath != null
+        ? '$componentBasePath/${data.onPath}/'
         : '$componentBasePath/';
-    final screenSnakeCase = StringHelpers.toSnakeCase(screenData.name);
+    final screenSnakeCase = StringHelpers.toSnakeCase(data.name);
 
     return [
       '$basePath$screenSnakeCase/${MainConstants.controllerSuffix}'.formatWith({
