@@ -12,12 +12,12 @@ import 'writers/summary_writer.dart';
 ///
 /// Usage:
 /// ```bash
-/// dart run tools/gexd_doc/generate_doc.dart [version]
+/// dart run tool/gexd_doc/generate_doc.dart [version]
 /// ```
 ///
 /// Example:
 /// ```bash
-/// dart run tools/gexd_doc/generate_doc.dart 1.x
+/// dart run tool/gexd_doc/generate_doc.dart 1.x
 /// ```
 Future<void> main(List<String> args) async {
   final version = args.isNotEmpty ? args.first : '1.x';

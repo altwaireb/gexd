@@ -4,7 +4,7 @@ This directory contains professional documentation generation tools for the Gexd
 
 ## 🚀 Gexd Documentation Generator
 
-Located in: `tools/gexd_doc/`
+Located in: `tool/gexd_doc/`
 
 ### Features:
 - **Direct Analysis**: Analyzes command files using Dart analyzer
@@ -16,12 +16,12 @@ Located in: `tools/gexd_doc/`
 
 ```bash
 # Generate documentation drafts
-dart tools/gexd_doc/generate_doc.dart
+dart tool/gexd_doc/generate_doc.dart
 ```
 
 ### Configuration:
 
-The generator uses `tools/gexd_doc/config/doc_config.dart` for configuration:
+The generator uses `tool/gexd_doc/config/doc_config.dart` for configuration:
 - Display control settings
 - Enum path mappings  
 - Output customization
@@ -30,14 +30,14 @@ The generator uses `tools/gexd_doc/config/doc_config.dart` for configuration:
 
 1. **Generate**: Documentation drafts are created in `doc/.1.x/` (hidden)
    ```bash
-   dart tools/gexd_doc/generate_doc.dart
+   dart tool/gexd_doc/generate_doc.dart
    ```
 
 2. **Review**: Manually review and edit the generated content in `doc/.1.x/`
 
 3. **Publish**: Copy final version to `doc/1.x/` for public access
    ```bash
-   dart tools/gexd_doc/publish_docs.dart
+   dart tool/gexd_doc/publish_docs.dart
    ```
 
 4. **Commit**: Only the published version is tracked in git
@@ -78,4 +78,4 @@ To add support for new commands:
 
 ---
 
-*This documentation generation system replaces the old `tools/generate_doc.dart` with a more robust and feature-rich solution.*
+*This documentation generation system replaces the old `tool/generate_doc.dart` with a more robust and feature-rich solution.*

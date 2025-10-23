@@ -15,7 +15,7 @@ void main(List<String> arguments) async {
 
   if (!draftDir.existsSync()) {
     print('❌ Draft directory doc/.$version does not exist');
-    print('💡 Run: dart tools/gexd_doc/generate_doc.dart first');
+    print('💡 Run: dart tool/gexd_doc/generate_doc.dart first');
     exit(1);
   }
 
