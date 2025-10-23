@@ -11,4 +11,5 @@ export '../commands/make_command.dart';
 export '../commands/make/binding_command.dart';
 export '../commands/make/controller_command.dart';
 export '../commands/make/screen_command.dart';
+export '../commands/make/service_command.dart';
 export '../commands/make/view_command.dart';

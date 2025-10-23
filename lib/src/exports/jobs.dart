@@ -31,3 +31,8 @@ export '../jobs/make/controller/controller_job.dart';
 export '../jobs/make/view/view_data.dart';
 export '../jobs/make/view/view_inputs.dart';
 export '../jobs/make/view/view_job.dart';
+
+// service
+export '../jobs/make/service/service_data.dart';
+export '../jobs/make/service/service_inputs.dart';
+export '../jobs/make/service/service_job.dart';

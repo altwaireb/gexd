@@ -33,6 +33,7 @@ class MainConstants {
   static const String controllerSuffix = 'controllers/{name}_controller.dart';
   static const String viewSuffix = 'views/{name}_view.dart';
   static const String bindingSuffix = 'bindings/{name}_binding.dart';
+  static const String serviceSuffix = '{name}_service.dart';
 
   // Progress messages
   static const String generatingFiles = 'Generating {name} files...';

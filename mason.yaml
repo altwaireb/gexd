@@ -10,4 +10,6 @@ bricks:
   controller:
     path: bricks/controller
   view:
-    path: bricks/view 
+    path: bricks/view
+  service:
+    path: bricks/service

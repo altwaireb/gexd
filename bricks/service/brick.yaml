@@ -1,0 +1,13 @@
+name: service
+description: Generate GetX service files for dependency injection
+
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Service class name
+    prompt: What is the service name?
