@@ -8,7 +8,7 @@ coverage/
 
 # Files and directories created by pub
 .packages
-# pubspec.lock - Keep for reproducible builds
+pubspec.lock
 
 # Test reports (generated on demand)
 reports/
