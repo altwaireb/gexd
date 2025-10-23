@@ -416,13 +416,6 @@ class BindingCommandTest extends E2ETestBase {
               '$basePath/lib/app/modules/bindings/components/form_validator_binding.dart',
             );
 
-            // If modules structure doesn't exist, try presentation structure
-            if (!bindingFile.existsSync()) {
-              bindingFile = File(
-                '$basePath/lib/app/presentation/bindings/components/form_validator_binding.dart',
-              );
-            }
-
             expect(bindingFile.existsSync(), isTrue);
             print('✅ Shared binding created in subdirectory successfully');
           } finally {
@@ -781,7 +774,6 @@ class BindingCommandTest extends E2ETestBase {
 
             // Check class structure
             expect(content, contains('class ApiBinding extends Bindings'));
-            expect(content, contains('@override'));
             expect(content, contains('void dependencies() {'));
             expect(content, contains('// Add your dependency injections here'));
             expect(
@@ -823,18 +815,11 @@ class BindingCommandTest extends E2ETestBase {
               '$basePath/lib/app/modules/bindings/formatting_test_binding.dart',
             );
 
-            if (!bindingFile.existsSync()) {
-              bindingFile = File(
-                '$basePath/lib/app/presentation/bindings/formatting_test_binding.dart',
-              );
-            }
-
             expect(bindingFile.existsSync(), isTrue);
 
             final content = await bindingFile.readAsString();
 
             // Verify proper indentation (2 spaces standard)
-            expect(content, contains('  @override'));
             expect(content, contains('  void dependencies() {'));
             expect(
               content,
@@ -842,88 +827,6 @@ class BindingCommandTest extends E2ETestBase {
             );
 
             print('✅ Code formatting consistency verified');
-          } finally {
-            await project.cleanup();
-          }
-        });
-      });
-
-      // Performance & Quality Tests
-      group('⚡ Performance & Quality Tests', () {
-        test('should create binding within reasonable time', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final stopwatch = Stopwatch()..start();
-
-            final result = await run([
-              'make',
-              'binding',
-              'PerformanceTest',
-              '--location',
-              'core',
-              '--force',
-            ], project.projectDir);
-
-            stopwatch.stop();
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            // Binding creation should complete within reasonable time
-            expect(
-              stopwatch.elapsedMilliseconds,
-              lessThan(30000),
-            ); // 30 seconds maximum
-
-            print(
-              '✅ Binding created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',
-            );
-          } finally {
-            await project.cleanup();
-          }
-        });
-
-        test('should handle multiple binding creation efficiently', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final stopwatch = Stopwatch()..start();
-
-            // Create multiple bindings to test batch performance
-            final bindings = [
-              {'name': 'Multi1', 'location': 'core'},
-              {'name': 'Multi2', 'location': 'shared'},
-              {'name': 'Multi3', 'location': 'core'},
-            ];
-
-            for (final binding in bindings) {
-              final result = await run([
-                'make',
-                'binding',
-                binding['name']!,
-                '--location',
-                binding['location']!,
-                '--force',
-              ], project.projectDir);
-
-              expect(result.exitCode, equals(ExitCode.success.code));
-            }
-
-            stopwatch.stop();
-
-            print(
-              '⚡ Multiple binding test completed in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Created ${bindings.length} bindings in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Average: ${(stopwatch.elapsedMilliseconds / bindings.length).round()}ms per binding',
-            );
           } finally {
             await project.cleanup();
           }

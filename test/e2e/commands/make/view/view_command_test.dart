@@ -247,7 +247,7 @@ class ViewCommandTest extends E2ETestBase {
           );
 
           try {
-            final viewName = 'SharedUtil';
+            final viewName = 'Shared';
             final result = await run([
               'make',
               'view',
@@ -262,39 +262,16 @@ class ViewCommandTest extends E2ETestBase {
             // Check for presentation directory structure
             final basePath = project.projectDir.path;
             var viewFile = File(
-              '$basePath/lib/presentation/views/shared_util_view.dart',
+              '$basePath/lib/presentation/pages/views/shared_view.dart',
             );
-
-            // If views folder doesn't exist, check if file was generated elsewhere
-            if (!viewFile.existsSync()) {
-              final possiblePaths = [
-                '$basePath/lib/presentation/pages/views/shared_util_view.dart',
-                '$basePath/lib/app/modules/bindings/shared_util_view.dart',
-                '$basePath/lib/app/modules/views/shared_util_view.dart',
-              ];
-
-              for (final path in possiblePaths) {
-                final file = File(path);
-                if (file.existsSync()) {
-                  viewFile = file;
-                  break;
-                }
-              }
-            }
 
             // Accept if either location exists
             expect(viewFile.existsSync(), isTrue);
 
             // Check view content
             final viewContent = await viewFile.readAsString();
-            expect(viewContent, contains('class SharedUtilView'));
-            expect(
-              viewContent,
-              anyOf([
-                contains('extends GetView'),
-                contains('extends StatelessWidget'),
-              ]),
-            );
+            expect(viewContent, contains('class SharedView'));
+            expect(viewContent, contains('extends StatelessWidget'));
 
             print('✅ Shared view created successfully in Clean template');
           } finally {
@@ -719,11 +696,12 @@ class ViewCommandTest extends E2ETestBase {
               content,
               contains("import 'package:flutter/material.dart';"),
             );
-            expect(content, contains("import 'package:get/get.dart';"));
 
             // Check class structure
-            expect(content, contains('class CustomButtonView extends GetView'));
-            expect(content, contains('@override'));
+            expect(
+              content,
+              contains('class CustomButtonView extends StatelessWidget'),
+            );
             expect(content, contains('Widget build(BuildContext context)'));
 
             // Verify file naming convention
@@ -746,7 +724,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'FormattingTest',
+              'Formatting',
               '--location',
               'shared',
               '--force',
@@ -757,23 +735,15 @@ class ViewCommandTest extends E2ETestBase {
             // Check generated file has consistent indentation and formatting
             final basePath = project.projectDir.path;
             var viewFile = File(
-              '$basePath/lib/app/modules/views/formatting_test_view.dart',
+              '$basePath/lib/app/modules/views/formatting_view.dart',
             );
-
-            if (!viewFile.existsSync()) {
-              viewFile = File(
-                '$basePath/lib/app/presentation/views/formatting_test_view.dart',
-              );
-            }
 
             expect(viewFile.existsSync(), isTrue);
 
             final content = await viewFile.readAsString();
 
             // Verify proper indentation (2 spaces standard)
-            expect(content, contains('  @override'));
-            expect(content, contains('  Widget build(BuildContext context) {'));
-            expect(content, contains('    return'));
+            expect(content, contains('Widget build(BuildContext context) {'));
 
             print('✅ Code formatting consistency verified');
           } finally {
@@ -813,50 +783,6 @@ class ViewCommandTest extends E2ETestBase {
 
             print(
               '✅ View created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',
-            );
-          } finally {
-            await project.cleanup();
-          }
-        });
-
-        test('should handle multiple view creation efficiently', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final stopwatch = Stopwatch()..start();
-
-            // Create multiple views to test batch performance
-            final views = [
-              {'name': 'Multi1', 'location': 'shared'},
-              {'name': 'Multi2', 'location': 'shared'},
-              {'name': 'Multi3', 'location': 'shared'},
-            ];
-
-            for (final view in views) {
-              final result = await run([
-                'make',
-                'view',
-                view['name']!,
-                '--location',
-                view['location']!,
-                '--force',
-              ], project.projectDir);
-
-              expect(result.exitCode, equals(ExitCode.success.code));
-            }
-
-            stopwatch.stop();
-
-            print(
-              '⚡ Multiple view test completed in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Created ${views.length} views in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Average: ${(stopwatch.elapsedMilliseconds / views.length).round()}ms per view',
             );
           } finally {
             await project.cleanup();

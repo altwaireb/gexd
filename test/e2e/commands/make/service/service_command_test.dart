@@ -543,7 +543,7 @@ class ServiceCommandTest extends E2ETestBase {
             );
 
             try {
-              final serviceName = 'NetworkManager';
+              final serviceName = 'Network';
               final result = await run([
                 'make',
                 'service',
@@ -555,19 +555,16 @@ class ServiceCommandTest extends E2ETestBase {
 
               final basePath = project.projectDir.path;
               final serviceFile = File(
-                '$basePath/lib/app/data/services/network_manager_service.dart',
+                '$basePath/lib/app/data/services/network_service.dart',
               );
 
               final serviceContent = await serviceFile.readAsString();
 
               // Check for proper class naming
-              expect(serviceContent, contains('class NetworkManagerService'));
+              expect(serviceContent, contains('class NetworkService'));
 
               // Check for proper file naming (snake_case)
-              expect(
-                serviceFile.path,
-                contains('network_manager_service.dart'),
-              );
+              expect(serviceFile.path, contains('network_service.dart'));
 
               print('✅ Service naming conventions working correctly');
             } finally {

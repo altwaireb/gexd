@@ -129,9 +129,7 @@ class ViewInputs
   Future<NameComponent> _getComponent({required ViewLocation location}) async {
     switch (location) {
       case ViewLocation.shared:
-        // For shared views, use a base modules/views structure
-        return NameComponent
-            .bindings; // We'll handle the path manually in view_job.dart
+        return NameComponent.screenViews;
       case ViewLocation.screen:
         return NameComponent.screen;
     }
