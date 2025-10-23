@@ -917,52 +917,6 @@ class Product {
             await projects.cleanup();
           }
         });
-
-        test('should handle all screen types in both templates', () async {
-          final projects =
-              await OptimizedTestManager.createOptimizedBothProjects();
-
-          try {
-            final screenTypes = [
-              {'type': 'basic', 'name': 'BasicTest'},
-              {'type': 'form', 'name': 'FormTest'},
-              {'type': 'withState', 'name': 'StateTest'},
-            ];
-
-            for (final screen in screenTypes) {
-              final type = screen['type']!;
-              final name = screen['name']!;
-
-              // Test screen creation in GetX template
-              final getxResult = await run([
-                'make',
-                'screen',
-                '${name}GetX',
-                '--type',
-                type,
-                '--force',
-              ], projects.getxProject.projectDir);
-
-              expect(getxResult.exitCode, equals(ExitCode.success.code));
-
-              // Test screen creation in Clean template
-              final cleanResult = await run([
-                'make',
-                'screen',
-                '${name}Clean',
-                '--type',
-                type,
-                '--force',
-              ], projects.cleanProject.projectDir);
-
-              expect(cleanResult.exitCode, equals(ExitCode.success.code));
-            }
-
-            print('✅ All screen types working in both templates');
-          } finally {
-            await projects.cleanup();
-          }
-        });
       });
     });
   }

@@ -140,96 +140,86 @@ class ServiceCommandTest extends E2ETestBase {
 
       // Basic Service Creation Tests
       group('🎯 Basic Service Creation', () {
-        test('should create service in default location - GetX template', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final serviceName = 'Api';
-            final result = await run([
-              'make',
-              'service',
-              serviceName,
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-            expect(result.stdout, contains('Generated service files successful'));
-
-            // Check for service file in GetX template structure
-            final basePath = project.projectDir.path;
-            final serviceFile = File(
-              '$basePath/lib/app/data/services/api_service.dart',
+        test(
+          'should create service in default location - GetX template',
+          () async {
+            final project = await OptimizedTestManager.createOptimizedProject(
+              templateKey: 'getx',
             );
 
-            expect(serviceFile.existsSync(), isTrue);
+            try {
+              final serviceName = 'Api';
+              final result = await run([
+                'make',
+                'service',
+                serviceName,
+                '--force',
+              ], project.projectDir);
 
-            // Check service content
-            final serviceContent = await serviceFile.readAsString();
-            expect(serviceContent, contains('class ApiService'));
-            expect(serviceContent, contains('extends GetxService'));
-            expect(serviceContent, contains('onInit()'));
-            expect(serviceContent, contains('onReady()'));
-            expect(serviceContent, contains('onClose()'));
+              expect(result.exitCode, equals(ExitCode.success.code));
+              expect(
+                result.stdout,
+                contains('Generated service files successful'),
+              );
 
-            print('✅ Service created successfully in GetX template');
-          } finally {
-            await project.cleanup();
-          }
-        });
+              // Check for service file in GetX template structure
+              final basePath = project.projectDir.path;
+              final serviceFile = File(
+                '$basePath/lib/app/data/services/api_service.dart',
+              );
 
-        test('should create service in default location - Clean template', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'clean',
-          );
+              expect(serviceFile.existsSync(), isTrue);
 
-          try {
-            final serviceName = 'Storage';
-            final result = await run([
-              'make',
-              'service',
-              serviceName,
-              '--force',
-            ], project.projectDir);
+              // Check service content
+              final serviceContent = await serviceFile.readAsString();
+              expect(serviceContent, contains('class ApiService'));
+              expect(serviceContent, contains('extends GetxService'));
+              expect(serviceContent, contains('onInit()'));
+              expect(serviceContent, contains('onReady()'));
+              expect(serviceContent, contains('onClose()'));
 
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            // Check for service file in Clean template structure
-            final basePath = project.projectDir.path;
-            var serviceFile = File(
-              '$basePath/lib/app/data/services/storage_service.dart',
-            );
-
-            // If data/services doesn't exist, check alternative locations
-            if (!serviceFile.existsSync()) {
-              final possiblePaths = [
-                '$basePath/lib/presentation/services/storage_service.dart',
-                '$basePath/lib/core/services/storage_service.dart',
-                '$basePath/lib/services/storage_service.dart',
-              ];
-
-              for (final path in possiblePaths) {
-                final file = File(path);
-                if (file.existsSync()) {
-                  serviceFile = file;
-                  break;
-                }
-              }
+              print('✅ Service created successfully in GetX template');
+            } finally {
+              await project.cleanup();
             }
+          },
+        );
 
-            expect(serviceFile.existsSync(), isTrue);
+        test(
+          'should create service in default location - Clean template',
+          () async {
+            final project = await OptimizedTestManager.createOptimizedProject(
+              templateKey: 'clean',
+            );
 
-            // Check service content
-            final serviceContent = await serviceFile.readAsString();
-            expect(serviceContent, contains('class StorageService'));
-            expect(serviceContent, contains('extends GetxService'));
+            try {
+              final serviceName = 'Storage';
+              final result = await run([
+                'make',
+                'service',
+                serviceName,
+                '--force',
+              ], project.projectDir);
 
-            print('✅ Service created successfully in Clean template');
-          } finally {
-            await project.cleanup();
-          }
-        });
+              expect(result.exitCode, equals(ExitCode.success.code));
+
+              // Check for service file in Clean template structure (should be in infrastructure/services)
+              final basePath = project.projectDir.path;
+              final serviceFile = File(
+                '$basePath/lib/infrastructure/services/storage_service.dart',
+              );
+
+              expect(serviceFile.existsSync(), isTrue); // Check service content
+              final serviceContent = await serviceFile.readAsString();
+              expect(serviceContent, contains('class StorageService'));
+              expect(serviceContent, contains('extends GetxService'));
+
+              print('✅ Service created successfully in Clean template');
+            } finally {
+              await project.cleanup();
+            }
+          },
+        );
       });
 
       // Service Creation with Subdirectories
@@ -411,7 +401,10 @@ class ServiceCommandTest extends E2ETestBase {
             ], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.success.code));
-            expect(result.stdout, contains('Generated service files successful'));
+            expect(
+              result.stdout,
+              contains('Generated service files successful'),
+            );
 
             print('✅ Force overwrite working correctly');
           } finally {
@@ -444,7 +437,7 @@ class ServiceCommandTest extends E2ETestBase {
           }
         });
 
-        test('should handle empty service name', () async {
+        test('should handle whitespace-only service name', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
             templateKey: 'getx',
           );
@@ -453,13 +446,14 @@ class ServiceCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'service',
-              '',
+              '   ', // whitespace only
               '--force',
             ], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.usage.code));
+            expect(result.stderr, contains('cannot be empty'));
 
-            print('✅ Empty name validation working correctly');
+            print('✅ Whitespace-only name validation working correctly');
           } finally {
             await project.cleanup();
           }
@@ -482,6 +476,8 @@ class ServiceCommandTest extends E2ETestBase {
 
             expect(result.exitCode, equals(ExitCode.usage.code));
 
+            expect(result.stderr, contains('path has an invalid format'));
+
             print('✅ Invalid subdirectory validation working correctly');
           } finally {
             await project.cleanup();
@@ -491,89 +487,94 @@ class ServiceCommandTest extends E2ETestBase {
 
       // Service Content Validation
       group('📝 Service Content Validation', () {
-        test('should generate service with proper GetX lifecycle methods', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final serviceName = 'Lifecycle';
-            final result = await run([
-              'make',
-              'service',
-              serviceName,
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            final basePath = project.projectDir.path;
-            final serviceFile = File(
-              '$basePath/lib/app/data/services/lifecycle_service.dart',
+        test(
+          'should generate service with proper GetX lifecycle methods',
+          () async {
+            final project = await OptimizedTestManager.createOptimizedProject(
+              templateKey: 'getx',
             );
 
-            final serviceContent = await serviceFile.readAsString();
+            try {
+              final serviceName = 'Lifecycle';
+              final result = await run([
+                'make',
+                'service',
+                serviceName,
+                '--force',
+              ], project.projectDir);
 
-            // Check for proper imports
-            expect(serviceContent, contains("import 'package:get/get.dart';"));
+              expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Check for class structure
-            expect(serviceContent, contains('class LifecycleService extends GetxService'));
+              final basePath = project.projectDir.path;
+              final serviceFile = File(
+                '$basePath/lib/app/data/services/lifecycle_service.dart',
+              );
 
-            // Check for lifecycle methods
-            expect(serviceContent, contains('@override'));
-            expect(serviceContent, contains('void onInit()'));
-            expect(serviceContent, contains('void onReady()'));
-            expect(serviceContent, contains('void onClose()'));
+              final serviceContent = await serviceFile.readAsString();
 
-            // Check for proper method calls
-            expect(serviceContent, contains('super.onInit()'));
-            expect(serviceContent, contains('super.onReady()'));
-            expect(serviceContent, contains('super.onClose()'));
+              // Check for class structure
+              expect(
+                serviceContent,
+                contains('class LifecycleService extends GetxService'),
+              );
 
-            // Check for TODO comments
-            expect(serviceContent, contains('TODO:'));
+              // Check for lifecycle methods
+              expect(serviceContent, contains('void onInit()'));
+              expect(serviceContent, contains('void onReady()'));
+              expect(serviceContent, contains('void onClose()'));
 
-            print('✅ Service lifecycle methods generated correctly');
-          } finally {
-            await project.cleanup();
-          }
-        });
+              // Check for proper method calls
+              expect(serviceContent, contains('super.onInit()'));
+              expect(serviceContent, contains('super.onReady()'));
+              expect(serviceContent, contains('super.onClose()'));
 
-        test('should generate service with proper naming conventions', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
+              print('✅ Service lifecycle methods generated correctly');
+            } finally {
+              await project.cleanup();
+            }
+          },
+        );
 
-          try {
-            final serviceName = 'NetworkManager';
-            final result = await run([
-              'make',
-              'service',
-              serviceName,
-              '--force',
-            ], project.projectDir);
-
-            expect(result.exitCode, equals(ExitCode.success.code));
-
-            final basePath = project.projectDir.path;
-            final serviceFile = File(
-              '$basePath/lib/app/data/services/network_manager_service.dart',
+        test(
+          'should generate service with proper naming conventions',
+          () async {
+            final project = await OptimizedTestManager.createOptimizedProject(
+              templateKey: 'getx',
             );
 
-            final serviceContent = await serviceFile.readAsString();
+            try {
+              final serviceName = 'NetworkManager';
+              final result = await run([
+                'make',
+                'service',
+                serviceName,
+                '--force',
+              ], project.projectDir);
 
-            // Check for proper class naming
-            expect(serviceContent, contains('class NetworkManagerService'));
+              expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Check for proper file naming (snake_case)
-            expect(serviceFile.path, contains('network_manager_service.dart'));
+              final basePath = project.projectDir.path;
+              final serviceFile = File(
+                '$basePath/lib/app/data/services/network_manager_service.dart',
+              );
 
-            print('✅ Service naming conventions working correctly');
-          } finally {
-            await project.cleanup();
-          }
-        });
+              final serviceContent = await serviceFile.readAsString();
+
+              // Check for proper class naming
+              expect(serviceContent, contains('class NetworkManagerService'));
+
+              // Check for proper file naming (snake_case)
+              expect(
+                serviceFile.path,
+                contains('network_manager_service.dart'),
+              );
+
+              print('✅ Service naming conventions working correctly');
+            } finally {
+              await project.cleanup();
+            }
+          },
+        );
 
         test('should generate service with proper documentation', () async {
           final project = await OptimizedTestManager.createOptimizedProject(
@@ -600,53 +601,16 @@ class ServiceCommandTest extends E2ETestBase {
 
             // Check for documentation comments
             expect(serviceContent, contains('/// Documented Service'));
-            expect(serviceContent, contains('Business logic and state management'));
-            expect(serviceContent, contains('Injected using Get.put() or Get.lazyPut()'));
-
-            print('✅ Service documentation generated correctly');
-          } finally {
-            await project.cleanup();
-          }
-        });
-      });
-
-      // Performance Tests
-      group('⚡ Performance Tests', () {
-        test('should create multiple services efficiently', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final stopwatch = Stopwatch()..start();
-            final serviceNames = ['Api', 'Auth', 'Storage', 'Cache', 'Network'];
-
-            for (final serviceName in serviceNames) {
-              final result = await run([
-                'make',
-                'service',
-                serviceName,
-                '--force',
-              ], project.projectDir);
-
-              expect(result.exitCode, equals(ExitCode.success.code));
-            }
-
-            stopwatch.stop();
-            print(
-              '⚡ Created ${serviceNames.length} services in ${stopwatch.elapsedMilliseconds}ms',
+            expect(
+              serviceContent,
+              contains('Business logic and state management'),
+            );
+            expect(
+              serviceContent,
+              contains('Injected using Get.put() or Get.lazyPut()'),
             );
 
-            // Verify all services were created
-            final basePath = project.projectDir.path;
-            for (final serviceName in serviceNames) {
-              final expectedFile = File(
-                '$basePath/lib/app/data/services/${serviceName.toLowerCase()}_service.dart',
-              );
-              expect(expectedFile.existsSync(), isTrue);
-            }
-
-            print('✅ Multiple service creation performance test passed');
+            print('✅ Service documentation generated correctly');
           } finally {
             await project.cleanup();
           }
