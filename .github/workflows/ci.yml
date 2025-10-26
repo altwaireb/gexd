@@ -106,7 +106,8 @@ jobs:
           'ScreenCommand E2E Tests',
           'BindingCommand E2E Tests',
           'ServiceCommand E2E Tests',
-          'ViewCommand E2E Tests'
+          'ViewCommand E2E Tests',
+          'ModelCommand E2E Tests'
         ]
     steps:
       - name: Checkout

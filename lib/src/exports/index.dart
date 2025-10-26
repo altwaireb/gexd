@@ -2,6 +2,7 @@ export 'commands.dart';
 export 'core.dart';
 export 'enums.dart';
 export 'jobs.dart';
+export 'models.dart';
 export 'utils.dart';
 export 'services.dart';
 export 'services_interfaces.dart';

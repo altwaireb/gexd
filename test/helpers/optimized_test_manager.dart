@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'e2e_helpers.dart';
@@ -32,6 +33,8 @@ class OptimizedTestManager {
     required String templateKey,
     String? projectName,
     bool verbose = false,
+    bool withJsonModel = false,
+    String modelJsonName = 'test_model',
   }) async {
     await initialize();
 
@@ -53,6 +56,11 @@ class OptimizedTestManager {
 
       // 3. Create necessary configuration files
       await _createEssentialConfig(project, templateKey);
+
+      // 4. Create JSON model file if requested
+      if (withJsonModel) {
+        await _createJsonModelFile(project, modelJsonName, verbose: verbose);
+      }
 
       stopwatch.stop();
 
@@ -128,11 +136,67 @@ class OptimizedTestManager {
     return comparison;
   }
 
-  /// Clear template cache
+  /// Clear cache and reset state
   static void clearCache() {
     _templateCache.clear();
     _isInitialized = false;
     print('🧹 Template cache cleared');
+  }
+
+  /// Create JSON model file for testing
+  static Future<void> _createJsonModelFile(
+    TemplateTestProject project,
+    String modelJsonName, {
+    bool verbose = false,
+  }) async {
+    if (verbose) {
+      print('📄 Creating JSON model file: $modelJsonName.json');
+    }
+
+    final assetsDir = Directory(
+      p.join(project.projectDir.path, 'assets', 'models'),
+    );
+    if (!await assetsDir.exists()) {
+      await assetsDir.create(recursive: true);
+    }
+
+    final jsonFile = File(p.join(assetsDir.path, '$modelJsonName.json'));
+
+    // Create simple test JSON content
+    final jsonContent = _generateTestJsonContent(modelJsonName);
+
+    await jsonFile.writeAsString(jsonContent);
+
+    if (verbose) {
+      print('✅ JSON model file created: ${jsonFile.path}');
+    }
+  }
+
+  /// Generate test JSON content for model
+  static String _generateTestJsonContent(String modelName) {
+    // Simple test data with common fields for testing
+    final Map<String, dynamic> testData = {
+      'id': 1,
+      'name':
+          'Test ${modelName.replaceAll('_', ' ').split(' ').map((word) => word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1)).join(' ')}',
+      'description': 'A test model for $modelName',
+      'isActive': true,
+      'createdAt': DateTime.now().toIso8601String(),
+      'updatedAt': DateTime.now().toIso8601String(),
+      'metadata': {
+        'version': '1.0.0',
+        'source': 'test',
+        'tags': ['test', 'model', 'automated'],
+      },
+      'items': [
+        {'itemId': 'item_1', 'value': 'First item', 'priority': 1},
+        {'itemId': 'item_2', 'value': 'Second item', 'priority': 2},
+      ],
+      'settings': {'theme': 'light', 'notifications': true, 'autoSave': false},
+    };
+
+    // Convert to formatted JSON
+    return const JsonEncoder.withIndent('  ').convert(testData);
   }
 
   // === Private Methods ===

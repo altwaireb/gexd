@@ -1,3 +1,5 @@
+import 'package:grammer/grammer.dart';
+
 import 'recase.dart';
 
 /// String helper utilities for text transformations
@@ -160,5 +162,75 @@ class StringHelpers {
   static String uncapitalize(String input) {
     if (input.isEmpty) return input;
     return input[0].toLowerCase() + input.substring(1);
+  }
+
+  /// Convert to singular form
+  ///
+  /// Examples:
+  /// - users -> user
+  /// - categories -> category
+  static String toSingular(String input) {
+    if (input.isEmpty) return input;
+    return Grammer(input).toSingular();
+  }
+
+  /// Convert to plural form
+  ///
+  /// Examples:
+  /// - user -> users
+  /// - category -> categories
+  static String toPlural(String input) {
+    if (input.isEmpty) return input;
+    return Grammer(input).toPlural().first;
+  }
+
+  /// Check if string is plural
+  ///
+  /// Examples:
+  /// - users -> true
+  /// - user -> false
+  static bool isPlural(String input) {
+    if (input.isEmpty) return false;
+    return Grammer(input).isPlural();
+  }
+
+  /// Check if string is singular
+  ///
+  /// Examples:
+  /// - user -> true
+  /// - users -> false
+  static bool isSingular(String input) {
+    if (input.isEmpty) return false;
+    return Grammer(input).isSingular();
+  }
+
+  /// Check if string is countable noun
+  ///
+  /// Examples:
+  /// - apple -> true
+  /// - information -> false
+  static bool isCountable(String input) {
+    if (input.isEmpty) return false;
+    return Grammer(input).isCountable();
+  }
+
+  /// Check if string is uncountable noun
+  ///
+  /// Examples:
+  /// - information -> true
+  /// - apple -> false
+  static bool isNotCountable(String input) {
+    if (input.isEmpty) return false;
+    return Grammer(input).isNotCountable();
+  }
+
+  /// Check if two strings are similar (case insensitive)
+  ///
+  /// Examples:
+  /// - 'User' and 'user' -> true
+  /// - 'User' and 'Admin' -> false
+  static bool isSimilar(String first, String second) {
+    if (first.isEmpty || second.isEmpty) return false;
+    return first.toLowerCase() == second.toLowerCase();
   }
 }

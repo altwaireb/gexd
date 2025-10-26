@@ -28,12 +28,17 @@ class MainConstants {
   static const String askForHasModelInput =
       'Do you want to enable auto model detection?';
 
+  static const String modelInputSourceTypePrompt =
+      'Select the model input source type:';
+
   // File paths
   static const String bindingSingleSuffix = '{name}_binding.dart';
   static const String controllerSuffix = 'controllers/{name}_controller.dart';
   static const String viewSuffix = 'views/{name}_view.dart';
   static const String bindingSuffix = 'bindings/{name}_binding.dart';
   static const String serviceSuffix = '{name}_service.dart';
+  static const String modelSuffix = '{name}.dart';
+  static const String modelSuffixEndingModel = '{name}_model.dart';
 
   // Progress messages
   static const String generatingFiles = 'Generating {name} files...';

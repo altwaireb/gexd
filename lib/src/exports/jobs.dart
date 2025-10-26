@@ -36,3 +36,8 @@ export '../jobs/make/view/view_job.dart';
 export '../jobs/make/service/service_data.dart';
 export '../jobs/make/service/service_inputs.dart';
 export '../jobs/make/service/service_job.dart';
+
+// model
+export '../jobs/make/model/model_data.dart';
+export '../jobs/make/model/model_inputs.dart';
+export '../jobs/make/model/model_job.dart';
