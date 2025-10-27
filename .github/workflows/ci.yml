@@ -127,5 +127,5 @@ jobs:
       - name: Install dependencies
         run: dart pub get
       - name: Run E2E test - ${{ matrix.test_group }}
-        run: dart test --tags e2e --plain-name "${{ matrix.test_group }}" --reporter expanded --concurrency=2
-        timeout-minutes: 15
+        run: dart test --tags e2e --plain-name "${{ matrix.test_group }}" --reporter expanded --concurrency=1
+        timeout-minutes: 20
