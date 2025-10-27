@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request 💡
+    url: https://github.com/altwaireb/gexd/discussions/new?category=ideas
+    about: Propose a new feature or enhancement for Gexd CLI.
+  - name: Ask a Question ❓
+    url: https://github.com/altwaireb/gexd/discussions/new?category=q-a  
+    about: Seek help from community or maintainers.
+  - name: Report Security Issue 🔒
+    url: https://github.com/altwaireb/gexd/security/advisories/new
+    about: Report security vulnerabilities privately.
