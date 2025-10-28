@@ -41,3 +41,9 @@ export '../jobs/make/service/service_job.dart';
 export '../jobs/make/model/model_data.dart';
 export '../jobs/make/model/model_inputs.dart';
 export '../jobs/make/model/model_job.dart';
+
+// locales
+// generate
+export '../jobs/locales/generate/generate_data.dart';
+export '../jobs/locales/generate/generate_inputs.dart';
+export '../jobs/locales/generate/generate_job.dart';

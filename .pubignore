@@ -1,11 +1,12 @@
-# Development files
-TEST_TAGS_GUIDE.md
-test_plan.md
-test/basic_test.dart
-test/helpers/e2e_helper.dart
+# Test files (not needed by end users - saves 348KB)
+test/
 
-# Build files
-bin/gexd
+# Documentation tools (kept for transparency and developer value)
+# tool/ - Contains gexd_doc generator for automatic documentation
+
+# Build files & executables
+bin/gexd*
+*.exe
 
 # IDE files
 .idea/

@@ -7,6 +7,9 @@ class MainConstants {
   /// Prompt message for name input
   static const String nameInput = 'Enter {input} name:';
 
+  /// Prompt message for directory input
+  static const String folderDirInput = 'Enter {input} directory:';
+
   /// Prompt message for 'on' path input
   static const String onPathInput = 'Enter path:';
 
