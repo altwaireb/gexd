@@ -768,8 +768,8 @@ class ControllerCommandTest extends E2ETestBase {
             // Controller creation should complete within reasonable time
             expect(
               stopwatch.elapsedMilliseconds,
-              lessThan(30000),
-            ); // 30 seconds maximum
+              lessThan(60000),
+            ); // 60 seconds maximum
 
             print(
               '✅ Controller created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',

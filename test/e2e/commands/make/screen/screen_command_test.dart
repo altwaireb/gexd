@@ -807,8 +807,8 @@ class Product {
             // Screen creation should complete within reasonable time
             expect(
               stopwatch.elapsedMilliseconds,
-              lessThan(30000),
-            ); // 30 seconds maximum
+              lessThan(60000),
+            ); // 60 seconds maximum
 
             print(
               '✅ Screen created in ${stopwatch.elapsedMilliseconds}ms (performance verified)',

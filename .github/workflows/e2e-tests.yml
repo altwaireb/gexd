@@ -29,6 +29,9 @@ jobs:
           'BindingCommand E2E Tests',
           'ServiceCommand E2E Tests',
           'ViewCommand E2E Tests',
+          'ModelCommand E2E Tests',
+          'LocaleCommand E2E Tests',
+          'LocaleGenerateCommand E2E Tests',
           'ModelCommand E2E Tests'
         ]
 

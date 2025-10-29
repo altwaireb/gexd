@@ -50,7 +50,7 @@ class LocaleCommandTest extends E2ETestBase {
 
           try {
             final result = await run(['locale', '--help'], tempDir);
-            
+
             expect(result.exitCode, equals(ExitCode.success.code));
             expect(result.stdout, contains('Manage GetX locale translations'));
             expect(result.stdout, contains('generate'));
@@ -59,14 +59,18 @@ class LocaleCommandTest extends E2ETestBase {
           } finally {
             await tempDir.delete(recursive: true);
           }
-        });        test('should show generate subcommand help', () async {
+        });
+        test('should show generate subcommand help', () async {
           final tempDir = Directory.systemTemp.createTempSync('locale_test_');
 
           try {
             final result = await run(['locale', 'generate', '--help'], tempDir);
 
             expect(result.exitCode, equals(ExitCode.success.code));
-            expect(result.stdout, contains('Generate GetX locale translations'));
+            expect(
+              result.stdout,
+              contains('Generate GetX locale translations'),
+            );
             expect(result.stdout, contains('key-style'));
             expect(result.stdout, contains('sort-keys'));
 
@@ -88,7 +92,7 @@ class LocaleCommandTest extends E2ETestBase {
             expect(result.exitCode, equals(70));
             expect(
               result.stderr,
-              contains('Could not find a command named "unknown"'),
+              contains('Could not find a subcommand named "unknown"'),
             );
 
             print('⚡ Unknown subcommand handling passed');
