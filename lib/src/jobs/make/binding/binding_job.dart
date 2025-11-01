@@ -59,10 +59,33 @@ class BindingJob {
     } else {
       logger.info('No files were generated.');
     }
-    logger.info('');
-    logger.info(
+    _logNextSteps();
+
+    logger.success(
       MainConstants.generatedFileSuccess.formatWith({'name': 'Binding'}),
     );
+  }
+
+  /// Log helpful next steps for binding usage
+  void _logNextSteps() {
+    logger.info('');
+    logger.info(' Next Steps:');
+    logger.info(' Register in route:');
+    logger.info('');
+
+    if (data.template == ProjectTemplate.getx) {
+      logger.info('   // In lib/app/routes/app_pages.dart');
+    } else {
+      logger.info('   // In lib/presentation/routes/app_pages.dart');
+    }
+
+    logger.info('   GetPage(');
+    logger.info('     name: Routes.YOUR_ROUTE,');
+    logger.info('     page: () => YourView(),');
+    logger.info('     binding: ${data.name}Binding(),');
+    logger.info('   ),');
+    logger.info('');
+    logger.info('💡 Tip: Define the route constant in app_routes.dart');
   }
 
   /// Generate files using Mason brick
@@ -95,34 +118,29 @@ class BindingJob {
   }
 
   Future<Directory> _prepareTargetDirectory(BindingData data) async {
-    final currentDir = data.targetDir;
-
     String targetPath;
     if (data.location == BindingLocation.screen && data.screenName != null) {
       // For screen bindings, place in the specific screen's bindings folder
-      final screenBasePath = ArchitectureCoordinator.getComponentPath(
-        NameComponent.screen,
-        data.template,
+      final screenBasePath = ArchitectureCoordinator.getComponentWithOnPath(
+        component: NameComponent.screen,
+        template: data.template,
+        onPath: data.onPath,
       );
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
-      targetPath = data.onPath != null
-          ? path.join(
-              currentDir.path,
-              screenBasePath,
-              data.onPath!,
-              screenPath,
-              'bindings',
-            )
-          : path.join(currentDir.path, screenBasePath, screenPath, 'bindings');
+      targetPath = path.join(
+        data.targetDir.path,
+        screenBasePath,
+        screenPath,
+        'bindings',
+      );
     } else {
       // For core and shared bindings
-      final basePath = ArchitectureCoordinator.getComponentPath(
-        data.component,
-        data.template,
+      targetPath = ArchitectureCoordinator.getFullTargetPath(
+        projectPath: data.targetDir.path,
+        component: data.component,
+        template: data.template,
+        onPath: data.onPath,
       );
-      targetPath = data.onPath != null
-          ? path.join(currentDir.path, basePath, data.onPath!)
-          : path.join(currentDir.path, basePath);
     }
 
     final targetDir = Directory(targetPath);

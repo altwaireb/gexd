@@ -1,5 +1,6 @@
 // lib/src/templates/architecture_coordinator.dart
 import 'package:gexd/src/core/enums/project_template.dart';
+import 'package:path/path.dart' as path;
 
 import '../core/enums/name_component.dart';
 import 'component_registry.dart';
@@ -38,6 +39,77 @@ class ArchitectureCoordinator {
     return ComponentRegistry.getPath(component, template) ?? '';
   }
 
+  /// Return component path with appended 'on' path if provided
+  /// Returns just the component path if onPath is null or empty
+  static String getComponentWithOnPath({
+    required NameComponent component,
+    required ProjectTemplate template,
+    required String? onPath,
+  }) {
+    if (onPath != null && onPath.isNotEmpty) {
+      final basePath = ComponentRegistry.getPath(component, template);
+      if (basePath != null && basePath.isNotEmpty) {
+        return '$basePath/$onPath';
+      }
+    }
+    return ComponentRegistry.getPath(component, template) ?? '';
+  }
+
+  /// Return component path with onPath but without 'lib/' prefix (for imports)
+  /// This is specifically useful for generating import statements
+  static String getComponentWithOnPathWithoutLib({
+    required NameComponent component,
+    required ProjectTemplate template,
+    required String? onPath,
+  }) {
+    final fullPath = getComponentWithOnPath(
+      component: component,
+      template: template,
+      onPath: onPath,
+    );
+
+    return removeLibPrefix(fullPath);
+  }
+
+  /// Get full absolute target path for component generation
+  /// Combines project directory, component base path, and optional onPath
+  /// This is the unified method for all make commands to determine target directory
+  static String getFullTargetPath({
+    required String projectPath,
+    required NameComponent component,
+    required ProjectTemplate template,
+    required String? onPath,
+  }) {
+    final componentWithOnPath = getComponentWithOnPath(
+      component: component,
+      template: template,
+      onPath: onPath,
+    );
+
+    // Use path.join for proper cross-platform path handling
+    return path.join(projectPath, componentWithOnPath);
+  }
+
+  /// Async version that auto-detects template from project config
+  /// Used for screen generation and other cases where template is not readily available
+  static Future<String> getFullTargetPathByConfig({
+    required String projectPath,
+    required NameComponent component,
+    required String? onPath,
+  }) async {
+    final template = await getCurrentProjectTemplate();
+    if (template == null) {
+      throw Exception('Not inside a valid Gexd project');
+    }
+
+    return getFullTargetPath(
+      projectPath: projectPath,
+      component: component,
+      template: template,
+      onPath: onPath,
+    );
+  }
+
   /// Smart function that reads template from .gexd/config.yaml and returns component path
   /// Returns the path for the component based on the current project's template configuration
   /// Returns empty string if:
@@ -69,10 +141,7 @@ class ArchitectureCoordinator {
     NameComponent component,
   ) async {
     final fullPath = await getComponentPathByConfig(component);
-    if (fullPath.startsWith('lib/')) {
-      return fullPath.substring(4); // Remove 'lib/' prefix
-    }
-    return fullPath;
+    return removeLibPrefix(fullPath);
   }
 
   /// Get component path without 'lib/' prefix for a specific template
@@ -81,10 +150,13 @@ class ArchitectureCoordinator {
     ProjectTemplate template,
   ) {
     final fullPath = getComponentPath(component, template);
-    if (fullPath.startsWith('lib/')) {
-      return fullPath.substring(4); // Remove 'lib/' prefix
-    }
-    return fullPath;
+    return removeLibPrefix(fullPath);
+  }
+
+  /// Helper method to remove 'lib/' prefix from path
+  /// This is the centralized utility for path prefix removal
+  static String removeLibPrefix(String path) {
+    return path.startsWith('lib/') ? path.substring(4) : path;
   }
 
   /// Get current project template from config

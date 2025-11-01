@@ -1,0 +1,13 @@
+name: middleware
+description: Generate GetX middleware files
+
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Middleware class name
+    prompt: What is the middleware name?

@@ -60,7 +60,7 @@ class ControllerJob {
       logger.info('No files were generated.');
     }
     logger.info('');
-    logger.info(
+    logger.success(
       MainConstants.generatedFileSuccess.formatWith({'name': 'controller'}),
     );
   }
@@ -95,39 +95,29 @@ class ControllerJob {
   }
 
   Future<Directory> _prepareTargetDirectory(ControllerData data) async {
-    final currentDir = data.targetDir;
-
     String targetPath;
     if (data.location == ControllerLocation.screen && data.screenName != null) {
       // For screen controllers, place in the specific screen's controllers folder
-      final screenBasePath = ArchitectureCoordinator.getComponentPath(
-        NameComponent.screen,
-        data.template,
+      final screenBasePath = ArchitectureCoordinator.getComponentWithOnPath(
+        component: NameComponent.screen,
+        template: data.template,
+        onPath: data.onPath,
       );
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
-      targetPath = data.onPath != null
-          ? path.join(
-              currentDir.path,
-              screenBasePath,
-              data.onPath!,
-              screenPath,
-              'controllers',
-            )
-          : path.join(
-              currentDir.path,
-              screenBasePath,
-              screenPath,
-              'controllers',
-            );
+      targetPath = path.join(
+        data.targetDir.path,
+        screenBasePath,
+        screenPath,
+        'controllers',
+      );
     } else {
       // For shared controllers
-      final basePath = ArchitectureCoordinator.getComponentPath(
-        data.component,
-        data.template,
+      targetPath = ArchitectureCoordinator.getFullTargetPath(
+        projectPath: data.targetDir.path,
+        component: data.component,
+        template: data.template,
+        onPath: data.onPath,
       );
-      targetPath = data.onPath != null
-          ? path.join(currentDir.path, basePath, data.onPath!)
-          : path.join(currentDir.path, basePath);
     }
 
     final targetDir = Directory(targetPath);

@@ -41,7 +41,7 @@ class BindingCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'binding', 'Test'], tempDir);
+            final result = await run(['make', 'binding', 'Sample'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -105,7 +105,7 @@ class BindingCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'binding',
-              'Test',
+              'Sample',
               '--location',
               'invalidlocation',
               '--force',
@@ -681,10 +681,9 @@ class BindingCommandTest extends E2ETestBase {
             final firstResult = await run([
               'make',
               'binding',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'core',
-              '--force',
             ], project.projectDir);
 
             expect(firstResult.exitCode, equals(ExitCode.success.code));
@@ -694,7 +693,7 @@ class BindingCommandTest extends E2ETestBase {
             final secondResult = await run([
               'make',
               'binding',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'core',
               '--force',
@@ -717,7 +716,7 @@ class BindingCommandTest extends E2ETestBase {
             await run([
               'make',
               'binding',
-              'ForceTest',
+              'Force',
               '--location',
               'core',
               '--force',
@@ -727,7 +726,7 @@ class BindingCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'binding',
-              'ForceTest',
+              'Force',
               '--location',
               'core',
               '--force',
@@ -801,7 +800,7 @@ class BindingCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'binding',
-              'FormattingTest',
+              'Formatting',
               '--location',
               'shared',
               '--force',
@@ -812,7 +811,7 @@ class BindingCommandTest extends E2ETestBase {
             // Check generated file has consistent indentation and formatting
             final basePath = project.projectDir.path;
             var bindingFile = File(
-              '$basePath/lib/app/modules/bindings/formatting_test_binding.dart',
+              '$basePath/lib/app/modules/bindings/formatting_binding.dart',
             );
 
             expect(bindingFile.existsSync(), isTrue);
@@ -846,10 +845,9 @@ class BindingCommandTest extends E2ETestBase {
             final getxResult = await run([
               'make',
               'binding',
-              'CrossTest',
+              'Cross',
               '--location',
               'core',
-              '--force',
             ], projects.getxProject.projectDir);
 
             expect(getxResult.exitCode, equals(ExitCode.success.code));
@@ -858,7 +856,7 @@ class BindingCommandTest extends E2ETestBase {
             final cleanResult = await run([
               'make',
               'binding',
-              'CrossTest',
+              'Cross',
               '--location',
               'core',
               '--force',
@@ -882,8 +880,8 @@ class BindingCommandTest extends E2ETestBase {
 
           try {
             final bindingLocations = [
-              {'location': 'core', 'name': 'CoreTest'},
-              {'location': 'shared', 'name': 'SharedTest'},
+              {'location': 'core', 'name': 'Core'},
+              {'location': 'shared', 'name': 'Shared'},
             ];
 
             for (final binding in bindingLocations) {

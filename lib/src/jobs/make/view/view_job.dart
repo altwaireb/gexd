@@ -60,7 +60,7 @@ class ViewJob {
       logger.info('No files were generated.');
     }
     logger.info('');
-    logger.info(
+    logger.success(
       MainConstants.generatedFileSuccess.formatWith({'name': 'view'}),
     );
   }
@@ -95,34 +95,29 @@ class ViewJob {
   }
 
   Future<Directory> _prepareTargetDirectory(ViewData data) async {
-    final currentDir = data.targetDir;
-
     String targetPath;
     if (data.location == ViewLocation.screen && data.screenName != null) {
       // For screen views, place in the specific screen's views folder
-      final screenBasePath = ArchitectureCoordinator.getComponentPath(
-        NameComponent.screen,
-        data.template,
+      final screenBasePath = ArchitectureCoordinator.getComponentWithOnPath(
+        component: NameComponent.screen,
+        template: data.template,
+        onPath: data.onPath,
       );
       final screenPath = StringHelpers.toSnakeCase(data.screenName!);
-      targetPath = data.onPath != null
-          ? path.join(
-              currentDir.path,
-              screenBasePath,
-              data.onPath!,
-              screenPath,
-              'views',
-            )
-          : path.join(currentDir.path, screenBasePath, screenPath, 'views');
+      targetPath = path.join(
+        data.targetDir.path,
+        screenBasePath,
+        screenPath,
+        'views',
+      );
     } else {
       // For shared views
-      final componentBasePath = ArchitectureCoordinator.getComponentPath(
-        data.component,
-        data.template,
+      targetPath = ArchitectureCoordinator.getFullTargetPath(
+        projectPath: data.targetDir.path,
+        component: data.component,
+        template: data.template,
+        onPath: data.onPath,
       );
-      targetPath = data.onPath != null
-          ? path.join(currentDir.path, componentBasePath, data.onPath!)
-          : path.join(currentDir.path, componentBasePath);
     }
 
     final targetDir = Directory(targetPath);

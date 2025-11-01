@@ -27,6 +27,11 @@ export '../jobs/make/controller/controller_data.dart';
 export '../jobs/make/controller/controller_inputs.dart';
 export '../jobs/make/controller/controller_job.dart';
 
+// exception
+export '../jobs/make/exception/exception_data.dart';
+export '../jobs/make/exception/exception_inputs.dart';
+export '../jobs/make/exception/exception_job.dart';
+
 // view
 export '../jobs/make/view/view_data.dart';
 export '../jobs/make/view/view_inputs.dart';
@@ -41,6 +46,11 @@ export '../jobs/make/service/service_job.dart';
 export '../jobs/make/model/model_data.dart';
 export '../jobs/make/model/model_inputs.dart';
 export '../jobs/make/model/model_job.dart';
+
+// middleware
+export '../jobs/make/middleware/middleware_data.dart';
+export '../jobs/make/middleware/middleware_inputs.dart';
+export '../jobs/make/middleware/middleware_job.dart';
 
 // locales
 // generate

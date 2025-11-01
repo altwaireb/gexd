@@ -55,6 +55,8 @@ mixin HasNameInput on HasName, HasInteractiveMode {
     final validator = FieldValidator(fieldName, example: exampleName);
     validator.notEmpty(value, toUserMessage);
     validator.pascalCase(value, exampleName, toUserMessage);
+    validator.minLength(value, 3, toUserMessage);
+    validator.maxLength(value, 30, toUserMessage);
     validator.validSuffix(value, exampleName, toUserMessage);
   }
 }
@@ -146,6 +148,7 @@ mixin HasForceFlag on HasArgResults, HasInteractiveMode {
     bool hasSubPath = false,
     String? nameSubPath,
     String? baseName, // For screen bindings, this would be the screen name
+    bool createNameSubfolder = true, // Whether to create subfolder with name
   }) async {
     final forceArg = argResults['force'] as bool?;
     // If --force flag is explicitly provided, return true
@@ -165,6 +168,7 @@ mixin HasForceFlag on HasArgResults, HasInteractiveMode {
         hasSubPath: hasSubPath,
         nameSubPath: nameSubPath,
         baseName: baseName,
+        createNameSubfolder: createNameSubfolder,
       );
       if (existingFiles.isNotEmpty) {
         throw ValidationException.custom(
@@ -187,6 +191,7 @@ mixin HasForceFlag on HasArgResults, HasInteractiveMode {
       hasSubPath: hasSubPath,
       nameSubPath: nameSubPath,
       baseName: baseName,
+      createNameSubfolder: createNameSubfolder,
     );
 
     // If no files exist, no need to force
@@ -227,46 +232,44 @@ mixin HasForceFlag on HasArgResults, HasInteractiveMode {
     bool hasSubPath = false,
     String? nameSubPath,
     String? baseName,
+    bool createNameSubfolder = true,
   }) async {
     final fileName = StringHelpers.toSnakeCase(name);
+    final componentBasePath = ArchitectureCoordinator.getComponentPath(
+      component,
+      template,
+    );
 
-    // Build the file directory path with flexible handling
-    String fileDirPath;
+    late String fileDirPath;
+
+    // 🧭 1. إذا كانت لدينا حالة خاصة فيها subPath (مثل: bindings داخل شاشة)
     if (hasSubPath && nameSubPath != null && baseName != null) {
-      // Custom sub-path logic (e.g., for screen bindings)
-      // Use NameComponent.screen to get the correct base path for screen bindings
-      final screenBasePath = ArchitectureCoordinator.getComponentPath(
-        NameComponent.screen,
-        template,
-      );
-      final baseNameSnakeCase = StringHelpers.toSnakeCase(baseName);
+      final baseNameSnake = StringHelpers.toSnakeCase(baseName);
       fileDirPath = on != null && on.isNotEmpty
-          ? path.join(screenBasePath, on, baseNameSnakeCase, nameSubPath)
-          : path.join(screenBasePath, baseNameSnakeCase, nameSubPath);
-    } else {
-      // Default behavior (for screens, controllers, etc.)
-      final componentBasePath = ArchitectureCoordinator.getComponentPath(
-        component,
-        template,
-      );
-      fileDirPath = on != null && on.isNotEmpty
+          ? path.join(componentBasePath, on, baseNameSnake, nameSubPath)
+          : path.join(componentBasePath, baseNameSnake, nameSubPath);
+    }
+    // 🧭 2. إذا كان الأمر يحتوي على on (مثل: gexd make controller Login --on auth)
+    else if (on != null && on.isNotEmpty) {
+      fileDirPath = createNameSubfolder
           ? path.join(componentBasePath, on, fileName)
-          : path.join(componentBasePath, fileName);
+          : path.join(componentBasePath, on);
+    }
+    // 🧭 3. الحالة الافتراضية - بدون on أو subpath
+    else {
+      fileDirPath = createNameSubfolder
+          ? path.join(componentBasePath, fileName)
+          : componentBasePath;
     }
 
+    // 🧭 4. نتحقق من الملفات الموجودة
     final existingFiles = <String>[];
 
-    final potentialFiles = checkFiles
-        .map((file) => path.join(fileDirPath, file))
-        .toList();
-
-    // Check each file
-    for (final filePath in potentialFiles) {
-      final file = File(filePath);
-      if (await file.exists()) {
-        // Convert to relative path for better display
-        final relativePath = path.relative(filePath, from: targetDir.path);
-        existingFiles.add(relativePath);
+    for (final file in checkFiles) {
+      final filePath = path.join(fileDirPath, file);
+      if (await File(filePath).exists()) {
+        final relative = path.relative(filePath, from: targetDir.path);
+        existingFiles.add(relative);
       }
     }
 

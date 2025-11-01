@@ -62,6 +62,7 @@ class ServiceInputs
         }),
       ],
       commandName: 'service',
+      createNameSubfolder: false, // Services go directly in services folder
     );
 
     return ServiceData(

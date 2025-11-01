@@ -76,10 +76,7 @@ class ProjectHelpers {
     NameComponent component,
   ) async {
     final fullPath = await getComponentPath(component);
-    if (fullPath.startsWith('lib/')) {
-      return fullPath.substring(4); // Remove 'lib/' prefix
-    }
-    return fullPath;
+    return ArchitectureCoordinator.removeLibPrefix(fullPath);
   }
 
   /// Get component path for specific template

@@ -282,14 +282,12 @@ class ModelJob {
 
   /// Prepare target directory
   Future<Directory> _prepareTargetDirectory() async {
-    final componentBasePath = ArchitectureCoordinator.getComponentPath(
-      data.component,
-      data.template,
+    final targetPath = ArchitectureCoordinator.getFullTargetPath(
+      projectPath: data.targetDir.path,
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
     );
-
-    final targetPath = data.onPath != null
-        ? path.join(data.targetDir.path, componentBasePath, data.onPath!)
-        : path.join(data.targetDir.path, componentBasePath);
 
     final targetDir = Directory(targetPath);
 

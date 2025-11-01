@@ -36,12 +36,17 @@ class MainConstants {
 
   // File paths
   static const String bindingSingleSuffix = '{name}_binding.dart';
-  static const String controllerSuffix = 'controllers/{name}_controller.dart';
-  static const String viewSuffix = 'views/{name}_view.dart';
-  static const String bindingSuffix = 'bindings/{name}_binding.dart';
+  static const String controllerSingleSuffix = '{name}_controller.dart';
+  static const String viewSingleSuffix = '{name}_view.dart';
   static const String serviceSuffix = '{name}_service.dart';
   static const String modelSuffix = '{name}.dart';
   static const String modelSuffixEndingModel = '{name}_model.dart';
+  static const String middlewareSuffix = '{name}_middleware.dart';
+  static const String exceptionSuffix = '{name}_exception.dart';
+  // for screen files
+  static const String controllerSuffix = 'controllers/{name}_controller.dart';
+  static const String viewSuffix = 'views/{name}_view.dart';
+  static const String bindingSuffix = 'bindings/{name}_binding.dart';
 
   // Progress messages
   static const String generatingFiles = 'Generating {name} files...';

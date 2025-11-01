@@ -55,9 +55,37 @@ class ServiceJob {
     } else {
       logger.info('No files were generated.');
     }
+    _logNextSteps();
+
+    logger.success(
+      MainConstants.generatedFileSuccess.formatWith({'name': 'service'}),
+    );
+  }
+
+  /// Log helpful next steps for service usage
+  void _logNextSteps() {
+    logger.info('');
+    logger.info(' Next Steps:');
+    logger.info(' 1. Register in dependency injection:');
+    logger.info('');
+
+    if (data.template == ProjectTemplate.getx) {
+      logger.info('   // In lib/app/core/bindings/initial_binding.dart');
+    } else {
+      logger.info('   // In lib/core/bindings/initial_binding.dart');
+    }
+
+    logger.info(
+      '   Get.lazyPut<${data.name}Service>(() => ${data.name}Service());',
+    );
+    logger.info('');
+    logger.info(' 2. Usage in controllers:');
+    logger.info(
+      '   final ${data.name}Service ${StringHelpers.toCamelCase(data.name)}Service = Get.find<${data.name}Service>();',
+    );
     logger.info('');
     logger.info(
-      MainConstants.generatedFileSuccess.formatWith({'name': 'service'}),
+      '💡 Tip: Use Get.lazyPut for services that are not immediately needed.',
     );
   }
 
@@ -91,16 +119,12 @@ class ServiceJob {
   }
 
   Future<Directory> _prepareTargetDirectory(ServiceData data) async {
-    final currentDir = data.targetDir;
-
-    final componentBasePath = ArchitectureCoordinator.getComponentPath(
-      data.component,
-      data.template,
+    final String targetPath = ArchitectureCoordinator.getFullTargetPath(
+      projectPath: data.targetDir.path,
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
     );
-
-    final String targetPath = data.onPath != null
-        ? path.join(currentDir.path, componentBasePath, data.onPath!)
-        : path.join(currentDir.path, componentBasePath);
 
     final targetDir = Directory(targetPath);
 
@@ -124,18 +148,16 @@ class ServiceJob {
 
   /// Build list of generated files for reporting
   List<String> _buildGeneratedFilesList(ServiceData data) {
-    final componentBasePath = ArchitectureCoordinator.getComponentPath(
-      data.component,
-      data.template,
+    final String basePath = ArchitectureCoordinator.getComponentWithOnPath(
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
     );
-    final String basePath = data.onPath != null
-        ? '$componentBasePath/${data.onPath}/'
-        : '$componentBasePath/';
 
     final nameSnakeCase = StringHelpers.toSnakeCase(data.name);
 
     return [
-      '$basePath${MainConstants.serviceSuffix}'.formatWith({
+      '$basePath/${MainConstants.serviceSuffix}'.formatWith({
         'name': nameSnakeCase,
       }),
     ];

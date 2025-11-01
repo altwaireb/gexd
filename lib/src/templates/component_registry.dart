@@ -84,6 +84,16 @@ class ComponentRegistry {
       },
       isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
     ),
+    NameComponent.coreExceptions: ComponentMetadata(
+      description: 'Custom exception classes',
+      category: 'core',
+      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
+      defaultPath: {
+        ProjectTemplate.getx: ArchitectureTemplate.getxAppCoreExceptions,
+        ProjectTemplate.clean: ArchitectureTemplate.cleanCoreExceptions,
+      },
+      isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
+    ),
 
     // ================= Data Layer =================
     NameComponent.models: ComponentMetadata(

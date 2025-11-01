@@ -13,3 +13,7 @@ bricks:
     path: bricks/view
   service:
     path: bricks/service
+  middleware:
+    path: bricks/middleware
+  exception:
+    path: bricks/exception

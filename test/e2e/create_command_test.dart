@@ -2,6 +2,7 @@
 library;
 
 import 'dart:io';
+import 'package:io/io.dart';
 import 'package:test/test.dart';
 import 'package:path/path.dart' as p;
 import '../helpers/e2e_helpers.dart';
@@ -21,7 +22,7 @@ void main() {
     test(
       'should create GetX project successfully',
       () async {
-        const projectName = 'test_getx_app';
+        const projectName = 'demo_getx_app';
         final projectPath = p.join(tempDir.path, projectName);
 
         // Run gexd create command with GetX template
@@ -41,7 +42,7 @@ void main() {
         // Verify command succeeded
         expect(
           result.exitCode,
-          equals(0),
+          equals(ExitCode.success.code),
           reason:
               'gexd create should succeed\nstderr: ${result.stderr}\nstdout: ${result.stdout}',
         );
@@ -82,7 +83,7 @@ void main() {
     test(
       'should create Clean Architecture project successfully',
       () async {
-        const projectName = 'test_clean_app';
+        const projectName = 'demo_clean_app';
         final projectPath = p.join(tempDir.path, projectName);
 
         // Run gexd create command with Clean template
@@ -156,9 +157,10 @@ void main() {
       ], workingDir: tempDir.path);
 
       // Should fail with appropriate error
+      expect(result.exitCode, equals(ExitCode.usage.code));
       expect(
         result.exitCode,
-        isNot(0),
+        isNot(ExitCode.success.code),
         reason: 'gexd should reject invalid project names',
       );
 
@@ -172,7 +174,7 @@ void main() {
     });
 
     test('should handle unsupported template gracefully', () async {
-      const projectName = 'test_invalid_template';
+      const projectName = 'app_invalid_template';
 
       // Test with invalid template
       final result = await E2EHelpers.runGexd([
@@ -191,7 +193,7 @@ void main() {
       // Should fail with appropriate error
       expect(
         result.exitCode,
-        isNot(0),
+        isNot(ExitCode.success.code),
         reason: 'gexd should reject invalid templates',
       );
 

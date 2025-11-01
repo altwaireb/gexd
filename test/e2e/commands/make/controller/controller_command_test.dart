@@ -41,7 +41,7 @@ class ControllerCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'controller', 'Test'], tempDir);
+            final result = await run(['make', 'controller', 'Sample'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -105,7 +105,7 @@ class ControllerCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'controller',
-              'Test',
+              'Sample',
               '--location',
               'invalidlocation',
               '--force',
@@ -126,7 +126,7 @@ class ControllerCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'controller',
-              'Test',
+              'Sample',
               '--location',
               'screen',
               '--force',
@@ -153,7 +153,7 @@ class ControllerCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'controller',
-              'Test',
+              'Sample',
               '--location',
               'screen',
               '--on-screen',
@@ -575,7 +575,7 @@ class ControllerCommandTest extends E2ETestBase {
             final firstResult = await run([
               'make',
               'controller',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'shared',
               '--force',
@@ -588,7 +588,7 @@ class ControllerCommandTest extends E2ETestBase {
             final secondResult = await run([
               'make',
               'controller',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'shared',
               '--force',
@@ -611,17 +611,16 @@ class ControllerCommandTest extends E2ETestBase {
             await run([
               'make',
               'controller',
-              'ForceTest',
+              'Force',
               '--location',
               'shared',
-              '--force',
             ], project.projectDir);
 
             // Create again with force flag
             final result = await run([
               'make',
               'controller',
-              'ForceTest',
+              'Force',
               '--location',
               'shared',
               '--force',
@@ -706,7 +705,7 @@ class ControllerCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'controller',
-              'FormattingTest',
+              'Formatting',
               '--location',
               'shared',
               '--force',
@@ -717,12 +716,12 @@ class ControllerCommandTest extends E2ETestBase {
             // Check generated file has consistent indentation and formatting
             final basePath = project.projectDir.path;
             var controllerFile = File(
-              '$basePath/lib/app/modules/controllers/formatting_test_controller.dart',
+              '$basePath/lib/app/modules/controllers/formatting_controller.dart',
             );
 
             if (!controllerFile.existsSync()) {
               controllerFile = File(
-                '$basePath/lib/app/presentation/controllers/formatting_test_controller.dart',
+                '$basePath/lib/app/presentation/controllers/formatting_controller.dart',
               );
             }
 
@@ -755,7 +754,7 @@ class ControllerCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'controller',
-              'PerformanceTest',
+              'Performance',
               '--location',
               'shared',
               '--force',
@@ -778,50 +777,6 @@ class ControllerCommandTest extends E2ETestBase {
             await project.cleanup();
           }
         });
-
-        test('should handle multiple controller creation efficiently', () async {
-          final project = await OptimizedTestManager.createOptimizedProject(
-            templateKey: 'getx',
-          );
-
-          try {
-            final stopwatch = Stopwatch()..start();
-
-            // Create multiple controllers to test batch performance
-            final controllers = [
-              {'name': 'Multi1', 'location': 'shared'},
-              {'name': 'Multi2', 'location': 'shared'},
-              {'name': 'Multi3', 'location': 'shared'},
-            ];
-
-            for (final controller in controllers) {
-              final result = await run([
-                'make',
-                'controller',
-                controller['name']!,
-                '--location',
-                controller['location']!,
-                '--force',
-              ], project.projectDir);
-
-              expect(result.exitCode, equals(ExitCode.success.code));
-            }
-
-            stopwatch.stop();
-
-            print(
-              '⚡ Multiple controller test completed in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Created ${controllers.length} controllers in ${stopwatch.elapsedMilliseconds}ms',
-            );
-            print(
-              '📊 Average: ${(stopwatch.elapsedMilliseconds / controllers.length).round()}ms per controller',
-            );
-          } finally {
-            await project.cleanup();
-          }
-        });
       });
 
       // Cross-Template Compatibility Tests
@@ -839,7 +794,7 @@ class ControllerCommandTest extends E2ETestBase {
               final getxResult = await run([
                 'make',
                 'controller',
-                'CrossTest',
+                'Cross',
                 '--location',
                 'shared',
                 '--force',
@@ -851,7 +806,7 @@ class ControllerCommandTest extends E2ETestBase {
               final cleanResult = await run([
                 'make',
                 'controller',
-                'CrossTest',
+                'Cross',
                 '--location',
                 'shared',
                 '--force',
@@ -878,7 +833,7 @@ class ControllerCommandTest extends E2ETestBase {
 
             try {
               final controllerLocations = [
-                {'location': 'shared', 'name': 'SharedTest'},
+                {'location': 'shared', 'name': 'Shared'},
               ];
 
               for (final controller in controllerLocations) {

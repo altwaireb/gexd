@@ -43,7 +43,7 @@ class ModelCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'model', 'Test'], tempDir);
+            final result = await run(['make', 'model', 'Sample'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -68,7 +68,7 @@ class ModelCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'model',
-              'ConflictTest',
+              'Conflict',
               '--file',
               'assets/models/user.json',
               '--url',
@@ -97,7 +97,7 @@ class ModelCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'model',
-              'StyleTest',
+              'Style',
               '--style',
               'plain',
               '--copyWith',
@@ -539,7 +539,7 @@ class ModelCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'model',
-              'PerfTest',
+              'Perf',
               '--file',
               'assets/models/perf_test.json',
               '--style',

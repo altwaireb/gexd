@@ -27,6 +27,7 @@ class ArchitectureTemplate {
   static const String getxAppCoreMiddleware = 'lib/app/core/middleware';
   static const String getxAppCoreConstants = 'lib/app/core/constants';
   static const String getxAppCoreExtensions = 'lib/app/core/extensions';
+  static const String getxAppCoreExceptions = 'lib/app/core/exceptions';
 
   // Data Layer Structure
   static const String getxDataLayer = 'lib/app/data';
@@ -103,6 +104,7 @@ class ArchitectureTemplate {
   static const String cleanCoreMiddleware = 'lib/core/middleware';
   static const String cleanCoreErrors = 'lib/core/errors';
   static const String cleanCoreUsecases = 'lib/core/usecases';
+  static const String cleanCoreExceptions = 'lib/core/exceptions';
 
   // Domain Layer - Business Logic
   static const String cleanDomain = 'lib/domain';

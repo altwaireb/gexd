@@ -6,6 +6,7 @@ enum NameComponent {
   coreConstants,
   coreMiddleware,
   coreExtensions,
+  coreExceptions,
   datasources,
   datasourcesInterfaces,
   localDatasources,

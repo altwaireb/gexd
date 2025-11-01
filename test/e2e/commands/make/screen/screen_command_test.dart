@@ -730,7 +730,7 @@ class Product {
             await run([
               'make',
               'screen',
-              'OverwriteTest',
+              'Overwrite',
               '--force',
             ], project.projectDir);
 
@@ -738,7 +738,7 @@ class Product {
             final result = await run([
               'make',
               'screen',
-              'OverwriteTest',
+              'Overwrite',
             ], project.projectDir);
 
             expect(
@@ -763,7 +763,7 @@ class Product {
             await run([
               'make',
               'screen',
-              'ForceTest',
+              'Force',
               '--force',
             ], project.projectDir);
 
@@ -771,7 +771,7 @@ class Product {
             final result = await run([
               'make',
               'screen',
-              'ForceTest',
+              'Force',
               '--force',
             ], project.projectDir);
 
@@ -796,7 +796,7 @@ class Product {
             final result = await run([
               'make',
               'screen',
-              'PerformanceTest',
+              'Performance',
               '--force',
             ], project.projectDir);
 
@@ -865,7 +865,7 @@ class Product {
             final result = await run([
               'make',
               'screen',
-              'QualityTest',
+              'Quality',
               '--type',
               'withState',
               '--force',
@@ -892,8 +892,7 @@ class Product {
             final getxResult = await run([
               'make',
               'screen',
-              'CrossTest',
-              '--force',
+              'Cross',
             ], projects.getxProject.projectDir);
 
             expect(getxResult.exitCode, equals(ExitCode.success.code));
@@ -902,7 +901,7 @@ class Product {
             final cleanResult = await run([
               'make',
               'screen',
-              'CrossTest',
+              'Cross',
               '--force',
             ], projects.cleanProject.projectDir);
 

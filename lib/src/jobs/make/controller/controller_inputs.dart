@@ -77,14 +77,17 @@ class ControllerInputs
       component: component,
       targetDir: targetDir,
       expectedFiles: [
-        MainConstants.bindingSingleSuffix.formatWith({
+        MainConstants.controllerSingleSuffix.formatWith({
           'name': StringHelpers.toSnakeCase(name),
         }),
       ],
       commandName: 'controller',
       hasSubPath: location == ControllerLocation.screen,
       nameSubPath: location == ControllerLocation.screen ? 'controllers' : null,
-      baseName: screenName, // Pass screen name for path calculation
+      // Pass screen name for path calculation
+      baseName: screenName,
+      // Controllers go directly in controllers folder
+      createNameSubfolder: false,
     );
 
     return ControllerData(

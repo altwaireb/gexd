@@ -43,6 +43,9 @@ class FieldValidator {
     'event',
     'data',
     'interface',
+    'exception',
+    'middleware',
+    'test',
 
     // General programming suffixes
     'manager',

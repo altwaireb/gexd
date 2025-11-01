@@ -42,7 +42,7 @@ class ServiceCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'service', 'Test'], tempDir);
+            final result = await run(['make', 'service', 'Sample'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -124,7 +124,7 @@ class ServiceCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'service',
-              'Test',
+              'Sample',
               '--on',
               'a/very/deep/nested/path',
               '--force',
@@ -345,29 +345,22 @@ class ServiceCommandTest extends E2ETestBase {
             final serviceName = 'Existing';
 
             // Create service first time
-            var result = await run([
+            var resultFirst = await run([
+              'make',
+              'service',
+              serviceName,
+            ], project.projectDir);
+            expect(resultFirst.exitCode, equals(ExitCode.success.code));
+
+            // Try to create same service with --force flag
+            var resultSecond = await run([
               'make',
               'service',
               serviceName,
               '--force',
             ], project.projectDir);
-            expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Try to create same service without --force
-            result = await run([
-              'make',
-              'service',
-              serviceName,
-            ], project.projectDir);
-
-            // Should either prompt or inform about existing file
-            expect(
-              result.exitCode,
-              anyOf([
-                equals(ExitCode.success.code),
-                equals(ExitCode.cantCreate.code),
-              ]),
-            );
+            expect(resultSecond.exitCode, equals(ExitCode.success.code));
 
             print('✅ Overwrite handling working correctly');
           } finally {
@@ -468,7 +461,7 @@ class ServiceCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'service',
-              'Test',
+              'Sample',
               '--on',
               'invalid-chars!',
               '--force',

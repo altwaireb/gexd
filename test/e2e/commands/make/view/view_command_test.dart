@@ -41,7 +41,7 @@ class ViewCommandTest extends E2ETestBase {
           final tempDir = Directory.systemTemp.createTempSync('empty_project_');
 
           try {
-            final result = await run(['make', 'view', 'Test'], tempDir);
+            final result = await run(['make', 'view', 'Sample'], tempDir);
             expect(result.exitCode, equals(ExitCode.config.code));
             expect(result.stderr, contains('Not inside a valid Gexd project'));
 
@@ -105,7 +105,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'Test',
+              'Sample',
               '--location',
               'invalidlocation',
               '--force',
@@ -126,7 +126,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'Test',
+              'Sample',
               '--location',
               'screen',
               '--force',
@@ -153,7 +153,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'Test',
+              'Sample',
               '--location',
               'screen',
               '--on-screen',
@@ -593,7 +593,7 @@ class ViewCommandTest extends E2ETestBase {
             final firstResult = await run([
               'make',
               'view',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'shared',
               '--force',
@@ -606,7 +606,7 @@ class ViewCommandTest extends E2ETestBase {
             final secondResult = await run([
               'make',
               'view',
-              'OverwriteTest',
+              'Overwrite',
               '--location',
               'shared',
               '--force',
@@ -629,7 +629,7 @@ class ViewCommandTest extends E2ETestBase {
             await run([
               'make',
               'view',
-              'ForceTest',
+              'Force',
               '--location',
               'shared',
               '--force',
@@ -639,7 +639,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'ForceTest',
+              'Force',
               '--location',
               'shared',
               '--force',
@@ -765,7 +765,7 @@ class ViewCommandTest extends E2ETestBase {
             final result = await run([
               'make',
               'view',
-              'PerformanceTest',
+              'Performance',
               '--location',
               'shared',
               '--force',
@@ -803,7 +803,7 @@ class ViewCommandTest extends E2ETestBase {
             final getxResult = await run([
               'make',
               'view',
-              'CrossTest',
+              'Cross',
               '--location',
               'shared',
               '--force',
@@ -815,7 +815,7 @@ class ViewCommandTest extends E2ETestBase {
             final cleanResult = await run([
               'make',
               'view',
-              'CrossTest',
+              'Cross',
               '--location',
               'shared',
               '--force',
@@ -942,14 +942,7 @@ class ViewCommandTest extends E2ETestBase {
               '--force',
             ], project.projectDir);
 
-            // Should either succeed or fail gracefully with appropriate message
-            expect(
-              result.exitCode,
-              anyOf([
-                equals(ExitCode.success.code),
-                equals(ExitCode.usage.code),
-              ]),
-            );
+            expect(result.exitCode, equals(ExitCode.usage.code));
 
             print('✅ Very long view name handled appropriately');
           } finally {

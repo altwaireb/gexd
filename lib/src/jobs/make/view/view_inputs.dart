@@ -75,7 +75,7 @@ class ViewInputs
       component: component,
       targetDir: targetDir,
       expectedFiles: [
-        MainConstants.bindingSingleSuffix.formatWith({
+        MainConstants.viewSingleSuffix.formatWith({
           'name': StringHelpers.toSnakeCase(name),
         }),
       ],
@@ -83,6 +83,7 @@ class ViewInputs
       hasSubPath: location == ViewLocation.screen,
       nameSubPath: location == ViewLocation.screen ? 'views' : null,
       baseName: screenName, // Pass screen name for path calculation
+      createNameSubfolder: false, // Views go directly in views folder
     );
 
     return ViewData(

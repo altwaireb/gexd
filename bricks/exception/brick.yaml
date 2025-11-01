@@ -1,0 +1,13 @@
+name: exception
+description: Generate GetX exception files
+
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Exception class name
+    prompt: What is the exception name?

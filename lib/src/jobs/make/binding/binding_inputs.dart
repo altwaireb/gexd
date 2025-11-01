@@ -83,6 +83,7 @@ class BindingInputs
       hasSubPath: location == BindingLocation.screen,
       nameSubPath: location == BindingLocation.screen ? 'bindings' : null,
       baseName: screenName, // Pass screen name for path calculation
+      createNameSubfolder: false, // Bindings go directly in bindings folder
     );
 
     return BindingData(

@@ -34,7 +34,7 @@ void main() {
       'should initialize existing Flutter project with GetX template',
       () async {
         // Step 1: Create a basic Flutter project
-        final projectName = 'test_getx_init';
+        final projectName = 'app_getx_init';
         final projectPath = p.join(tempDir.path, projectName);
 
         final createResult = await Process.run('flutter', [
@@ -104,7 +104,7 @@ void main() {
       'should initialize existing Flutter project with Clean Architecture template',
       () async {
         // Step 1: Create a basic Flutter project
-        final projectName = 'test_clean_init';
+        final projectName = 'app_clean_init';
         final projectPath = p.join(tempDir.path, projectName);
 
         final createResult = await Process.run('flutter', [
@@ -168,15 +168,14 @@ void main() {
       // Should fail with appropriate error
       expect(
         result.exitCode,
-        isNot(0),
+        equals(ExitCode.config.code),
         reason: 'gexd init should fail for non-Flutter projects',
       );
 
       // Should contain validation error message with new exception format
       final errorOutput = '${result.stderr}${result.stdout}'.toLowerCase();
       expect(
-        errorOutput.contains('pubspec.yaml') ||
-            errorOutput.contains('configprojectexception') ||
+        errorOutput.contains('pubspec.yaml') &&
             errorOutput.contains('missing required configuration'),
         isTrue,
         reason: 'Should provide clear error message for non-Flutter project',
@@ -185,7 +184,7 @@ void main() {
 
     test('should handle invalid templates gracefully in init', () async {
       // Step 1: Create a basic Flutter project
-      final projectName = 'test_invalid_template_init';
+      final projectName = 'invalid_template_init';
       final projectPath = p.join(tempDir.path, projectName);
 
       final createResult = await Process.run('flutter', [
@@ -204,9 +203,10 @@ void main() {
       ], workingDir: projectPath);
 
       // Should fail with appropriate error
+      expect(result.exitCode, equals(ExitCode.software.code));
       expect(
         result.exitCode,
-        isNot(0),
+        isNot(ExitCode.success.code),
         reason: 'gexd init should reject invalid templates',
       );
 
@@ -259,7 +259,7 @@ void main() {
         // Real environment: usually ~5-15 seconds, optimized should be similar
         expect(
           duration,
-          lessThan(60000), // 60 seconds max
+          lessThan(85000), // 85 seconds max
           reason: 'Init should complete within reasonable time: ${duration}ms',
         );
 

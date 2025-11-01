@@ -71,7 +71,7 @@ class ScreenJob {
       logger.info('No files were generated.');
     }
     logger.info('');
-    logger.info(
+    logger.success(
       MainConstants.generatedFilesSuccess.formatWith({'name': 'Screen'}),
     );
   }
@@ -106,14 +106,11 @@ class ScreenJob {
   }
 
   Future<Directory> _prepareTargetDirectory(ScreenData screenData) async {
-    final basePath = await ArchitectureCoordinator.getComponentPathByConfig(
-      NameComponent.screen,
+    final targetPath = await ArchitectureCoordinator.getFullTargetPathByConfig(
+      projectPath: screenData.targetDir.path,
+      component: NameComponent.screen,
+      onPath: screenData.onPath,
     );
-
-    final currentDir = screenData.targetDir;
-    final targetPath = screenData.onPath != null
-        ? path.join(currentDir.path, basePath, screenData.onPath!)
-        : path.join(currentDir.path, basePath);
 
     final targetDir = Directory(targetPath);
 

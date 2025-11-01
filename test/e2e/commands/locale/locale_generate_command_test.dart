@@ -565,6 +565,282 @@ class LocaleGenerateCommandTest extends E2ETestBase {
         });
       });
 
+      // Extensions Tests
+      group('🔧 Extensions Generation', () {
+        test('should generate trVars and trCount extension files', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            await _createExtensionTestLocaleFiles(project.projectDir);
+
+            final result = await run([
+              'locale',
+              'generate',
+              'assets/locales',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.success.code));
+
+            // Verify extension files are created
+            final extensionsDir = Directory(
+              path.join(
+                project.projectDir.path,
+                'lib/app/translations/extensions',
+              ),
+            );
+            expect(await extensionsDir.exists(), isTrue);
+
+            // Check trVars extension file
+            final trVarsFile = File(
+              path.join(extensionsDir.path, 'tr_vars_extension.dart'),
+            );
+            expect(await trVarsFile.exists(), isTrue);
+
+            final trVarsContent = await trVarsFile.readAsString();
+            expect(
+              trVarsContent,
+              contains('extension TrVarsExtension on String'),
+            );
+            expect(trVarsContent, contains('String trVars('));
+            expect(trVarsContent, contains('replaceAll(\'{\$key}\', value)'));
+
+            // Check trCount extension file
+            final trCountFile = File(
+              path.join(extensionsDir.path, 'tr_count_extension.dart'),
+            );
+            expect(await trCountFile.exists(), isTrue);
+
+            final trCountContent = await trCountFile.readAsString();
+            expect(
+              trCountContent,
+              contains('extension TrCountExtension on String'),
+            );
+            expect(trCountContent, contains('String trCount('));
+            expect(trCountContent, contains('_getPluralKey'));
+
+            print('⚡ Extensions generation passed');
+          } finally {
+            await project.cleanup();
+          }
+        });
+
+        test(
+          'should generate extensions with universal pluralization',
+          () async {
+            final project = await OptimizedTestManager.createOptimizedProject(
+              templateKey: 'getx',
+            );
+
+            try {
+              await _createExtensionTestLocaleFiles(project.projectDir);
+
+              final result = await run([
+                'locale',
+                'generate',
+                'assets/locales',
+              ], project.projectDir);
+
+              expect(result.exitCode, equals(ExitCode.success.code));
+
+              final trCountFile = File(
+                path.join(
+                  project.projectDir.path,
+                  'lib/app/translations/extensions/tr_count_extension.dart',
+                ),
+              );
+              final content = await trCountFile.readAsString();
+
+              // Verify universal pluralization logic
+              expect(content, contains('universal pluralization'));
+              expect(content, contains('works with all languages'));
+              expect(content, contains('zero: exactly 0 items'));
+              expect(content, contains('one: exactly 1 item'));
+              expect(content, contains('two: exactly 2 items'));
+              expect(content, contains('few: small quantities'));
+              expect(content, contains('many: larger quantities'));
+              expect(content, contains('other: fallback'));
+
+              // Check pluralization logic
+              expect(content, contains('if (count == 0) return \'zero\''));
+              expect(content, contains('if (count == 1) return \'one\''));
+              expect(content, contains('if (count == 2) return \'two\''));
+              expect(
+                content,
+                contains('if (count >= 3 && count <= 10) return \'few\''),
+              );
+              expect(content, contains('if (count >= 11) return \'many\''));
+              expect(content, contains('return \'other\''));
+
+              print('⚡ Universal pluralization logic passed');
+            } finally {
+              await project.cleanup();
+            }
+          },
+        );
+      });
+
+      // trVars Functionality Tests
+      group('🔤 trVars Extension Tests', () {
+        test('should process __count structures correctly', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            await _createCountTestLocaleFiles(project.projectDir);
+
+            final result = await run([
+              'locale',
+              'generate',
+              'assets/locales',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.success.code));
+
+            // Verify main translations file
+            final outputFile = File(
+              path.join(
+                project.projectDir.path,
+                'lib/app/translations/translations.g.dart',
+              ),
+            );
+            final content = await outputFile.readAsString();
+
+            // Check that __count is converted to JSON string
+            expect(content, contains('{"zero":"No notifications"'));
+            expect(content, contains('"one":"One notification"'));
+            expect(content, contains('"few":"{count} notifications"'));
+            expect(content, contains('"many":"{count} notifications"'));
+            expect(content, contains('"other":"{count} notifications"}'));
+
+            // Verify regular strings are not affected
+            expect(content, contains('\'welcome\': \'Welcome {name}\''));
+
+            print('⚡ __count processing passed');
+          } finally {
+            await project.cleanup();
+          }
+        });
+
+        test('should handle variable replacement patterns', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            await _createVariableTestLocaleFiles(project.projectDir);
+
+            final result = await run([
+              'locale',
+              'generate',
+              'assets/locales',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.success.code));
+
+            final outputFile = File(
+              path.join(
+                project.projectDir.path,
+                'lib/app/translations/translations.g.dart',
+              ),
+            );
+            final content = await outputFile.readAsString();
+
+            // Verify variable patterns are preserved
+            expect(content, contains('Hello {name}'));
+            expect(content, contains('You have {count} messages'));
+            expect(content, contains('Welcome {firstName} {lastName}'));
+
+            print('⚡ Variable replacement patterns passed');
+          } finally {
+            await project.cleanup();
+          }
+        });
+      });
+
+      // trCount Functionality Tests
+      group('🔢 trCount Extension Tests', () {
+        test('should support all plural keys', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            await _createFullPluralTestLocaleFiles(project.projectDir);
+
+            final result = await run([
+              'locale',
+              'generate',
+              'assets/locales',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.success.code));
+
+            final outputFile = File(
+              path.join(
+                project.projectDir.path,
+                'lib/app/translations/translations.g.dart',
+              ),
+            );
+            final content = await outputFile.readAsString();
+
+            // English with basic plurals
+            expect(content, contains('"zero":"No books"'));
+            expect(content, contains('"one":"One book"'));
+            expect(content, contains('"other":"{count} books"'));
+
+            // Arabic with full plurals
+            expect(content, contains('"zero":"لا توجد كتب"'));
+            expect(content, contains('"one":"كتاب واحد"'));
+            expect(content, contains('"two":"كتابان"'));
+            expect(content, contains('"few":"{count} كتب"'));
+            expect(content, contains('"many":"{count} كتاباً"'));
+            expect(content, contains('"other":"{count} كتاب"'));
+
+            print('⚡ All plural keys support passed');
+          } finally {
+            await project.cleanup();
+          }
+        });
+
+        test('should handle mixed variable and count patterns', () async {
+          final project = await OptimizedTestManager.createOptimizedProject(
+            templateKey: 'getx',
+          );
+
+          try {
+            await _createMixedPluralTestLocaleFiles(project.projectDir);
+
+            final result = await run([
+              'locale',
+              'generate',
+              'assets/locales',
+            ], project.projectDir);
+
+            expect(result.exitCode, equals(ExitCode.success.code));
+
+            final outputFile = File(
+              path.join(
+                project.projectDir.path,
+                'lib/app/translations/translations.g.dart',
+              ),
+            );
+            final content = await outputFile.readAsString();
+
+            // Verify mixed patterns are preserved
+            expect(content, contains('{name} has no items'));
+            expect(content, contains('{name} has one item'));
+            expect(content, contains('{name} has {count} items'));
+
+            print('⚡ Mixed variable and count patterns passed');
+          } finally {
+            await project.cleanup();
+          }
+        });
+      });
+
       // Integration Tests
       group('🔗 Integration & GetX Compatibility', () {
         test('should generate GetX-compatible translations', () async {
@@ -792,6 +1068,153 @@ class LocaleGenerateCommandTest extends E2ETestBase {
     }
     buffer.write('}');
     return buffer.toString();
+  }
+
+  /// Creates extension test locale files with trVars and trCount examples
+  Future<void> _createExtensionTestLocaleFiles(Directory projectDir) async {
+    final localesDir = Directory(
+      path.join(projectDir.path, 'assets', 'locales'),
+    );
+    await localesDir.create(recursive: true);
+
+    // English locale with extensions features
+    final enFile = File(path.join(localesDir.path, 'en.json'));
+    await enFile.writeAsString('''
+{
+  "welcome": "Welcome {name}!",
+  "items": {
+    "__count": {
+      "zero": "No items",
+      "one": "One item",
+      "other": "{count} items"
+    }
+  },
+  "simple": "Simple text"
+}
+''');
+
+    // Arabic locale with full plural support
+    final arFile = File(path.join(localesDir.path, 'ar.json'));
+    await arFile.writeAsString('''
+{
+  "welcome": "مرحباً {name}!",
+  "items": {
+    "__count": {
+      "zero": "لا توجد عناصر",
+      "one": "عنصر واحد",
+      "two": "عنصران",
+      "few": "{count} عناصر",
+      "many": "{count} عنصراً",
+      "other": "{count} عنصر"
+    }
+  },
+  "simple": "نص بسيط"
+}
+''');
+  }
+
+  /// Creates test files specifically for __count processing
+  Future<void> _createCountTestLocaleFiles(Directory projectDir) async {
+    final localesDir = Directory(
+      path.join(projectDir.path, 'assets', 'locales'),
+    );
+    await localesDir.create(recursive: true);
+
+    final enFile = File(path.join(localesDir.path, 'en.json'));
+    await enFile.writeAsString('''
+{
+  "welcome": "Welcome {name}",
+  "notifications": {
+    "__count": {
+      "zero": "No notifications",
+      "one": "One notification",
+      "few": "{count} notifications",
+      "many": "{count} notifications",
+      "other": "{count} notifications"
+    }
+  },
+  "regular": "Regular string"
+}
+''');
+  }
+
+  /// Creates test files for variable replacement patterns
+  Future<void> _createVariableTestLocaleFiles(Directory projectDir) async {
+    final localesDir = Directory(
+      path.join(projectDir.path, 'assets', 'locales'),
+    );
+    await localesDir.create(recursive: true);
+
+    final enFile = File(path.join(localesDir.path, 'en.json'));
+    await enFile.writeAsString('''
+{
+  "greeting": "Hello {name}",
+  "messages": "You have {count} messages",
+  "fullName": "Welcome {firstName} {lastName}",
+  "complex": "Hello {name}, you have {count} items and {unread} unread"
+}
+''');
+  }
+
+  /// Creates test files with full plural key support
+  Future<void> _createFullPluralTestLocaleFiles(Directory projectDir) async {
+    final localesDir = Directory(
+      path.join(projectDir.path, 'assets', 'locales'),
+    );
+    await localesDir.create(recursive: true);
+
+    // English with basic plurals
+    final enFile = File(path.join(localesDir.path, 'en.json'));
+    await enFile.writeAsString('''
+{
+  "books": {
+    "__count": {
+      "zero": "No books",
+      "one": "One book",
+      "other": "{count} books"
+    }
+  }
+}
+''');
+
+    // Arabic with full plurals
+    final arFile = File(path.join(localesDir.path, 'ar.json'));
+    await arFile.writeAsString('''
+{
+  "books": {
+    "__count": {
+      "zero": "لا توجد كتب",
+      "one": "كتاب واحد",
+      "two": "كتابان",
+      "few": "{count} كتب",
+      "many": "{count} كتاباً",
+      "other": "{count} كتاب"
+    }
+  }
+}
+''');
+  }
+
+  /// Creates test files with mixed variable and count patterns
+  Future<void> _createMixedPluralTestLocaleFiles(Directory projectDir) async {
+    final localesDir = Directory(
+      path.join(projectDir.path, 'assets', 'locales'),
+    );
+    await localesDir.create(recursive: true);
+
+    final enFile = File(path.join(localesDir.path, 'en.json'));
+    await enFile.writeAsString('''
+{
+  "userItems": {
+    "__count": {
+      "zero": "{name} has no items",
+      "one": "{name} has one item",
+      "other": "{name} has {count} items"
+    }
+  },
+  "status": "User {name} is {status} with {points} points"
+}
+''');
   }
 }
 

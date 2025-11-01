@@ -32,7 +32,7 @@ class LocaleCommandTest extends E2ETestBase {
             final result = await run(['locale'], tempDir);
 
             // The command returns exit code 70 when missing subcommand
-            expect(result.exitCode, equals(70));
+            expect(result.exitCode, equals(ExitCode.software.code));
             expect(
               result.stderr,
               contains('Missing subcommand for "gexd locale"'),

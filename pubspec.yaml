@@ -5,7 +5,7 @@ homepage: https://github.com/altwaireb/gexd
 repository: https://github.com/altwaireb/gexd
 
 environment:
-  sdk: ^3.9.2
+  sdk: ^3.8.3
 
 # Add regular dependencies here.
 dependencies:
@@ -34,4 +34,4 @@ dev_dependencies:
 
 
 executables:
-  gexd:
+  gexd: gexd
