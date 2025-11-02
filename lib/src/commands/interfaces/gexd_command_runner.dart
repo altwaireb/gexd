@@ -29,10 +29,27 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
       help: 'Print the current version.',
     );
 
+    argParser.addFlag(
+      'skip-update-check',
+      negatable: false,
+      help: 'Skip automatic update check.',
+      hide: true,
+    );
+
+    addCommand(AddCommand(logger: _logger));
     addCommand(CreateCommand(logger: _logger, prompt: _prompt));
     addCommand(InitCommand(logger: _logger, prompt: _prompt));
     addCommand(MakeCommand(logger: _logger));
     addCommand(LocaleCommand(logger: _logger, prompt: _prompt));
+    addCommand(RemoveCommand(logger: _logger));
+    addCommand(UpgradeCommand(logger: _logger));
+    addCommand(
+      SelfUpdateCommand(
+        logger: _logger,
+        pubUpdater: _pubUpdater,
+        prompt: _prompt,
+      ),
+    );
   }
 
   @override
@@ -88,11 +105,8 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
     final result = await super.runCommand(topLevelResults);
     // Automatic update check (skip for help/version/update commands for performance)
     final skipUpdateCheck =
-        topLevelResults.command?.name == 'update' ||
-        topLevelResults['help'] == true ||
-        topLevelResults.arguments.contains('--help') ||
-        topLevelResults.arguments.contains('-h') ||
-        isVersionCommand;
+        topLevelResults['skip-update-check'] as bool ||
+        topLevelResults.command?.name == 'self-update';
 
     if (!skipUpdateCheck) {
       // final latestVersion = await _pubUpdater.getLatestVersion(packageName);

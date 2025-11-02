@@ -3,8 +3,12 @@ export '../commands/interfaces/gexd_command_runner.dart';
 // mixins
 export '../commands/interfaces/mixins.dart';
 // commands
+export '../commands/add_command.dart';
 export '../commands/create_command.dart';
 export '../commands/init_command.dart';
+export '../commands/remove_command.dart';
+export '../commands/self_update_command.dart';
+export '../commands/upgrade_command.dart';
 
 // locale
 export '../commands/locale_command.dart';

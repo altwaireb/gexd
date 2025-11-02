@@ -1,6 +1,12 @@
 name: Run Tests ✅
 
 on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'hotfix/**'
   pull_request:
     types: [opened, synchronize, reopened]
     branches:

@@ -3,8 +3,14 @@ name: Formatting & Analyze ✨
 on:
   push:
     branches:
+      - main
+      - develop
       - 'feature/**'
       - 'hotfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   format-analyze:
