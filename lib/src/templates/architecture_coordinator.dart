@@ -110,6 +110,37 @@ class ArchitectureCoordinator {
     );
   }
 
+  static String getComponentWithSuffixPath({
+    required NameComponent component,
+    required ProjectTemplate template,
+    required String? onPath,
+    required String suffix,
+  }) {
+    final fullPath = getComponentWithOnPath(
+      component: component,
+      template: template,
+      onPath: onPath,
+    );
+
+    return '$fullPath/$suffix';
+  }
+
+  static String getImportComponentWithSuffixPath({
+    required NameComponent component,
+    required ProjectTemplate template,
+    required String? onPath,
+    required String projectName,
+    required String suffix,
+  }) {
+    final fullPath = getComponentWithOnPathWithoutLib(
+      component: component,
+      template: template,
+      onPath: onPath,
+    );
+
+    return 'package:$projectName/$fullPath/$suffix';
+  }
+
   /// Smart function that reads template from .gexd/config.yaml and returns component path
   /// Returns the path for the component based on the current project's template configuration
   /// Returns empty string if:

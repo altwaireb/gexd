@@ -9,8 +9,11 @@ class MakeCommand extends Command<int> {
     addSubcommand(BindingCommand(logger: _logger));
     addSubcommand(ControllerCommand(logger: _logger));
     addSubcommand(ExceptionCommand(logger: _logger));
+    addSubcommand(InterfaceCommand(logger: _logger));
     addSubcommand(MiddlewareCommand(logger: _logger));
     addSubcommand(ModelCommand(logger: _logger));
+    addSubcommand(ProviderCommand(logger: _logger));
+    addSubcommand(RepositoryCommand(logger: _logger));
     addSubcommand(ScreenCommand(logger: _logger));
     addSubcommand(ServiceCommand(logger: _logger));
     addSubcommand(ViewCommand(logger: _logger));

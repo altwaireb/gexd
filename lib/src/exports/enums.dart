@@ -5,6 +5,9 @@ export '../core/enums/screen_type.dart';
 export '../core/enums/binding_location.dart';
 export '../core/enums/controller_location.dart';
 export '../core/enums/view_location.dart';
+export '../core/enums/interface_location.dart';
+export '../core/enums/interface_type.dart';
+export '../core/enums/repository_type.dart';
 
 // models
 export '../core/enums/model/field_type.dart';

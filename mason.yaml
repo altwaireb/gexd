@@ -17,3 +17,7 @@ bricks:
     path: bricks/middleware
   exception:
     path: bricks/exception
+  provider:
+    path: bricks/provider
+  repository:
+    path: bricks/repository

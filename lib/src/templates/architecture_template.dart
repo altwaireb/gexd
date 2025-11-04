@@ -36,9 +36,8 @@ class ArchitectureTemplate {
   static const String getxDataRepositories = 'lib/app/data/repositories';
   static const String getxDataRepositoriesInterfaces =
       'lib/app/data/repositories/interfaces';
+  static const String getxDataInterfaces = 'lib/app/data/interfaces';
   static const String getxDataServices = 'lib/app/data/services';
-  static const String getxDataServicesInterfaces =
-      'lib/app/data/services/interfaces';
   static const String getxDataProviders = 'lib/app/data/providers';
   static const String getxDataDatasources = 'lib/app/data/datasources';
   static const String getxDataRemoteDatasourcesInterfaces =
@@ -51,8 +50,6 @@ class ArchitectureTemplate {
   // Business Logic Layer
   static const String getxDomainLayer = 'lib/app/domain';
   static const String getxDomainUsecases = 'lib/app/domain/usecases';
-  static const String getxDomainUsecasesInterfaces =
-      'lib/app/domain/usecases/interfaces';
   static const String getxDomainEntities = 'lib/app/domain/entities';
   static const String getxDomainRepositories = 'lib/app/domain/repositories';
 
@@ -109,10 +106,9 @@ class ArchitectureTemplate {
   // Domain Layer - Business Logic
   static const String cleanDomain = 'lib/domain';
   static const String cleanDomainEntities = 'lib/domain/entities';
+  static const String cleanInterfaces = 'lib/domain/interfaces';
   static const String cleanDomainRepositories = 'lib/domain/repositories';
   static const String cleanDomainUsecases = 'lib/domain/usecases';
-  static const String cleanDomainUsecasesInterfaces =
-      'lib/domain/usecases/interfaces';
   static const String cleanDomainModels = 'lib/domain/models';
   static const String cleanDomainValueObjects = 'lib/domain/value_objects';
   static const String cleanDomainFailures = 'lib/domain/failures';
@@ -120,14 +116,14 @@ class ArchitectureTemplate {
   // Infrastructure Layer - External Dependencies
   static const String cleanInfrastructure = 'lib/infrastructure';
   static const String cleanInfrastructureModels = 'lib/infrastructure/models';
+  static const String cleanInfrastructureProviders =
+      'lib/infrastructure/providers';
   static const String cleanInfrastructureRepositories =
       'lib/infrastructure/repositories';
   static const String cleanInfrastructureRepositoriesInterfaces =
       'lib/infrastructure/repositories/interfaces';
   static const String cleanInfrastructureServices =
       'lib/infrastructure/services';
-  static const String cleanInfrastructureServicesInterfaces =
-      'lib/infrastructure/services/interfaces';
   static const String cleanInfrastructureDatasources =
       'lib/infrastructure/datasources';
   static const String cleanInfrastructureDatasourcesInterfaces =

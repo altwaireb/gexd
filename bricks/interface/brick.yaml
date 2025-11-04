@@ -1,0 +1,44 @@
+name: interface
+description: A flexible interface template supporting CRUD or empty structure.
+
+version: 0.1.0+1
+
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Interface base name
+    prompt: What is the interface name?
+
+  is_crud:
+    type: boolean
+    description: Generate CRUD methods
+    default: false
+
+  is_empty:
+    type: boolean
+    description: Generate empty interface
+    default: false
+
+  hasModel:
+    type: boolean
+    description: Has associated model class
+    default: false
+
+  modelName:
+    type: string
+    description: Model class name
+    default: ""
+
+  modelExists:
+    type: boolean
+    description: Model class exists in project
+    default: false
+
+  modelImport:
+    type: string
+    description: Model import path
+    default: ""

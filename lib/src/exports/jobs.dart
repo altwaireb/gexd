@@ -32,6 +32,11 @@ export '../jobs/make/exception/exception_data.dart';
 export '../jobs/make/exception/exception_inputs.dart';
 export '../jobs/make/exception/exception_job.dart';
 
+// interface
+export '../jobs/make/interface/interface_data.dart';
+export '../jobs/make/interface/interface_inputs.dart';
+export '../jobs/make/interface/interface_job.dart';
+
 // view
 export '../jobs/make/view/view_data.dart';
 export '../jobs/make/view/view_inputs.dart';
@@ -46,6 +51,16 @@ export '../jobs/make/service/service_job.dart';
 export '../jobs/make/model/model_data.dart';
 export '../jobs/make/model/model_inputs.dart';
 export '../jobs/make/model/model_job.dart';
+
+// provider
+export '../jobs/make/provider/provider_data.dart';
+export '../jobs/make/provider/provider_inputs.dart';
+export '../jobs/make/provider/provider_job.dart';
+
+// repository
+export '../jobs/make/repository/repository_data.dart';
+export '../jobs/make/repository/repository_inputs.dart';
+export '../jobs/make/repository/repository_job.dart';
 
 // middleware
 export '../jobs/make/middleware/middleware_data.dart';

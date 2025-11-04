@@ -96,6 +96,16 @@ class ComponentRegistry {
     ),
 
     // ================= Data Layer =================
+    NameComponent.interface: ComponentMetadata(
+      description: 'Domain interfaces',
+      category: 'data',
+      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
+      defaultPath: {
+        ProjectTemplate.getx: ArchitectureTemplate.getxDataInterfaces,
+        ProjectTemplate.clean: ArchitectureTemplate.cleanInterfaces,
+      },
+      isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
+    ),
     NameComponent.models: ComponentMetadata(
       description: 'Data models',
       category: 'data',
@@ -113,6 +123,17 @@ class ComponentRegistry {
       defaultPath: {
         ProjectTemplate.getx: ArchitectureTemplate.getxDataEntities,
         ProjectTemplate.clean: ArchitectureTemplate.cleanDomainEntities,
+      },
+      isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
+    ),
+    NameComponent.providers: ComponentMetadata(
+      description: 'Data providers',
+      category: 'data',
+      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
+      defaultPath: {
+        ProjectTemplate.getx: ArchitectureTemplate.getxDataProviders,
+        ProjectTemplate.clean:
+            ArchitectureTemplate.cleanInfrastructureProviders,
       },
       isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
     ),
@@ -148,17 +169,6 @@ class ComponentRegistry {
         ProjectTemplate.clean: ArchitectureTemplate.cleanInfrastructureServices,
       },
       isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
-    ),
-    NameComponent.servicesInterfaces: ComponentMetadata(
-      description: 'Service interfaces',
-      category: 'data',
-      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
-      defaultPath: {
-        ProjectTemplate.getx: ArchitectureTemplate.getxDataServicesInterfaces,
-        ProjectTemplate.clean:
-            ArchitectureTemplate.cleanInfrastructureServicesInterfaces,
-      },
-      isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
     ),
     NameComponent.datasources: ComponentMetadata(
       description: 'Data sources',
@@ -214,17 +224,6 @@ class ComponentRegistry {
       defaultPath: {
         ProjectTemplate.getx: ArchitectureTemplate.getxDomainUsecases,
         ProjectTemplate.clean: ArchitectureTemplate.cleanDomainUsecases,
-      },
-      isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
-    ),
-    NameComponent.usecasesInterfaces: ComponentMetadata(
-      description: 'Usecases / business rules interfaces',
-      category: 'domain',
-      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
-      defaultPath: {
-        ProjectTemplate.getx: ArchitectureTemplate.getxDomainUsecasesInterfaces,
-        ProjectTemplate.clean:
-            ArchitectureTemplate.cleanDomainUsecasesInterfaces,
       },
       isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
     ),

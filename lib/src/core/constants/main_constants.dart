@@ -31,6 +31,9 @@ class MainConstants {
   static const String askForHasModelInput =
       'Do you want to enable auto model detection?';
 
+  static const String askForHasInterfaceInput =
+      'Do you want to create an interface for the repository?';
+
   static const String modelInputSourceTypePrompt =
       'Select the model input source type:';
 
@@ -38,7 +41,10 @@ class MainConstants {
   static const String bindingSingleSuffix = '{name}_binding.dart';
   static const String controllerSingleSuffix = '{name}_controller.dart';
   static const String viewSingleSuffix = '{name}_view.dart';
+  static const String interfaceSuffix = '{name}_interface.dart';
   static const String serviceSuffix = '{name}_service.dart';
+  static const String providerSuffix = '{name}_provider.dart';
+  static const String repositorySuffix = '{name}_repository.dart';
   static const String modelSuffix = '{name}.dart';
   static const String modelSuffixEndingModel = '{name}_model.dart';
   static const String middlewareSuffix = '{name}_middleware.dart';
