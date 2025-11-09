@@ -16,3 +16,9 @@ export '../core/constants/main_constants.dart';
 // helpers
 export '../core/helpers/project_helpers.dart';
 export '../core/helpers/string_helpers.dart';
+
+// enums
+export '../core/enums/entity_style.dart';
+export '../core/enums/model_style.dart';
+export '../core/enums/project_template.dart';
+export '../core/enums/name_component.dart';

@@ -2,6 +2,9 @@ import 'package:args/command_runner.dart';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
+/// Command to create a new Flutter project using gexd templates.
+/// Provides options to customize the project template, organization name,
+/// description, target platforms, and project structure.
 class CreateCommand extends Command<int> {
   final Logger _logger;
   final PromptServiceInterface _prompt;

@@ -18,6 +18,7 @@ export '../commands/locales/generate_command.dart';
 export '../commands/make_command.dart';
 export '../commands/make/binding_command.dart';
 export '../commands/make/controller_command.dart';
+export '../commands/make/entity_command.dart';
 export '../commands/make/exception_command.dart';
 export '../commands/make/interface_command.dart';
 export '../commands/make/middleware_command.dart';

@@ -4,6 +4,8 @@ import 'package:args/command_runner.dart';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
+/// Command to initialize an existing Flutter project with Gexd templates and patterns.
+/// Provides options to select project template and structure.
 class InitCommand extends Command<int> {
   final Logger _logger;
   final PromptServiceInterface _prompt;

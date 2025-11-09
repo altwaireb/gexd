@@ -1,3 +1,13 @@
+## 0.0.3
+
+- **🚀 NEW: Entity Command** - Generate domain entities for Clean Architecture with multiple styles (plain, immutable, freezed)
+- **🔄 Advanced Entity Generation** - Support for JSON-to-Entity conversion with automatic model generation using `--with-model` flag
+- **🎯 Entity Style System** - Choose between plain, immutable, or freezed entity styles with proper dependency management
+- **🌐 Multi-Source Entity Creation** - Generate entities from templates, JSON files, or API endpoints
+- **🏗️ Enhanced Clean Architecture Support** - Domain entity generation with proper folder structure and imports
+- **📚 Comprehensive Documentation** - Added complete example directory with advanced localization features
+- **🔧 Improved Development Experience** - Better error handling, validation, and user guidance for entity workflows
+
 ## 0.0.2
 
 - **NEW: Typed Model Support** - Added --model option to Repository and Interface commands for typed method generation
@@ -14,7 +24,7 @@
 - Improved ArchitectureCoordinator for consistent path resolution
 - Added comprehensive E2E tests for ViewCommand
 - Fixed binding job path consistency issues
-- Updated all job files to use ArchitectureCoordinator instead of hard-coded paths
+- Updated all job files use ArchitectureCoordinator instead of hard-coded paths
 - Performance improvements: 50-60% faster formatting by targeting only generated files
 - Code cleanup: removed unused StringExtension from test files
 

@@ -2,12 +2,27 @@ import 'package:args/command_runner.dart';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
+/// Main make command that contains subcommands for generating various project files and components.
+/// Available subcommands:
+/// - `binding`: Generate a GetX binding file
+/// - `controller`: Generate a GetX controller file
+/// - `entity`: Generate a domain entity for Clean Architecture
+/// - `exception`: Generate a custom exception class
+/// - `interface`: Generate a Dart interface
+/// - `middleware`: Generate a GetX middleware file
+/// - `model`: Generate a Dart model class with JSON serialization
+/// - `provider`: Generate a data provider class
+/// - `repository`: Generate a repository class
+/// - `screen`: Generate a Flutter screen (view) with GetX structure
+/// - `service`: Generate a service class
+/// - `view`: Generate a Flutter view widget
 class MakeCommand extends Command<int> {
   final Logger _logger;
 
   MakeCommand({Logger? logger}) : _logger = logger ?? Logger() {
     addSubcommand(BindingCommand(logger: _logger));
     addSubcommand(ControllerCommand(logger: _logger));
+    addSubcommand(EntityCommand(logger: _logger));
     addSubcommand(ExceptionCommand(logger: _logger));
     addSubcommand(InterfaceCommand(logger: _logger));
     addSubcommand(MiddlewareCommand(logger: _logger));

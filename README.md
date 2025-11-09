@@ -1,4 +1,4 @@
-# Gexd CLI
+# 🧩 Gexd CLI
 
 [![Format & Analyze](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml)
 [![Run Tests](https://github.com/altwaireb/gexd/actions/workflows/run-tests.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/run-tests.yml)
@@ -7,208 +7,341 @@
 [![Latest Release](https://img.shields.io/github/v/release/altwaireb/gexd)](https://github.com/altwaireb/gexd/releases/latest)
 [![codecov](https://codecov.io/gh/altwaireb/gexd/branch/main/graph/badge.svg)](https://codecov.io/gh/altwaireb/gexd)
 [![pub package](https://img.shields.io/pub/v/gexd.svg)](https://pub.dev/packages/gexd)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A powerful command-line tool for generating Flutter projects with GetX and Clean Architecture templates.
+> A modern CLI tool for generating Flutter projects using **GetX** and **Clean Architecture**, designed for scalability, maintainability, and developer productivity.
 
-## 📦 Installation & Download
+---
 
-### 🚀 Quick Install (Recommended)
+## ⚡ Overview
+
+`Gexd` helps Flutter developers scaffold complete applications using GetX + Clean Architecture, with strong typing, modular folder structure, and SOLID design principles.
+
+### ✨ Highlights
+- 🏗️ **Project Scaffolding** — GetX and Clean Architecture templates  
+- 🧠 **Typed Model Integration** — Type-safe Repositories, Services, and Providers  
+- 🧩 **Smart Code Generation** — Models from JSON/API, Screens with state management  
+- 🛡️ **SOLID Principles** — Clean folder hierarchy and separation of concerns  
+- 🌍 **Advanced Localization** — Multi-language with variables and pluralization  
+- 📱 **Screen Templates** — Basic, Form, and withState screen types  
+- 🔗 **Repository Pattern** — CRUD and custom repositories with interfaces  
+- 🎯 **Interactive CLI** — Smart prompts and guided setup  
+
+---
+
+## 🚀 Installation
+
 ```bash
 # Install from pub.dev
 dart pub global activate gexd
 
 # Verify installation
 gexd --version
-```
+````
 
-### 💾 Download Pre-built Binaries
+### 📦 Pre-built Binaries
 
-Get the latest release for your platform:
-
-| Platform | Download | Status |
-|----------|----------|---------|
-| 🐧 **Linux (x64)** | [📥 gexd-linux-x64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-linux-x64) | ✅ Ready |
-| 🪟 **Windows (x64)** | [📥 gexd-windows-x64.exe](https://github.com/altwaireb/gexd/releases/latest/download/gexd-windows-x64.exe) | ✅ Ready |
-| 🍎 **macOS (Intel)** | [📥 gexd-macos-x64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-macos-x64) | ✅ Ready |
-| 🍎 **macOS (Apple Silicon)** | [📥 gexd-macos-arm64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-macos-arm64) | ✅ Ready |
-
-> 🔗 **All Releases:** [GitHub Releases Page](https://github.com/altwaireb/gexd/releases)
-
-### 🔐 Verify Downloads
-```bash
-# Download checksums file
-curl -LO https://github.com/altwaireb/gexd/releases/latest/download/checksums.txt
-
-# Verify your download (example for Linux)
-sha256sum -c checksums.txt --ignore-missing
-```
-
-## 🚀 Quick Start
-
-### Create Your First Project
-```bash
-# Create a new GetX project
-gexd create my_awesome_app
-
-# Or create with Clean Architecture
-gexd create my_app --template clean
-
-# Navigate to your project
-cd my_awesome_app
-
-# Start developing!
-flutter run
-```
-
-### Generate Components
-```bash
-# Generate a new screen
-gexd make screen user_profile
-
-# Generate a service
-gexd make service api_service
-
-# Generate a model with custom fields
-gexd make model user --interactive
-
-# Generate a controller
-gexd make controller home_controller
-```
-
-### Get Help
-```bash
-# Show all commands
-gexd --help
-
-# Get help for specific command
-gexd make --help
-gexd create --help
-```
-
-## Development
-
-This project includes a `Makefile` for common development tasks:
-
-### Quick Start
-```bash
-# Setup development environment
-make setup
-
-# Quick development cycle (format + analyze + unit tests)  
-make quick
-
-# Run all tests
-make test
-```
-
-### Available Commands
-```bash
-make help           # Show all available commands
-make deps          # Get dependencies
-make format        # Format code
-make analyze       # Analyze code
-make test-unit     # Run unit tests only
-make test-e2e      # Run E2E tests only
-make build         # Build executable
-make install       # Install globally
-make clean         # Clean build artifacts
-make pre-commit    # Pre-commit checks
-```
-
-### Testing
-The project uses a tag-based testing system:
-- `unit` - Fast unit tests (< 30s)
-- `integration` - Integration tests (30s-2m)
-- `e2e` - End-to-end tests (2m+)
-- `smoke` - Essential smoke tests
-
-See [TEST_TAGS_GUIDE.md](TEST_TAGS_GUIDE.md) for detailed testing information.
-
-## 🚢 Release Process
-
-### Creating a New Release
-```bash
-# 1. Update version in pubspec.yaml
-# 2. Update CHANGELOG.md
-# 3. Commit changes
-git add .
-git commit -m "chore: bump version to v1.2.3"
-
-# 4. Create and push tag
-git tag v1.2.3
-git push origin v1.2.3
-```
-
-### 🤖 Automated Release Pipeline
-The release process is fully automated via GitHub Actions:
-
-1. **🏗️ Multi-Platform Build:** Linux, Windows, macOS (Intel + Apple Silicon)
-2. **🧪 Safety Tests:** Unit tests run before building
-3. **📦 Artifacts:** Compiled binaries with checksums  
-4. **📝 Release Notes:** Auto-generated from commits
-5. **🌍 Distribution:** GitHub Releases + pub.dev (when ready)
-
-### 📊 CI/CD Overview
-
-| Workflow | Trigger | Purpose | Duration |
-|----------|---------|---------|----------|
-| 🎨 **Format & Analyze** | Feature branches | Code quality checks | ~5min |
-| ✅ **Run Tests** | Pull requests | Unit & build tests | ~15min |
-| 🚀 **E2E Tests** | Manual + Release tags | Comprehensive testing | ~25min |
-| 📦 **Release** | Version tags | Multi-platform build & publish | ~20min |
-| 🤖 **Dependabot** | Weekly | Dependency updates | ~5min |
-
-> 💡 **Resource Optimization:** Our CI system saves ~92% of GitHub Actions minutes through smart triggering and caching.
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-### 🐛 Report Issues
-- 🔗 [Create an Issue](https://github.com/altwaireb/gexd/issues/new)
-- 💡 [Feature Requests](https://github.com/altwaireb/gexd/discussions/new?category=ideas)
-- ❓ [Ask Questions](https://github.com/altwaireb/gexd/discussions/new?category=q-a)
-
-### 💻 Development Setup
-```bash
-# Clone the repository
-git clone https://github.com/altwaireb/gexd.git
-cd gexd
-
-# Setup development environment
-make setup
-
-# Run tests
-make test
-
-# Create a feature branch
-git checkout -b feature/awesome-feature
-```
-
-### 📋 Development Guidelines
-- ✅ Follow the existing code style
-- 🧪 Add tests for new features  
-- 📝 Update documentation
-- 🎯 Keep commits focused and descriptive
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- 🌟 **GetX Team** - For the amazing state management solution
-- 🚀 **Flutter Team** - For the incredible framework
-- 💙 **Dart Community** - For continuous inspiration
-- 🤝 **Contributors** - For making this project better
+| Platform                 | Download                                                                                                   | Status  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------- | ------- |
+| 🐧 Linux (x64)           | [📥 gexd-linux-x64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-linux-x64)             | ✅ Ready |
+| 🪟 Windows (x64)         | [📥 gexd-windows-x64.exe](https://github.com/altwaireb/gexd/releases/latest/download/gexd-windows-x64.exe) | ✅ Ready |
+| 🍎 macOS (Intel)         | [📥 gexd-macos-x64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-macos-x64)             | ✅ Ready |
+| 🍎 macOS (Apple Silicon) | [📥 gexd-macos-arm64](https://github.com/altwaireb/gexd/releases/latest/download/gexd-macos-arm64)         | ✅ Ready |
 
 ---
 
-<div align="center">
+## 🧭 Quick Start
 
-**⭐ Star this project if you find it helpful!**
+### Create a New Project
 
-[🏠 Home](https://github.com/altwaireb/gexd) • [📖 Docs](./doc/1.x/README.md) • [🐛 Issues](https://github.com/altwaireb/gexd/issues) • [💬 Discussions](https://github.com/altwaireb/gexd/discussions)
+```bash
+gexd create my_app                 # Default GetX project
+gexd create my_app --template clean
+gexd create my_app --org com.example
+```
 
-</div>
+### Initialize Existing Project
+
+```bash
+gexd init --template clean
+```
+
+---
+
+## 🧱 Core Commands
+
+### 🏗️ Create
+
+Create a new Flutter project.
+
+```bash
+gexd create <project_name> --template <getx|clean>
+```
+
+### 🔨 Make
+
+Generate code components for your project:
+
+| Command        | Example                                              | Description                     |
+| -------------- | ---------------------------------------------------- | ------------------------------- |
+| **Entity**     | `gexd make entity User --style immutable --with-model` | Domain entities for Clean Architecture |
+| **Model**      | `gexd make model User --file user.json --immutable` | Smart models from JSON/API     |
+| **Screen**     | `gexd make screen Login --type form`                 | Complete screen components      |
+| **Repository** | `gexd make repository User --type crud --interface` | Typed CRUD repositories         |
+| **Service**    | `gexd make service Auth --on auth`                   | Business logic services         |
+| **Controller** | `gexd make controller Profile --type withState`     | Reactive controllers            |
+| **Binding**    | `gexd make binding Home --location core`             | Dependency injection            |
+| **Provider**   | `gexd make provider Api --model User`                | Typed API providers             |
+| **Interface**  | `gexd make interface Repository --type crud`         | Abstract interfaces             |
+| **Middleware** | `gexd make middleware Auth`                          | Route middleware                |
+| **Exception**  | `gexd make exception ValidationError`                | Custom exceptions               |
+
+### 🎯 Advanced Generation Features
+
+#### 📱 Smart Screen Generation
+```bash
+gexd make screen Login --type form           # Form with validation
+gexd make screen UserList --type withState   # Reactive state management  
+gexd make screen Profile --has-model         # Type-safe with User model
+```
+
+#### 🗂️ Smart Model Generation
+```bash
+gexd make model User --file assets/user.json      # From JSON file
+gexd make model User --url https://api.com/user   # From API endpoint
+gexd make model User --immutable --copyWith        # Immutable with features
+gexd make model User --style freezed               # Freezed-style models
+```
+
+#### 🗄️ Repository Pattern
+```bash
+gexd make repository User --type crud --interface  # Full CRUD with interface
+gexd make repository User --model User             # Type-safe repository
+```
+
+#### 🎯 Flexible Organization
+```bash
+--on <subfolder>        # Generate in subdirectory (auth/user)
+--location <type>       # Binding locations (core|shared|screen)
+--model <ModelName>     # Enable typed integration
+--interface            # Generate abstract interface
+--force                # Overwrite existing files
+```
+
+---
+
+## 🌍 Advanced Localization
+
+Generate powerful multi-language support with advanced features:
+
+```bash
+gexd locale generate assets/translations --key-style dot --sort-keys
+```
+
+### 🚀 Localization Features
+
+#### 🔗 Variable Replacement
+```dart
+// Dynamic content with named variables
+Text('welcome'.trVars({'name': 'John'}))        // "Welcome John"
+Text(LocaleKeys.welcome.trVars({'name': 'John'}))  // Type-safe version
+
+// Multiple variables  
+Text(LocaleKeys.greeting.trVars({'name': 'Ali', 'time': 'morning'}))  // "Good morning, Ali!"
+```
+
+#### 🔢 Smart Pluralization
+```dart
+// Universal pluralization for all languages
+Text('items'.trCount({'count': '0'}))           // "No items"
+Text(LocaleKeys.items.trCount({'count': '0'}))  // Type-safe version
+
+// Rich Arabic pluralization (zero, one, two, few, many, other)
+Text(LocaleKeys.notifications.trCount({'count': '2'}))   // "لديك إشعاران"
+Text(LocaleKeys.notifications.trCount({'count': '15'}))  // "لديك 15 إشعاراً"
+```
+
+#### 🌟 Combined Features
+```dart
+// Pluralization with additional variables
+Text(LocaleKeys.messages.trCount({'count': '5', 'sender': 'Ali'}))  // "5 messages from Ali"
+```
+
+#### 🔑 Type-Safe Keys  
+```dart
+// Generated LocaleKeys for compile-time safety
+Text(LocaleKeys.welcome.tr)                     // Simple translation
+Text(LocaleKeys.validation_required.trVars({'field': 'Email'}))  // With variables
+Text(LocaleKeys.items.trCount({'count': '10'})) // With pluralization
+```
+
+**Supported Languages:** English, Arabic (RTL), French, and easily extensible to any language.
+
+---
+
+## 🧰 Dependency Management
+
+```bash
+gexd add http dio              # Add dependencies
+gexd upgrade dio               # Upgrade dependencies
+gexd remove dio                # Remove dependencies
+```
+
+---
+
+## 🧠 Architecture Templates
+
+### GetX Structure
+
+```
+lib/
+├── app/
+│   ├── modules/
+│   ├── routes/
+│   └── core/
+├── data/
+│   ├── models/
+│   └── repositories/
+└── domain/
+    └── services/
+```
+
+### Clean Architecture
+
+```
+lib/
+├── core/
+├── data/
+├── domain/
+└── presentation/
+```
+
+---
+
+## ⚙️ Advanced Options
+
+### 🎛️ Generation Options
+| Option                    | Description                               |
+| ------------------------- | ----------------------------------------- |
+| `--interactive`           | Run guided interactive mode               |
+| `--type <crud\|form\|withState>` | Component type and behavior       |
+| `--interface`             | Generate abstract interface               |
+| `--model <Model>`         | Enable typed model integration            |
+| `--immutable`             | Generate immutable data classes           |
+| `--copyWith`              | Add copyWith methods                      |
+| `--equatable`             | Use Equatable for value equality          |
+| `--relationships-in-folder` | Organize model relationships           |
+
+### 🎨 Style Options  
+| Style      | Description                    | Best For              |
+| ---------- | ------------------------------ | --------------------- |
+| `plain`    | Simple Dart classes            | Basic models          |
+| `json`     | JSON serializable models       | API integration       |
+| `freezed`  | Freezed-style immutable models | Complex data handling |
+
+### 🏗️ Architecture Options
+| Template | Description              | Use Case                    |
+| -------- | ------------------------ | --------------------------- |
+| `getx`   | GetX modular architecture| Rapid development          |
+| `clean`  | Clean Architecture (DDD) | Enterprise applications    |
+
+---
+
+## 💡 Help & Troubleshooting
+
+```bash
+gexd --help
+gexd make repository --help
+```
+
+**Common Issues**
+
+* ❌ *Command not found*: add Dart global path
+
+  ```bash
+  export PATH="$PATH":"$HOME/.pub-cache/bin"
+  ```
+* ⚙️ *Permission denied*:
+
+  ```bash
+  chmod +x gexd-macos-x64
+  ```
+* 🧩 *Model not found*: generate it first
+
+  ```bash
+  gexd make model User
+  ```
+
+---
+
+## 🚀 Complete Workflow Example
+
+Create a full-featured Flutter app in minutes:
+
+```bash
+# 1. Create Clean Architecture project
+gexd create my_ecommerce_app --template clean
+
+# 2. Generate User model from JSON
+gexd make model User --file assets/models/user.json --immutable --copyWith
+
+# 3. Generate typed repository with interface
+gexd make repository User --type crud --interface --on auth/data
+
+# 4. Generate authentication service  
+gexd make service AuthService --on auth/services
+
+# 5. Generate login screen with form validation
+gexd make screen Login --type form --on auth
+
+# 6. Generate user profile screen with state management
+gexd make screen UserProfile --type withState --has-model --on auth
+
+# 7. Generate multi-language support
+gexd locale generate assets/translations --key-style dot --sort-keys
+
+# 8. Generate core bindings
+gexd make binding App --location core
+```
+
+**Result:** A complete, production-ready Flutter app with Clean Architecture, type-safe repositories, reactive screens, and multi-language support! 🎉
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions!
+
+* [Open an Issue](https://github.com/altwaireb/gexd/issues/new)
+* [Start a Discussion](https://github.com/altwaireb/gexd/discussions)
+* [Feature Requests](https://github.com/altwaireb/gexd/discussions/new?category=ideas)
+
+Clone and setup for development:
+
+```bash
+git clone https://github.com/altwaireb/gexd.git
+cd gexd
+```
+
+---
+
+## 📄 License
+
+Licensed under the **MIT License** — see [LICENSE](LICENSE).
+
+---
+
+## 📚 Documentation & Examples
+
+* [📘 Complete Examples](./example/README.md) - Comprehensive usage examples
+* [🗂️ Model Examples](./example/assets/models/) - JSON examples for model generation  
+* [🌍 Locale Examples](./example/assets/translations/) - Multi-language examples
+* [🚀 Advanced Features](./example/assets/LOCALE_FEATURES.md) - trVars & trCount usage
+* [📦 pub.dev](https://pub.dev/packages/gexd)
+* [💬 Discussions](https://github.com/altwaireb/gexd/discussions)
+
+---
+
+**Made with ❤️ for the Flutter community.**
+
+```

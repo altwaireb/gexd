@@ -1,0 +1,67 @@
+{
+  "app": {
+    "name": "تطبيقي",
+    "version": "الإصدار {version}"
+  },
+  "welcome": "أهلاً وسهلاً {name}",
+  "greeting": "{time} طيب، {name}!",
+  "buttons": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "ok": "موافق",
+    "retry": "إعادة المحاولة"
+  },
+  "auth": {
+    "title": "المصادقة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "إنشاء حساب"
+  },
+  "items": {
+    "__count": {
+      "zero": "لا توجد عناصر",
+      "one": "عنصر واحد",
+      "two": "عنصران",
+      "few": "{count} عناصر",
+      "many": "{count} عنصراً",
+      "other": "{count} عنصر"
+    }
+  },
+  "notifications": {
+    "__count": {
+      "zero": "لا توجد إشعارات",
+      "one": "لديك إشعار واحد",
+      "two": "لديك إشعاران",
+      "few": "لديك {count} إشعارات",
+      "many": "لديك {count} إشعاراً",
+      "other": "لديك {count} إشعار"
+    }
+  },
+  "messages": {
+    "__count": {
+      "zero": "لا توجد رسائل",
+      "one": "رسالة واحدة من {sender}",
+      "two": "رسالتان من {sender}",
+      "few": "{count} رسائل من {sender}",
+      "many": "{count} رسالة من {sender}",
+      "other": "{count} رسالة من {sender}"
+    }
+  },
+  "validation": {
+    "required": "{field} مطلوب",
+    "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+    "passwordMinLength": "كلمة المرور يجب أن تكون {min} أحرف على الأقل"
+  },
+  "status": {
+    "loading": "جارٍ التحميل...",
+    "success": "تم بنجاح!",
+    "error": "حدث خطأ ما",
+    "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+  }
+}

@@ -52,6 +52,11 @@ export '../jobs/make/model/model_data.dart';
 export '../jobs/make/model/model_inputs.dart';
 export '../jobs/make/model/model_job.dart';
 
+// entity
+export '../jobs/make/entity/entity_data.dart';
+export '../jobs/make/entity/entity_inputs.dart';
+export '../jobs/make/entity/entity_job.dart';
+
 // provider
 export '../jobs/make/provider/provider_data.dart';
 export '../jobs/make/provider/provider_inputs.dart';

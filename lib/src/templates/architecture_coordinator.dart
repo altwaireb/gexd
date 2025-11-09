@@ -1,4 +1,3 @@
-// lib/src/templates/architecture_coordinator.dart
 import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:path/path.dart' as path;
 
@@ -110,6 +109,8 @@ class ArchitectureCoordinator {
     );
   }
 
+  /// Get component path with appended suffix
+  /// Returns the component path with the specified suffix appended.
   static String getComponentWithSuffixPath({
     required NameComponent component,
     required ProjectTemplate template,
@@ -125,6 +126,8 @@ class ArchitectureCoordinator {
     return '$fullPath/$suffix';
   }
 
+  /// Get import path for component with appended suffix
+  /// Returns the package import path for the component with the specified suffix.
   static String getImportComponentWithSuffixPath({
     required NameComponent component,
     required ProjectTemplate template,

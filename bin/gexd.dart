@@ -1,3 +1,5 @@
+#!/usr/bin/env dart
+
 import 'dart:io';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';

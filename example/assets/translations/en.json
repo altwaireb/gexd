@@ -1,0 +1,58 @@
+{
+  "app": {
+    "name": "My App",
+    "version": "Version {version}"
+  },
+  "welcome": "Welcome {name}",
+  "greeting": "Good {time}, {name}!",
+  "buttons": {
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "ok": "OK",
+    "retry": "Retry"
+  },
+  "auth": {
+    "title": "Authentication",
+    "email": "Email Address",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up"
+  },
+  "items": {
+    "__count": {
+      "zero": "No items",
+      "one": "One item", 
+      "other": "{count} items"
+    }
+  },
+  "notifications": {
+    "__count": {
+      "zero": "No notifications",
+      "one": "You have 1 notification",
+      "other": "You have {count} notifications"
+    }
+  },
+  "messages": {
+    "__count": {
+      "zero": "No messages",
+      "one": "1 message from {sender}",
+      "other": "{count} messages from {sender}"
+    }
+  },
+  "validation": {
+    "required": "{field} is required",
+    "emailInvalid": "Please enter a valid email",
+    "passwordMinLength": "Password must be at least {min} characters"
+  },
+  "status": {
+    "loading": "Loading...",
+    "success": "Success!",
+    "error": "Something went wrong",
+    "networkError": "Network error. Please try again."
+  }
+}

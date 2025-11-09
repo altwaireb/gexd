@@ -20,7 +20,7 @@ class ModelCommand extends Command<int>
         'file',
         abbr: 'f',
         help: 'Path to JSON file for model generation',
-        valueHelp: 'path/to/file.json',
+        valueHelp: 'assets/models/file.json',
       )
       ..addOption(
         'url',

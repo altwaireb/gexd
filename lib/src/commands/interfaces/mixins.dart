@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Mixin to provide target directory functionality
 mixin HasTargetDirectory {
   Directory get targetDirectory => Directory(Directory.current.path);
 
-  /// إنشاء مجلد فرعي داخل current directory
+  /// Get or create a subdirectory within the target directory
   Directory subDir(String relativePath) {
     final dir = Directory('${targetDirectory.path}/$relativePath');
     if (!dir.existsSync()) dir.createSync(recursive: true);
@@ -13,6 +14,7 @@ mixin HasTargetDirectory {
   }
 }
 
+/// Mixin to provide project data functionality
 mixin HasProjectData {
   Future<ProjectData?> get projectData async => await ProjectHelpers.getdata();
 

@@ -2,6 +2,11 @@ import 'package:gexd/src/core/enums/project_template.dart';
 
 import 'component_registry.dart';
 
+/// ArchitectureHelpers
+/// Utility class for architecture-related helper functions.
+/// Includes functions for generating tree structures, descriptions, and validations.
+/// Also includes some string utilities for project naming.
+/// Deprecated functions are kept for backward compatibility.
 class ArchitectureHelpers {
   ArchitectureHelpers._();
 
@@ -162,13 +167,7 @@ Separates business logic from framework details and external dependencies.
     return s.replaceAll(RegExp(r'\s+'), '_').toLowerCase();
   }
 
-  static String pascalCase(String s) {
-    return s
-        .split(RegExp(r'[_\s-]'))
-        .map((p) => p.isEmpty ? '' : '${p[0].toUpperCase()}${p.substring(1)}')
-        .join();
-  }
-
+  /// Validate project name according to Dart package naming rules
   static bool isValidProjectName(String name) {
     final regex = RegExp(r'^[a-z][a-z0-9_]*$');
     return regex.hasMatch(name);

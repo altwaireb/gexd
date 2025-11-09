@@ -1,0 +1,58 @@
+{
+  "app": {
+    "name": "Mon App",
+    "version": "Version {version}"
+  },
+  "welcome": "Bienvenue {name}",
+  "greeting": "Bon {time}, {name}!",
+  "buttons": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "ok": "OK",
+    "retry": "Réessayer"
+  },
+  "auth": {
+    "title": "Authentification",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Pas de compte?",
+    "signUp": "S'inscrire"
+  },
+  "items": {
+    "__count": {
+      "zero": "Aucun élément",
+      "one": "Un élément",
+      "other": "{count} éléments"
+    }
+  },
+  "notifications": {
+    "__count": {
+      "zero": "Aucune notification",
+      "one": "Vous avez 1 notification",
+      "other": "Vous avez {count} notifications"
+    }
+  },
+  "messages": {
+    "__count": {
+      "zero": "Aucun message",
+      "one": "1 message de {sender}",
+      "other": "{count} messages de {sender}"
+    }
+  },
+  "validation": {
+    "required": "{field} est requis",
+    "emailInvalid": "Veuillez entrer un e-mail valide",
+    "passwordMinLength": "Le mot de passe doit contenir au moins {min} caractères"
+  },
+  "status": {
+    "loading": "Chargement...",
+    "success": "Succès!",
+    "error": "Une erreur s'est produite",
+    "networkError": "Erreur réseau. Veuillez réessayer."
+  }
+}

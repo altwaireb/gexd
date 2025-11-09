@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:pub_updater/pub_updater.dart';
 
+/// Gexd command runner
+///
+/// This class is responsible for running Gexd commands.
 class GexdCommandRunner extends CompletionCommandRunner<int> {
   final Logger _logger;
   final PubUpdater _pubUpdater;
@@ -92,42 +95,33 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
         topLevelResults.arguments.contains('--version');
 
     if (isVersionCommand) {
-      final isUpToDate = await _pubUpdater.isUpToDate(
-        packageName: packageName,
-        currentVersion: packageVersion,
-      );
-      if (!isUpToDate) {
-        await _pubUpdater.update(packageName: packageName);
-      }
-      // _logger.info('gexd $packageVersion');
+      // Skip update check for now since repository is private
+      // This will be re-enabled once repository becomes public
+      _logger.info('gexd $packageVersion');
       return ExitCode.success.code;
     }
     final result = await super.runCommand(topLevelResults);
-    // Automatic update check (skip for help/version/update commands for performance)
-    final skipUpdateCheck =
-        topLevelResults['skip-update-check'] as bool ||
-        topLevelResults.command?.name == 'self-update';
 
-    if (!skipUpdateCheck) {
-      // final latestVersion = await _pubUpdater.getLatestVersion(packageName);
-      await _checkForUpdates();
-    }
+    // Skip automatic update check while repository is private
+    // This will be re-enabled once repository becomes public
+    // TODO: Re-enable update check after making repository public
 
     return result;
   }
 
-  Future<void> _checkForUpdates() async {
-    try {
-      final latest = await _pubUpdater.getLatestVersion('gexd');
-      if (packageVersion != latest) {
-        _logger
-          ..info('')
-          ..warnMessage(CommandMessages.updateAvailable, {
-            'currentVersion': packageVersion,
-            'latestVersion': latest,
-          })
-          ..infoMessage(CommandMessages.updateInstruction);
-      }
-    } catch (_) {}
-  }
+  // TODO: Re-enable after repository becomes public
+  // Future<void> _checkForUpdates() async {
+  //   try {
+  //     final latest = await _pubUpdater.getLatestVersion('gexd');
+  //     if (packageVersion != latest) {
+  //       _logger
+  //         ..info('')
+  //         ..warnMessage(CommandMessages.updateAvailable, {
+  //           'currentVersion': packageVersion,
+  //           'latestVersion': latest,
+  //         })
+  //         ..infoMessage(CommandMessages.updateInstruction);
+  //     }
+  //   } catch (_) {}
+  // }
 }
