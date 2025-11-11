@@ -1,5 +1,8 @@
 import 'package:gexd/gexd.dart';
 
+/// Data required for initializing a project
+/// Includes project name, template, full flag, and target directory
+/// Provides a method to convert data into a map of variables for templating
 class InitData {
   final String name;
   final ProjectTemplate template;

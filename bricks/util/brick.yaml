@@ -1,0 +1,13 @@
+name: util
+description: generation of utility classes for common functionalities
+
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Util name (e.g., StringHelper, Validation)
+    prompt: What is the util name?

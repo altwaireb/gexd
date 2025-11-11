@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for interface job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces InterfaceData for use in interface generation
 class InterfaceInputs
     with
         HasArgResults,

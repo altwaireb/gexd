@@ -85,6 +85,9 @@ Future<void> main(List<String> args) async {
   // Generate introduction README
   await writeIntroduction(outputDir: 'doc/.$version', commands: commandNames);
 
+  // Generate SUMMARY.md for GitBook
+  await writeSummary(outputDir: 'doc/.$version', commands: commandNames);
+
   print('📚 Documentation structure generated in: doc/.$version/');
   print('🎉 Professional documentation generated successfully!');
   print('📖 Total commands documented: ${commandNames.length}');

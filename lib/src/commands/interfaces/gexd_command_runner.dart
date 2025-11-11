@@ -42,6 +42,7 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
     addCommand(AddCommand(logger: _logger));
     addCommand(CreateCommand(logger: _logger, prompt: _prompt));
     addCommand(InitCommand(logger: _logger, prompt: _prompt));
+    addCommand(InfoCommand(logger: _logger));
     addCommand(MakeCommand(logger: _logger));
     addCommand(LocaleCommand(logger: _logger, prompt: _prompt));
     addCommand(RemoveCommand(logger: _logger));
@@ -95,33 +96,34 @@ class GexdCommandRunner extends CompletionCommandRunner<int> {
         topLevelResults.arguments.contains('--version');
 
     if (isVersionCommand) {
-      // Skip update check for now since repository is private
-      // This will be re-enabled once repository becomes public
       _logger.info('gexd $packageVersion');
       return ExitCode.success.code;
     }
+
+    // Check for updates unless explicitly skipped
+    if (topLevelResults['skip-update-check'] != true) {
+      await _checkForUpdates();
+    }
+
     final result = await super.runCommand(topLevelResults);
-
-    // Skip automatic update check while repository is private
-    // This will be re-enabled once repository becomes public
-    // TODO: Re-enable update check after making repository public
-
     return result;
   }
 
-  // TODO: Re-enable after repository becomes public
-  // Future<void> _checkForUpdates() async {
-  //   try {
-  //     final latest = await _pubUpdater.getLatestVersion('gexd');
-  //     if (packageVersion != latest) {
-  //       _logger
-  //         ..info('')
-  //         ..warnMessage(CommandMessages.updateAvailable, {
-  //           'currentVersion': packageVersion,
-  //           'latestVersion': latest,
-  //         })
-  //         ..infoMessage(CommandMessages.updateInstruction);
-  //     }
-  //   } catch (_) {}
-  // }
+  /// Check for available updates
+  Future<void> _checkForUpdates() async {
+    try {
+      final latest = await _pubUpdater.getLatestVersion('gexd');
+      if (packageVersion != latest) {
+        _logger
+          ..info('')
+          ..warnMessage(CommandMessages.updateAvailable, {
+            'currentVersion': packageVersion,
+            'latestVersion': latest,
+          })
+          ..infoMessage(CommandMessages.updateInstruction);
+      }
+    } catch (_) {
+      // Silently ignore update check failures
+    }
+  }
 }

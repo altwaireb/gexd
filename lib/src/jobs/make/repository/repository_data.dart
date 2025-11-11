@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for repository job
+/// Holds necessary information to generate repository files
+/// using Mason templates
 class RepositoryData {
   final String name;
   final Directory targetDir;
@@ -14,6 +17,8 @@ class RepositoryData {
   final bool force;
   final String? modelName;
   final ModelDetectionData? modelData;
+  final String? entityName;
+  final EntityDetectionData? entityData;
 
   RepositoryData({
     required this.name,
@@ -27,10 +32,15 @@ class RepositoryData {
     required this.component,
     this.modelName,
     this.modelData,
+    this.entityName,
+    this.entityData,
   });
 
   /// Check if repository has model
   bool get hasModel => modelName != null && modelName!.isNotEmpty;
+
+  /// Check if repository has entity
+  bool get hasEntity => entityName != null && entityName!.isNotEmpty;
 
   Map<String, dynamic> toVars() => {
     'name': name,
@@ -42,6 +52,12 @@ class RepositoryData {
     'modelExists': modelData?.exists ?? false,
     'modelImport': modelData?.importPath != null && modelData!.exists
         ? modelData!.importPath
+        : null,
+    'hasEntity': hasEntity,
+    'entityName': entityName,
+    'entityExists': entityData?.exists ?? false,
+    'entityImport': entityData?.importPath != null && entityData!.exists
+        ? entityData!.importPath
         : null,
     'packageName': projectName,
   };

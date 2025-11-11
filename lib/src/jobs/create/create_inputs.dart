@@ -1,6 +1,9 @@
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles input arguments and prompts for creating a new project
+/// Validates inputs and returns a [CreateData] object
+/// Throws [ValidationException] if any validation fails
 class CreateInputs with HasArgResults, HasName, HasInteractiveMode {
   @override
   final ArgResults argResults;

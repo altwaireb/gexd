@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle constant generation
+/// Uses Mason templates to generate constant files
+/// querying ConstantData for necessary information
 class ControllerJob {
   final ControllerData data;
   final Logger logger;
@@ -166,9 +169,8 @@ class ControllerJob {
     final nameSnakeCase = StringHelpers.toSnakeCase(data.name);
 
     return [
-      '$basePath${MainConstants.controllerSuffix}'.formatWith({
-        'name': nameSnakeCase,
-      }),
+      '$basePath${data.location == ControllerLocation.shared ? MainConstants.controllerSingleSuffix : MainConstants.controllerSuffix}'
+          .formatWith({'name': nameSnakeCase}),
     ];
   }
 }

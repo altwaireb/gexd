@@ -1,5 +1,9 @@
 import 'package:gexd/gexd.dart';
 
+/// Exception thrown when a model file is not found
+/// Used to indicate that a specific model file could not be located
+/// Provides factory constructors for creating exceptions
+/// with detailed messages and suggestions
 class ModelNotFoundException implements Exception {
   final String message;
   final String modelName;

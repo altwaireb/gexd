@@ -1,9 +1,19 @@
-# GEXD Documentation
+# GEXD CLI Documentation
 
-Welcome to the **GEXD** command-line tool documentation!
+{% hint style="success" %}
+**Welcome to GEXD!** A powerful Flutter project generator for clean architecture.
+{% endhint %}
 
-GEXD is a powerful Flutter/GetX project generator that helps you
-quickly scaffold new projects with clean architecture and best practices.
+GEXD is a comprehensive Flutter project scaffolding tool that helps you create scalable applications using the **GetX pattern** with **clean architecture principles**. Generate complete project structures with predefined templates, manage configurations, and maintain consistent code organization.
+
+## ✨ What is GEXD?
+
+GEXD (GetX Development) is a CLI tool that automates the creation of Flutter projects with:
+- **Clean Architecture** structure
+- **GetX State Management** integration  
+- **Predefined Templates** for rapid development
+- **Configuration Management** for project settings
+- **Best Practices** enforcement
 
 ---
 
@@ -24,11 +34,40 @@ gexd --help
 
 ## 📋 Available Commands
 
-- **[Init](init.md)** - Generate Flutter/GetX projects
-- **[Create](create.md)** - Generate Flutter/GetX projects
-- **[Screen](screen.md)** - Generate Flutter/GetX projects
-- **[Binding](binding.md)** - Generate Flutter/GetX projects
-- **[Make](make.md)** - Generate Flutter/GetX projects
+### Project Commands
+- **[Create](commands/create_command.md)** - Create a new Flutter project using gexd templates
+- **[Init](commands/init_command.md)** - Initialize an existing Flutter project with gexd structure
+- **[Add](commands/add_command.md)** - Add packages to your Flutter project
+- **[Remove](commands/remove_command.md)** - Remove packages from your Flutter project
+- **[Upgrade](commands/upgrade_command.md)** - Upgrade packages in your Flutter project
+- **[Self-update](commands/self_update_command.md)** - Update gexd CLI tool to the latest version
+
+### Information Commands
+- **[Info](commands/info_command.md)** - Display project and template information
+- **[Config](commands/info/config_command.md)** - Show current project configuration
+- **[Template](commands/info/template_command.md)** - Display template information and structure
+
+### Localization Commands
+- **[Locale](commands/locale_command.md)** - Manage GetX locale translations
+- **[Generate](commands/locales/generate_command.md)** - Generate locale files from JSON
+
+### Component Generation Commands
+- **[Make](commands/make_command.md)** - Generate various project files and components
+- **[Binding](commands/make/binding_command.md)** - Generate binding files for dependency injection
+- **[Controller](commands/make/controller_command.md)** - Generate controller files for state management
+- **[View](commands/make/view_command.md)** - Generate view files for UI components
+- **[Widget](commands/make/widget_command.md)** - Generate reusable Flutter widgets
+- **[Screen](commands/make/screen_command.md)** - Generate complete screen with controller and view
+- **[Service](commands/make/service_command.md)** - Generate service files for business logic
+- **[Repository](commands/make/repository_command.md)** - Generate repository files for data access
+- **[Provider](commands/make/provider_command.md)** - Generate provider files for data providers
+- **[Model](commands/make/model_command.md)** - Generate model files for data structures
+- **[Entity](commands/make/entity_command.md)** - Generate domain entities for Clean Architecture
+- **[Interface](commands/make/interface_command.md)** - Generate interface files for abstractions
+- **[Util](commands/make/util_command.md)** - Generate utility helper classes
+- **[Constant](commands/make/constant_command.md)** - Generate constant files
+- **[Exception](commands/make/exception_command.md)** - Generate custom exception classes
+- **[Middleware](commands/make/middleware_command.md)** - Generate middleware files for routing
 
 ---
 

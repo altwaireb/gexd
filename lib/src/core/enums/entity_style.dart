@@ -1,3 +1,7 @@
+/// Enumeration of different entity styles
+/// for domain entities in Clean Architecture.
+/// Each style defines its key, display name,
+/// description, required dependencies, and dev dependencies.
 enum EntityStyle {
   plain(
     key: 'plain',

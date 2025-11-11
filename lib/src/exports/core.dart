@@ -22,3 +22,4 @@ export '../core/enums/entity_style.dart';
 export '../core/enums/model_style.dart';
 export '../core/enums/project_template.dart';
 export '../core/enums/name_component.dart';
+export '../core/enums/widget_location.dart';

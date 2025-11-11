@@ -5,6 +5,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Handles input arguments and prompts for initializing a project
+/// Validates inputs and returns an [InitData] object
+/// Throws [ValidationException] if any validation fails
 class InitInputs {
   final ArgResults argResults;
   final PromptServiceInterface prompt;

@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle interface generation
+/// Uses Mason templates to generate interface files
+/// querying InterfaceData for necessary information
 class InterfaceJob {
   final InterfaceData data;
   final Logger logger;

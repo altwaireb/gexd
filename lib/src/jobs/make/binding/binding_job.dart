@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle constant generation
+/// Uses Mason templates to generate constant files
+/// querying ConstantData for necessary information
 class BindingJob {
   final BindingData data;
   final Logger logger;

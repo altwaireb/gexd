@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for interface job
+/// Holds necessary information to generate interface files
+/// using Mason templates
 class InterfaceData {
   final String name;
   final Directory targetDir;

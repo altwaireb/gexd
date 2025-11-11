@@ -511,7 +511,7 @@ class CustomValidator {
 Generate these advanced translations with:
 
 ```bash
-gexd locale generate assets/translations --key-style dot --sort-keys
+gexd locale generate assets/locales --key-style dot --sort-keys
 ```
 
 This creates the translation file with all the extensions needed for `trVars` and `trCount` functionality! 🎉

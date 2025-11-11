@@ -1,3 +1,6 @@
+/// Interface for MasonService
+/// Defines methods for generating files
+/// from Mason bricks and package bricks
 abstract class PromptServiceInterface {
   /// inputs a string from the user
   /// [prompt] is the message to display to the user

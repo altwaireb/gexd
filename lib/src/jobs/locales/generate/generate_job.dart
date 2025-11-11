@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job to generate localization files
+/// Validates locale files and generates translations file
+/// Uses LocaleGeneratorService for validation and generation
 class GenerateJob {
   final GenerateData data;
   final Logger logger;

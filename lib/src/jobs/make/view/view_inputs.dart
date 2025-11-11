@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for screen job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces ViewData for use in view generation
 class ViewInputs
     with
         HasArgResults,
@@ -130,7 +134,7 @@ class ViewInputs
   Future<NameComponent> _getComponent({required ViewLocation location}) async {
     switch (location) {
       case ViewLocation.shared:
-        return NameComponent.screenViews;
+        return NameComponent.views;
       case ViewLocation.screen:
         return NameComponent.screen;
     }

@@ -1,0 +1,36 @@
+# GitBook configuration file
+# See https://docs.gitbook.com/integrations/github/content-configuration#.gitbook.yaml
+
+root: ./doc/1.x/
+
+# Table of contents
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Format options
+format: website
+
+# Git integration
+git:
+  # GitBook will sync this branch
+  branch: main
+  
+  # Edit page source
+  editPage:
+    url: https://github.com/altwaireb/gexd/edit/main/doc/1.x/{{path}}
+
+# Search configuration
+search:
+  enabled: true
+  
+# PDF generation
+pdf:
+  enabled: true
+  title: GEXD CLI Documentation
+  
+# Social sharing
+sharing:
+  enabled: true
+  twitter: true
+  github: true

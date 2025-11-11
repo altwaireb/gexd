@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for controller job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces ControllerData for use in controller generation
 class ControllerInputs
     with
         HasArgResults,
@@ -136,7 +140,7 @@ class ControllerInputs
   }) async {
     switch (location) {
       case ControllerLocation.shared:
-        return NameComponent.screenControllers;
+        return NameComponent.controllers;
       case ControllerLocation.screen:
         return NameComponent.screen;
     }

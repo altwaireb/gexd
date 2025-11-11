@@ -16,11 +16,13 @@ import 'package:mason_logger/mason_logger.dart';
 /// - `screen`: Generate a Flutter screen (view) with GetX structure
 /// - `service`: Generate a service class
 /// - `view`: Generate a Flutter view widget
+/// - `widget`: Generate a Flutter widget component
 class MakeCommand extends Command<int> {
   final Logger _logger;
 
   MakeCommand({Logger? logger}) : _logger = logger ?? Logger() {
     addSubcommand(BindingCommand(logger: _logger));
+    addSubcommand(ConstantCommand(logger: _logger));
     addSubcommand(ControllerCommand(logger: _logger));
     addSubcommand(EntityCommand(logger: _logger));
     addSubcommand(ExceptionCommand(logger: _logger));
@@ -31,7 +33,9 @@ class MakeCommand extends Command<int> {
     addSubcommand(RepositoryCommand(logger: _logger));
     addSubcommand(ScreenCommand(logger: _logger));
     addSubcommand(ServiceCommand(logger: _logger));
+    addSubcommand(UtilCommand(logger: _logger));
     addSubcommand(ViewCommand(logger: _logger));
+    addSubcommand(WidgetCommand(logger: _logger));
   }
 
   @override

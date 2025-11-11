@@ -68,7 +68,7 @@ class EntityCommand extends Command<int>
 
   @override
   String get description =>
-      'Generate domain entity files for Clean Architecture';
+      'Generate domain entity files for supported project templates';
 
   @override
   String get usage =>
@@ -119,17 +119,20 @@ Examples:
         return ExitCode.config.code;
       }
 
-      // Only allow entity generation for Clean Architecture template
-      if (template != ProjectTemplate.clean) {
+      // Validate that entity generation is supported for this template
+      final supportedTemplates =
+          ComponentRegistry.get(NameComponent.entities)?.supportedTemplates ??
+          {};
+      if (!supportedTemplates.contains(template)) {
         _logger.err(
-          '❌ Entity command is only available for Clean Architecture projects',
+          '❌ Entity command is not supported for ${template.displayName} projects',
         );
         _logger.info('');
         _logger.info(
-          '💡 Use "gexd make model" for ${template.displayName} projects',
+          '💡 Entity command supports: ${supportedTemplates.map((t) => t.displayName).join(", ")}',
         );
         _logger.info(
-          '💡 Create a Clean Architecture project with: gexd create <project_name> --template clean',
+          '💡 Use "gexd make model" as an alternative for data structures',
         );
         return ExitCode.config.code;
       }

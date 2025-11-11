@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for model job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces RepositoryData for use in repository generation
 class RepositoryInputs
     with
         HasArgResults,
@@ -55,6 +59,12 @@ class RepositoryInputs
     // Get model name
     final modelName = await _getModelName(type);
 
+    // Get entity name
+    final entityName = await _getEntityName(type);
+
+    // Validate that model and entity are not both specified
+    _validateModelEntityConflict(modelName, entityName);
+
     // Get component
     final NameComponent component = NameComponent.repositories;
 
@@ -90,6 +100,17 @@ class RepositoryInputs
       );
     }
 
+    // Get entity data if entity name is provided
+    EntityDetectionData? entityData;
+    if (entityName != null && entityName.isNotEmpty) {
+      entityData = await EntityDetectionService.getEntityData(
+        entityName: entityName,
+        template: template,
+        basePath: targetDir,
+        suffixes: ['Entity'],
+      );
+    }
+
     return RepositoryData(
       name: name,
       onPath: onPath,
@@ -102,6 +123,8 @@ class RepositoryInputs
       hasInterface: hasInterface,
       modelName: modelName,
       modelData: modelData,
+      entityName: entityName,
+      entityData: entityData,
     );
   }
 
@@ -193,6 +216,58 @@ class RepositoryInputs
     return nameModel.trim().isEmpty ? null : nameModel;
   }
 
+  Future<String?> _getEntityName(RepositoryType repositoryType) async {
+    final entityArg = argResults['entity'] as String?;
+
+    // If not in interactive mode and no entity specified, use default (null)
+    if (!isInteractiveMode && (entityArg == null || entityArg.isEmpty)) {
+      return null;
+    }
+
+    if (entityArg != null && entityArg.isNotEmpty) {
+      if (repositoryType != RepositoryType.crud) {
+        throw ValidationException.custom(
+          'Entity name can only be used with CRUD repositories.\n'
+          ' Please use --type crud to specify a CRUD repository.',
+        );
+      }
+      await _validateEntityName(entityArg);
+      return entityArg;
+    }
+
+    if (repositoryType != RepositoryType.crud) return null;
+
+    final askForEntity = await prompt.confirm(
+      'Do you want to specify an entity for this repository?',
+      defaultValue: false,
+    );
+
+    if (!askForEntity) return null;
+
+    final nameEntity = await prompt.input(
+      MainConstants.nameInput.formatWith({'input': 'entity'}),
+      validator: (value) {
+        if (value.trim().isEmpty) return null; // Allow empty
+        _validateEntityName(value, toUserMessage: true);
+        return null;
+      },
+    );
+    return nameEntity.trim().isEmpty ? null : nameEntity;
+  }
+
+  /// Validate that model and entity are not both specified
+  void _validateModelEntityConflict(String? modelName, String? entityName) {
+    if (modelName != null &&
+        modelName.isNotEmpty &&
+        entityName != null &&
+        entityName.isNotEmpty) {
+      throw ValidationException.custom(
+        'Cannot specify both --model and --entity flags simultaneously.\n'
+        'Please choose either a model or an entity for the repository.',
+      );
+    }
+  }
+
   // section for Validations
 
   Future<void> _validateModelName(
@@ -213,6 +288,32 @@ class RepositoryInputs
     );
     if (!exists) {
       throw ModelNotFoundException.fromModelName(value, template);
+    }
+  }
+
+  Future<void> _validateEntityName(
+    String value, {
+    bool toUserMessage = false,
+  }) async {
+    final exampleEntity = 'User';
+    final validator = FieldValidator('entity name', example: exampleEntity);
+    validator.notEmpty(value, toUserMessage);
+    validator.pascalCase(value, exampleEntity, toUserMessage);
+
+    // Check if entity exists in the project (only for Clean Architecture)
+    if (template == ProjectTemplate.clean) {
+      final exists = await EntityDetectionService.exists(
+        entityName: value,
+        template: template,
+        basePath: targetDir,
+        suffixes: ['Entity'],
+      );
+      if (!exists) {
+        throw ValidationException.custom(
+          'Entity "$value" not found in the project.\n'
+          'Create it first with: gexd make entity $value',
+        );
+      }
     }
   }
 }

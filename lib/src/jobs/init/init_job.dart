@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 
+/// Job to initialize a project with specified architecture
+/// Validates Flutter project
+/// Uses MasonService to generate architecture structure
+/// Uses DependencyService to add necessary dependencies
+/// Uses PostGenerationService for post-initialization tasks
 class InitJob {
   final InitData data;
   final Logger logger;

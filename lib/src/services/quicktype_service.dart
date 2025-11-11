@@ -37,7 +37,7 @@ class QuicktypeService {
 
       // Generate primary model
       final primaryModel = await _generatePrimaryModel(
-        modelName: modelName,
+        modelName: '${modelName}Model',
         jsonData: jsonData,
         style: style,
         immutable: immutable,
@@ -46,7 +46,7 @@ class QuicktypeService {
       );
 
       final generatedFiles = <String, String>{
-        '${StringHelpers.toSnakeCase(modelName)}.dart': primaryModel,
+        '${StringHelpers.toSnakeCase(modelName)}_model.dart': primaryModel,
       };
 
       // Extract and generate relationship models if enabled
@@ -54,7 +54,7 @@ class QuicktypeService {
         final relationships = _extractRelationships(jsonData, modelName);
         for (final relationship in relationships.entries) {
           final relationshipModel = await _generateRelationshipModel(
-            modelName: relationship.key,
+            modelName: '${relationship.key}Model',
             jsonData: relationship.value,
             style: style,
             immutable: immutable,
@@ -63,7 +63,7 @@ class QuicktypeService {
           );
 
           final fileName =
-              '${StringHelpers.toSnakeCase(relationship.key)}.dart';
+              '${StringHelpers.toSnakeCase(relationship.key)}_model.dart';
           generatedFiles[fileName] = relationshipModel;
         }
       }

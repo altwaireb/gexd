@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for screen job
+/// Holds necessary information to generate screen files
+/// using Mason templates
 class ScreenData {
   final String name;
   final Directory targetDir;
@@ -13,6 +16,10 @@ class ScreenData {
   final bool hasModelFlag;
   final bool hasModel;
   final ModelDetectionData? modelData;
+  final String? entityName;
+  final bool hasEntityFlag;
+  final bool hasEntity;
+  final EntityDetectionData? entityData;
   final bool force;
 
   ScreenData({
@@ -26,6 +33,10 @@ class ScreenData {
     this.hasModelFlag = false,
     this.hasModel = false,
     this.modelData,
+    this.entityName,
+    this.hasEntityFlag = false,
+    this.hasEntity = false,
+    this.entityData,
     this.force = false,
   });
 
@@ -47,6 +58,12 @@ class ScreenData {
     'modelImport': modelData?.importPath != null && modelData!.exists
         ? modelData!.importPath
         : null,
+    'entityName': entityName,
+    'has_entity': entityData?.exists ?? false,
+    'entityExists': entityData?.exists ?? false,
+    'entityImport': entityData?.importPath != null && entityData!.exists
+        ? entityData!.importPath
+        : null,
   };
 
   ScreenDataValue get value => ScreenDataValue(this);
@@ -62,11 +79,17 @@ class ScreenDataValue {
   ScreenType get screenType => _data.screenType;
   String? get modelName => _data.modelName;
   bool get hasModelFlag => _data.hasModelFlag;
+  String? get entityName => _data.entityName;
+  bool get hasEntityFlag => _data.hasEntityFlag;
   bool get isBasic => _data.isBasic;
   bool get isForm => _data.isForm;
   bool get isState => _data.isState;
   bool get hasModel => _data.modelData?.exists ?? false;
   bool get modelExists => _data.modelData?.exists ?? false;
+  bool get hasEntity => _data.entityData?.exists ?? false;
+  bool get entityExists => _data.entityData?.exists ?? false;
   String? get modelImport => _data.modelData?.importPath;
+  String? get entityImport => _data.entityData?.importPath;
   String? get modelFilePath => _data.modelData?.filePath;
+  String? get entityFilePath => _data.entityData?.filePath;
 }

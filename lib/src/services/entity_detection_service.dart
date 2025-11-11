@@ -131,4 +131,75 @@ class EntityDetectionService {
         : entityName;
     return '${StringHelpers.toSnakeCase(baseName)}_entity.dart';
   }
+
+  /// Get entity data with complete information for code generation
+  static Future<EntityDetectionData> getEntityData({
+    required String entityName,
+    required ProjectTemplate template,
+    required Directory basePath,
+    List<String> suffixes = const ['Entity'],
+  }) async {
+    final className = getEntityClassName(entityName);
+    final fileName = getEntityFileName(entityName);
+    final filePath = await getEntityPath(
+      entityName: entityName,
+      template: template,
+      basePath: basePath,
+      suffixes: suffixes,
+    );
+    final importPath = _getEntityImportPath(
+      entityName: entityName,
+      template: template,
+    );
+    final exists = await EntityDetectionService.exists(
+      entityName: entityName,
+      template: template,
+      basePath: basePath,
+      suffixes: suffixes,
+    );
+
+    return EntityDetectionData(
+      className: className,
+      fileName: fileName,
+      filePath: filePath ?? '',
+      importPath: importPath,
+      exists: exists,
+    );
+  }
+
+  /// Get entity import path for Dart imports
+  static String _getEntityImportPath({
+    required String entityName,
+    required ProjectTemplate template,
+  }) {
+    if (template != ProjectTemplate.clean) return '';
+
+    final baseName = entityName.endsWith('Entity')
+        ? entityName.substring(0, entityName.length - 'Entity'.length)
+        : entityName;
+
+    return 'package:{{packageName}}/domain/entities/${StringHelpers.toSnakeCase(baseName)}_entity.dart';
+  }
+}
+
+/// Data class containing entity detection information
+class EntityDetectionData {
+  // PascalCase
+  final String className;
+  // file name with extension
+  final String fileName;
+  // full file path
+  final String filePath;
+  // import path to be used in Dart files
+  final String importPath;
+  // whether the entity file actually exists
+  final bool exists;
+
+  EntityDetectionData({
+    required this.className,
+    required this.fileName,
+    required this.filePath,
+    required this.importPath,
+    required this.exists,
+  });
 }

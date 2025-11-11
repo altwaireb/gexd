@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for controller job
+/// Holds necessary information to generate controller files
+/// using Mason templates
 class ControllerData {
   final String name;
   final Directory targetDir;

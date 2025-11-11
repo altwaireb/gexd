@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for service job
+/// Holds necessary information to generate service files
+/// using Mason templates
 class ServiceData {
   final String name;
   final Directory targetDir;

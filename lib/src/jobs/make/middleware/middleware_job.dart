@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle middleware generation
+/// Uses Mason templates to generate middleware files
+/// querying MiddlewareData for necessary information
 class MiddlewareJob {
   final MiddlewareData data;
   final Logger logger;

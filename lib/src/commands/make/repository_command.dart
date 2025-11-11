@@ -34,6 +34,12 @@ class RepositoryCommand extends Command<int>
         valueHelp: 'User|Product',
       )
       ..addOption(
+        'entity',
+        help:
+            'Specify entity class for CRUD repositories (enables typed repository methods with entities)',
+        valueHelp: 'User|Product',
+      )
+      ..addOption(
         'on',
         help:
             'Specify subdirectory path (max ${MainConstants.maxPathDepth} levels)',
@@ -83,6 +89,7 @@ Examples:
   gexd make repository User --type crud                  # Generate CRUD repository type
   gexd make repository User --type crud --interface      # Generate CRUD repository type with interface
   gexd make repository User --type crud --model User     # Generate typed CRUD repository with User model
+  gexd make repository User --type crud --entity User    # Generate typed CRUD repository with User entity
   gexd make repository User --force                      # Force overwrite without prompting
   gexd make repository User --on auth                    # Create in subdirectory
 ''';

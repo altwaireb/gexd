@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for screen job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces ScreenData for use in screen generation
 class ScreenInputs
     with
         HasArgResults,
@@ -43,6 +47,16 @@ class ScreenInputs
     final skipRoute = await _getSkipRoute();
     final modelName = await _getModelName(screenType);
     final hasModelFlag = await _getHasModelFlag(screenType);
+    final entityName = await _getEntityName(screenType);
+    final hasEntityFlag = await _getHasEntityFlag(screenType);
+
+    // Validate that model and entity are not both specified
+    _validateModelEntityConflict(
+      modelName,
+      entityName,
+      hasModelFlag,
+      hasEntityFlag,
+    );
     final force = await getForceInput(
       prompt: prompt,
       confirmationMessage: MainConstants.askForOverwriteInput,
@@ -90,6 +104,33 @@ class ScreenInputs
       }
     }
 
+    EntityDetectionData? entityData;
+
+    // Check entity only if entityName is provided
+    if (entityName != null && entityName.isNotEmpty) {
+      entityData = await EntityDetectionService.getEntityData(
+        entityName: entityName,
+        template: template,
+        basePath: targetDir,
+        suffixes: ['Entity'],
+      );
+    } else if (hasEntityFlag == true) {
+      entityData = await EntityDetectionService.getEntityData(
+        entityName: name,
+        template: template,
+        basePath: targetDir,
+        suffixes: ['Entity'],
+      );
+
+      // Validate that entity exists when using --has-entity
+      if (!entityData.exists) {
+        throw ValidationException.custom(
+          'Entity "$name" not found in the project.\n'
+          'Create it first with: gexd make entity $name',
+        );
+      }
+    }
+
     return ScreenData(
       name: name,
       targetDir: targetDir,
@@ -100,6 +141,9 @@ class ScreenInputs
       modelName: modelName,
       hasModelFlag: hasModelFlag,
       modelData: modelData,
+      entityName: entityName,
+      hasEntityFlag: hasEntityFlag,
+      entityData: entityData,
       force: force,
     );
   }
@@ -237,6 +281,118 @@ class ScreenInputs
     );
     if (!exists) {
       throw ModelNotFoundException.fromModelName(value, template);
+    }
+  }
+
+  Future<String?> _getEntityName(ScreenType screenType) async {
+    final entityArg = argResults['entity'] as String?;
+
+    // If not in interactive mode and no entity specified, use default (null)
+    if (!isInteractiveMode && (entityArg == null || entityArg.isEmpty)) {
+      return null;
+    }
+
+    if (entityArg != null && entityArg.isNotEmpty) {
+      if (screenType != ScreenType.withState) {
+        throw ValidationException.custom(
+          'Entity name can only be used with withState screens.\n'
+          'Please use --type withState to specify a withState screen.',
+        );
+      }
+      await _validateEntityName(entityArg);
+      return entityArg;
+    }
+
+    if (screenType != ScreenType.withState) return null;
+
+    final askForEntity = await prompt.confirm(
+      'Do you want to specify an entity for this screen?',
+      defaultValue: false,
+    );
+
+    if (!askForEntity) return null;
+
+    final nameEntity = await prompt.input(
+      MainConstants.nameInput.formatWith({'input': 'entity'}),
+      validator: (value) {
+        if (value.trim().isEmpty) return null; // Allow empty
+        _validateEntityName(value, toUserMessage: true);
+        return null;
+      },
+    );
+    return nameEntity.trim().isEmpty ? null : nameEntity;
+  }
+
+  Future<bool> _getHasEntityFlag(ScreenType screenType) async {
+    final hasEntityArg = argResults['has-entity'] as bool?;
+
+    // If has-entity flag is provided, validate for consistency
+    if (hasEntityArg != null && hasEntityArg) {
+      if (screenType != ScreenType.withState) {
+        throw ValidationException.custom(
+          '--has-entity flag can only be used with withState screens.\n'
+          'Please use --type withState to specify a withState screen.',
+        );
+      }
+      return hasEntityArg;
+    }
+
+    // If not in interactive mode and no has-entity flag specified, use default (false)
+    if (!isInteractiveMode) return false;
+
+    if (screenType != ScreenType.withState) return false;
+
+    final confirm = await prompt.confirm(
+      'Use entity class with same name as screen?',
+      defaultValue: false,
+    );
+
+    return confirm;
+  }
+
+  /// Validate that model and entity are not both specified
+  void _validateModelEntityConflict(
+    String? modelName,
+    String? entityName,
+    bool hasModelFlag,
+    bool hasEntityFlag,
+  ) {
+    final hasModel =
+        (modelName != null && modelName.isNotEmpty) || hasModelFlag;
+    final hasEntity =
+        (entityName != null && entityName.isNotEmpty) || hasEntityFlag;
+
+    if (hasModel && hasEntity) {
+      throw ValidationException.custom(
+        'Cannot specify both model and entity for the same screen.\n'
+        'Please choose either --model/--has-model or --entity/--has-entity.',
+      );
+    }
+  }
+
+  Future<void> _validateEntityName(
+    String value, {
+    bool toUserMessage = false,
+  }) async {
+    final exampleEntity = 'User';
+    final validator = FieldValidator('entity name', example: exampleEntity);
+    validator.notEmpty(value, toUserMessage);
+    validator.pascalCase(value, exampleEntity, toUserMessage);
+
+    // Check if entity exists in the project (only for Clean Architecture)
+    if (template == ProjectTemplate.clean) {
+      final exists = await EntityDetectionService.exists(
+        entityName: value,
+        template: template,
+        basePath: targetDir,
+        suffixes: ['Entity'],
+      );
+      if (!exists) {
+        throw ValidationException.custom(
+          'Entity "$value" not found in the project.\n'
+          'Create it first with: gexd make entity $value',
+        );
+      }
     }
   }
 }

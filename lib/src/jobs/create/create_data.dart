@@ -1,6 +1,9 @@
 import 'package:gexd/src/core/enums/project_template.dart';
 import 'package:gexd/src/version.dart';
 
+/// Data required for creating a new project
+/// Includes project name, template, platforms, organization, and description
+/// Provides a method to convert data into a map of variables for templating
 class CreateData {
   final String name;
   final ProjectTemplate template;

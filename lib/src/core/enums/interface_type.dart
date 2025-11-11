@@ -1,3 +1,7 @@
+/// Enumeration of different interface types
+/// for repository interfaces in Clean Architecture.
+/// Each type defines its key, display name, and description.
+/// Used in code generation for interface files.
 enum InterfaceType {
   /// Basic CRUD operations (getAll, getById, create, update, delete)
   crud(

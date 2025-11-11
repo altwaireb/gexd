@@ -1,6 +1,9 @@
 import 'package:interact/interact.dart';
 import 'interfaces/prompt_service_interface.dart';
 
+/// Prompt service implementation using interact package
+/// Implements PromptServiceInterface
+/// Provides methods for user input, confirmation, selection, and multi-selection
 class PromptService implements PromptServiceInterface {
   @override
   /// Prompts the user for input with validation

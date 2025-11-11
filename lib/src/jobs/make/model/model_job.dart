@@ -6,6 +6,9 @@ import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 
+/// Job class to handle model generation
+/// Uses Quicktype to generate model files
+/// querying ModelData for necessary information
 class ModelJob {
   final ModelData data;
   final Logger logger;

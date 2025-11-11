@@ -337,6 +337,27 @@ class ComponentRegistry {
       },
       isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
     ),
+    NameComponent.controllers: ComponentMetadata(
+      description: 'Shared controllers folder',
+      category: 'presentation',
+      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
+      defaultPath: {
+        ProjectTemplate.getx: ArchitectureTemplate.getxModulesControllers,
+        ProjectTemplate.clean:
+            ArchitectureTemplate.cleanPresentationControllers,
+      },
+      isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
+    ),
+    NameComponent.views: ComponentMetadata(
+      description: 'Shared views folder',
+      category: 'presentation',
+      supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
+      defaultPath: {
+        ProjectTemplate.getx: ArchitectureTemplate.getxModulesViews,
+        ProjectTemplate.clean: ArchitectureTemplate.cleanPresentationViews,
+      },
+      isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
+    ),
 
     // ================= Shared =================
     NameComponent.widgets: ComponentMetadata(

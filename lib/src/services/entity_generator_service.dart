@@ -1,6 +1,7 @@
 import 'package:mason_logger/mason_logger.dart';
 import '../core/enums/entity_style.dart';
 import '../core/enums/model_style.dart';
+import '../core/enums/project_template.dart';
 import '../core/helpers/string_helpers.dart';
 import 'entity_detection_service.dart';
 import 'quicktype_service.dart';
@@ -25,6 +26,7 @@ class EntityGeneratorService {
     required String entityName,
     required String jsonContent,
     required EntityStyle style,
+    ProjectTemplate? template,
     bool withModel = false,
     bool immutable = true,
     bool equatable = true,
@@ -70,6 +72,7 @@ class EntityGeneratorService {
             entityContent: entityContent,
             entityName: entityName,
             originalModelContent: originalModelContent,
+            template: template,
           );
 
           generatedFiles[modelFileName] = modelContent;
@@ -132,20 +135,21 @@ class EntityGeneratorService {
 
     // Remove JSON serialization parts and make it abstract
     String entityContent = modelContent
-        // Replace class name
+        // Replace class name (only Model classes, avoid double replacement)
         .replaceAll(RegExp(r'class\s+\w+Model'), 'abstract class $className')
-        .replaceAll(RegExp(r'class\s+\w+'), 'abstract class $className')
+        // Replace constructor name with entity class name and fix spacing
+        .replaceAll(RegExp(r'\s+(\w+)\s*\({'), '\n\n  const $className({')
         // Remove JSON serialization
         .replaceAll(RegExp(r'@JsonSerializable\(\)'), '')
         .replaceAll(RegExp(r'@JsonKey\([^)]*\)'), '')
-        .replaceAll(RegExp(r'factory\s+\w+\.fromJson[^}]+}'), '')
-        .replaceAll(RegExp(r'Map<String,\s*dynamic>\s+toJson\(\)[^}]+}'), '')
+        .replaceAll(RegExp(r'factory\s+\w+\.fromJson[^}]*}\s*'), '')
+        .replaceAll(RegExp(r'Map<String,\s*dynamic>\s+toJson\(\)[^}]*}\s*'), '')
         // Remove build runner imports
         .replaceAll(
           "import 'package:json_annotation/json_annotation.dart';",
           '',
         )
-        .replaceAll(RegExp(r"part\s+'[^']+\.g\.dart';"), '')
+        .replaceAll(RegExp(r"part\s+'[^']+\.g\.dart';\s*"), '')
         // Add domain-specific imports
         .replaceFirst(
           "import 'package:equatable/equatable.dart';",
@@ -163,6 +167,7 @@ class EntityGeneratorService {
     required String entityContent,
     required String entityName,
     required String originalModelContent,
+    ProjectTemplate? template,
   }) {
     final entityClassName = EntityDetectionService.getEntityClassName(
       entityName,
@@ -175,9 +180,12 @@ class EntityGeneratorService {
         .map((f) => 'required super.${f.name}')
         .join(', ');
 
+    // Get relative import path based on template
+    final entityImportPath = _getEntityImportPath(entityName, template);
+
     return '''
 import 'package:json_annotation/json_annotation.dart';
-import '../../domain/entities/${StringHelpers.toSnakeCase(entityName)}_entity.dart';
+import '$entityImportPath';
 
 part '${StringHelpers.toSnakeCase(entityName)}_model.g.dart';
 
@@ -193,6 +201,13 @@ class $modelClassName extends $entityClassName {
   Map<String, dynamic> toJson() => _\$${modelClassName}ToJson(this);
 }
 ''';
+  }
+
+  /// Get entity import path based on template
+  String _getEntityImportPath(String entityName, ProjectTemplate? template) {
+    // For now, both entity and model are generated in the same directory
+    // So we use relative import regardless of template
+    return '${StringHelpers.toSnakeCase(entityName)}_entity.dart';
   }
 
   /// Generate Entity class from fields

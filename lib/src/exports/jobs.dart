@@ -22,10 +22,20 @@ export '../jobs/make/binding/binding_data.dart';
 export '../jobs/make/binding/binding_inputs.dart';
 export '../jobs/make/binding/binding_job.dart';
 
+// constant
+export '../jobs/make/constant/constant_data.dart';
+export '../jobs/make/constant/constant_inputs.dart';
+export '../jobs/make/constant/constant_job.dart';
+
 // controller
 export '../jobs/make/controller/controller_data.dart';
 export '../jobs/make/controller/controller_inputs.dart';
 export '../jobs/make/controller/controller_job.dart';
+
+// widget
+export '../jobs/make/widget/widget_data.dart';
+export '../jobs/make/widget/widget_inputs.dart';
+export '../jobs/make/widget/widget_job.dart';
 
 // exception
 export '../jobs/make/exception/exception_data.dart';
@@ -46,6 +56,11 @@ export '../jobs/make/view/view_job.dart';
 export '../jobs/make/service/service_data.dart';
 export '../jobs/make/service/service_inputs.dart';
 export '../jobs/make/service/service_job.dart';
+
+// util
+export '../jobs/make/util/util_data.dart';
+export '../jobs/make/util/util_inputs.dart';
+export '../jobs/make/util/util_job.dart';
 
 // model
 export '../jobs/make/model/model_data.dart';

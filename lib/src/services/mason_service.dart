@@ -2,6 +2,10 @@ import 'dart:io';
 import 'package:gexd/gexd.dart';
 import 'package:mason/mason.dart';
 
+/// MasonService - Handles Mason brick generation
+/// Implements MasonServiceInterface
+/// Uses Mason to generate files from bricks
+/// Supports both local bricks and package bricks
 class MasonService implements MasonServiceInterface {
   final Logger logger;
 

@@ -1,3 +1,7 @@
+/// Enumeration of name components used in the project
+/// Each component represents a specific part
+/// of the project structure
+/// Used for generating paths and organizing files
 enum NameComponent {
   core,
   coreBindings,
@@ -20,6 +24,8 @@ enum NameComponent {
   services,
   routes,
   bindings,
+  controllers,
+  views,
   screen,
   interface,
 

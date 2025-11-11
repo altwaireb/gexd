@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data required for generating localization files
+/// Includes input directory, output path, target directory, key style, sorting option, force flag
+/// template type, and component type
 class GenerateData {
   final String from;
   final String outputPath;

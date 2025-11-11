@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle provider generation
+/// Uses Mason templates to generate provider files
+/// querying ProviderData for necessary information
 class ProviderJob {
   final ProviderData data;
   final Logger logger;

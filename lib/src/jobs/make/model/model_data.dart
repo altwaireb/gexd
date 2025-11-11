@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for model job
+/// Holds necessary information to generate model files
 class ModelData {
   final String name;
   final Directory targetDir;

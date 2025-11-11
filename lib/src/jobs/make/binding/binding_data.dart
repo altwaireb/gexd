@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for binding job
+/// Holds necessary information to generate binding files
+/// using Mason templates
 class BindingData {
   final String name;
   final Directory targetDir;

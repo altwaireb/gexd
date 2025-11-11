@@ -1,3 +1,6 @@
+/// Enumeration of project templates
+/// Each template includes key, display name, and description
+/// Used in project creation and scaffolding
 enum ProjectTemplate {
   getx(
     key: "getx",

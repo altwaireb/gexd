@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for middleware job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces MiddlewareData for use in middleware generation
 class MiddlewareInputs
     with
         HasArgResults,

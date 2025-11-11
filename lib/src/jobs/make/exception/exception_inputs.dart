@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 
+/// Handles inputs for exception job
+/// Gathers necessary information from command-line arguments
+/// or interactively via prompts
+/// Produces ExceptionData for use in exception generation
 class ExceptionInputs
     with
         HasArgResults,

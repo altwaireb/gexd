@@ -46,6 +46,8 @@ class FieldValidator {
     'exception',
     'middleware',
     'test',
+    'constants',
+    'constant',
 
     // General programming suffixes
     'manager',

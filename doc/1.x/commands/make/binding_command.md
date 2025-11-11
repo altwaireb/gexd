@@ -48,8 +48,8 @@ Examples:
   gexd make binding App                                  # Smart mode (interactive if exists)
 
   # Core/Shared bindings (use --on for custom subdirectory):
-  gexd make binding Auth --location core                 # Core binding
-  gexd make binding Utils --location shared              # Shared binding
+  gexd make binding Config --location core               # Core binding
+  gexd make binding Tools --location shared              # Shared binding
   gexd make binding Auth --location core --on user       # Core binding in subdirectory
 
   # Screen bindings (use --on-screen, --on not allowed):

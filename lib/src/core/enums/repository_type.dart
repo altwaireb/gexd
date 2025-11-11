@@ -1,3 +1,7 @@
+/// Enumeration of different repository types
+/// for repositories in Clean Architecture.
+/// Each type defines its key, display name, and description.
+/// Used in code generation for repository classes.
 enum RepositoryType {
   /// Basic CRUD operations (getAll, getById, create, update, delete)
   crud(

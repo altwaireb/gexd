@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:gexd/gexd.dart';
 
+/// Data class for entity job
+/// Holds necessary information to generate entity files
+/// using Mason templates
 class EntityData {
   final String name;
   final Directory targetDir;

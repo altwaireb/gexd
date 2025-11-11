@@ -4,6 +4,10 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle service generation
+/// Uses Mason templates to generate service files
+/// querying ServiceData for necessary information
+
 class ServiceJob {
   final ServiceData data;
   final Logger logger;

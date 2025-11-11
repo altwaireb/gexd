@@ -1,0 +1,159 @@
+name: 📚 Deploy Documentation
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'doc/**'
+      - '.gitbook.yaml'
+      - 'README.md'
+  pull_request:
+    paths:
+      - 'doc/**'
+      - '.gitbook.yaml'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  docs-sync:
+    name: 🔄 Sync with GitBook
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🔍 Check Documentation Changes
+        id: docs-changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.gitbook.yaml'
+              - 'README.md'
+              
+      - name: 📝 Validate Documentation Structure
+        if: steps.docs-changes.outputs.docs == 'true'
+        run: |
+          echo "🔍 Validating documentation structure..."
+          
+          # Check if required files exist
+          if [ ! -f "doc/1.x/SUMMARY.md" ]; then
+            echo "❌ SUMMARY.md not found in doc/1.x/"
+            exit 1
+          fi
+          
+          if [ ! -f "doc/1.x/README.md" ]; then
+            echo "❌ README.md not found in doc/1.x/"
+            exit 1
+          fi
+          
+          if [ ! -f ".gitbook.yaml" ]; then
+            echo "❌ .gitbook.yaml not found in root"
+            exit 1
+          fi
+          
+          echo "✅ Documentation structure is valid"
+          
+      - name: 🚀 Trigger GitBook Sync
+        if: steps.docs-changes.outputs.docs == 'true'
+        run: |
+          echo "🔄 GitBook will automatically sync from this push"
+          echo "📖 Documentation will be available at: https://gexd-docs.gitbook.io/gexd-cli-documentation"
+          
+      - name: 📬 Create Deployment Comment
+        if: steps.docs-changes.outputs.docs == 'true' && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commitSha = context.sha.substring(0, 7);
+            const commitMessage = context.payload.head_commit?.message || 'Documentation update';
+            
+            const body = `
+            ## 📚 Documentation Deployed
+            
+            **Commit:** \`${commitSha}\`  
+            **Message:** ${commitMessage}
+            
+            🔗 **Live Documentation:** https://gexd-docs.gitbook.io/gexd-cli-documentation
+            
+            ---
+            
+            > 📖 GitBook will sync automatically within 1-2 minutes
+            `;
+            
+            // Create a comment on the latest commit
+            await github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: body
+            });
+
+  docs-preview:
+    name: 🔍 Documentation Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 📝 PR Documentation Preview
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { readdir, readFile } = require('fs').promises;
+            const path = require('path');
+            
+            // Read documentation files
+            const docsDir = 'doc/1.x';
+            let documentationSummary = '## 📖 Documentation Preview\n\n';
+            
+            try {
+              // Read SUMMARY.md to show structure
+              const summaryContent = await readFile(path.join(docsDir, 'SUMMARY.md'), 'utf8');
+              documentationSummary += '### 📋 Table of Contents\n```\n';
+              documentationSummary += summaryContent.split('\n').slice(0, 15).join('\n');
+              documentationSummary += '\n```\n\n';
+              
+              documentationSummary += '### 🔗 Preview Links\n';
+              documentationSummary += '- 📚 [Full Documentation](https://gexd-docs.gitbook.io/gexd-cli-documentation)\n';
+              documentationSummary += '- 🔄 GitBook will update after merge to main\n\n';
+              
+            } catch (error) {
+              documentationSummary += '❌ Could not read documentation structure\n';
+            }
+            
+            // Comment on PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('📖 Documentation Preview')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: documentationSummary
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: documentationSummary
+              });
+            }

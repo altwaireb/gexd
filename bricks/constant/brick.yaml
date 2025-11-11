@@ -1,0 +1,14 @@
+name: constant
+description: Generate GetX constant files for application-wide constants
+
+version: 0.1.0+1
+
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Constant name (e.g., App, Api)
+    prompt: What is the constant name?

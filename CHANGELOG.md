@@ -1,12 +1,11 @@
 ## 0.0.3
 
-- **🚀 NEW: Entity Command** - Generate domain entities for Clean Architecture with multiple styles (plain, immutable, freezed)
-- **🔄 Advanced Entity Generation** - Support for JSON-to-Entity conversion with automatic model generation using `--with-model` flag
-- **🎯 Entity Style System** - Choose between plain, immutable, or freezed entity styles with proper dependency management
-- **🌐 Multi-Source Entity Creation** - Generate entities from templates, JSON files, or API endpoints
-- **🏗️ Enhanced Clean Architecture Support** - Domain entity generation with proper folder structure and imports
-- **📚 Comprehensive Documentation** - Added complete example directory with advanced localization features
-- **🔧 Improved Development Experience** - Better error handling, validation, and user guidance for entity workflows
+- **NEW: Entity Command** - Generate domain entities for Clean Architecture with multiple styles and JSON conversion support
+- **NEW: Util Command** - Generate utility helper classes with customizable templates and subdirectory support
+- **NEW: Widget Command** - Generate reusable Flutter widgets with location flexibility (shared/screen) and subdirectory support
+- **🔧 Fixed File Formatting** - Resolved formatting issues across all make commands for consistent code generation
+- **Enhanced Path Management** - Improved component registry with proper path resolution for all templates
+- **Architecture Support** - Full GetX and Clean Architecture compatibility for all new commands
 
 ## 0.0.2
 

@@ -1,3 +1,7 @@
+/// Main constants used throughout the application
+/// Contains string templates, file suffixes,
+/// and prompt messages
+/// Private constructor to prevent instantiation
 class MainConstants {
   MainConstants._();
 
@@ -40,9 +44,12 @@ class MainConstants {
   // File paths
   static const String bindingSingleSuffix = '{name}_binding.dart';
   static const String controllerSingleSuffix = '{name}_controller.dart';
+  static const String widgetSingleSuffix = '{name}_widget.dart';
   static const String viewSingleSuffix = '{name}_view.dart';
   static const String interfaceSuffix = '{name}_interface.dart';
   static const String serviceSuffix = '{name}_service.dart';
+  static const String utilSuffix = '{name}_utils.dart';
+  static const String constantsSuffix = '{name}_constants.dart';
   static const String providerSuffix = '{name}_provider.dart';
   static const String repositorySuffix = '{name}_repository.dart';
   static const String modelSuffix = '{name}.dart';

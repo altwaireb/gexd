@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle view generation
+/// Uses Mason templates to generate view files
+/// querying ViewData for necessary information
 class ViewJob {
   final ViewData data;
   final Logger logger;
@@ -163,9 +166,8 @@ class ViewJob {
     final nameSnakeCase = StringHelpers.toSnakeCase(data.name);
 
     return [
-      '$basePath${MainConstants.viewSuffix}'.formatWith({
-        'name': nameSnakeCase,
-      }),
+      '$basePath${data.location == ViewLocation.shared ? MainConstants.viewSingleSuffix : MainConstants.viewSuffix}'
+          .formatWith({'name': nameSnakeCase}),
     ];
   }
 }

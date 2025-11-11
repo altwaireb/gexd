@@ -35,6 +35,7 @@ Options:
           [withState]               Reactive data screen.
 
     --model=<value>                      Specify model class for withState screens (enables typed state management)
+    --entity=<value>                     Specify entity class for withState screens (enables typed state management with entities)
     --on=<value>                         Specify subdirectory path (max ${MainConstants.maxPathDepth} levels)
 -f, --has-model                          Specify subdirectory path (max ${MainConstants.maxPathDepth} levels)
 
@@ -46,6 +47,8 @@ Screen Types:
 Model Detection:
   --model <ModelName>       Specify exact model class for withState screens
   --has-model               Use model class with same name as screen
+  --entity <EntityName>     Specify exact entity class for withState screens  
+  --has-entity              Use entity class with same name as screen
 
 Examples:
   gexd make screen                                    # Interactive mode
@@ -54,7 +57,9 @@ Examples:
   gexd make screen Login --force                      # Force overwrite without prompting
   gexd make screen Login --on auth                    # Create in subdirectory
   gexd make screen UserList --type withState --model User          # Specific model class (User)
+  gexd make screen UserList --type withState --entity User         # Specific entity class (User)
   gexd make screen Product --type withState --has-model            # Use Product model (same name)
+  gexd make screen User --type withState --has-entity              # Use User entity (same name)
   gexd make screen UserProfile --on auth/user --type withState --skip-route --force
 ```
 
@@ -78,6 +83,12 @@ Examples:
 ### `--model`
 
 **Description:** Specify model class for withState screens (enables typed state management)
+
+---
+
+### `--entity`
+
+**Description:** Specify entity class for withState screens (enables typed state management with entities)
 
 ---
 

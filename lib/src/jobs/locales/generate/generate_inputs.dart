@@ -4,6 +4,9 @@ import 'package:args/args.dart';
 import 'package:gexd/gexd.dart';
 import 'package:path/path.dart' as path;
 
+/// Handles input arguments and prompts for generating localization files
+/// Validates inputs and returns a [GenerateData] object
+/// Throws [ValidationException] if any validation fails
 class GenerateInputs {
   final ArgResults argResults;
   final PromptServiceInterface prompt;

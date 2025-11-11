@@ -1,0 +1,28 @@
+name: widget
+description: Generate Flutter widget files
+
+version: 0.1.0+1
+
+environment:
+  mason: ^0.1.1
+
+vars:
+  name:
+    type: string
+    description: Widget name (e.g., CustomButton, UserCard)
+    prompt: What is the widget name?
+
+  is_shared:
+    type: boolean
+    description: Is this a shared widget?
+    default: true
+    
+  is_screen:
+    type: boolean
+    description: Is this a screen widget?
+    default: false
+  
+  screenName:
+    type: string
+    description: Screen name for screen widgets
+    prompt: What is the screen name?

@@ -8,10 +8,10 @@ This directory contains example files that demonstrate how to use various Gexd C
 assets/
 ├── models/           # JSON examples for model generation
 │   └── user.json     # User model with nested objects
-└── translations/     # Locale files for internationalization
-    ├── en.json       # English translations
-    ├── ar.json       # Arabic translations (RTL)
-    └── fr.json       # French translations
+└── locales/          # Locale files for internationalization
+    ├── en_US.json    # English (US) translations
+    ├── ar_SA.json    # Arabic (Saudi Arabia) translations (RTL)
+    └── fr_FR.json    # French (France) translations
 ```
 
 ## 🗂️ Model Example
@@ -40,13 +40,13 @@ gexd make model User --file example/assets/models/user.json --immutable --copyWi
 ### Multi-language Support
 **Usage:**
 ```bash
-gexd locale generate assets/translations --key-style dot --sort-keys
+gexd locale generate assets/locales --key-style dot --sort-keys
 ```
 
 **Supported Languages:**
-- **English (`en.json`)**: Base language with complete translations
-- **Arabic (`ar.json`)**: RTL language with rich pluralization support
-- **French (`fr.json`)**: European language variant
+- **English (`en_US.json`)**: Base language with complete translations
+- **Arabic (`ar_SA.json`)**: RTL language with rich pluralization support
+- **French (`fr_FR.json`)**: European language variant
 
 **🚀 Advanced Features:**
 
@@ -104,11 +104,11 @@ gexd make model User --file example/assets/models/user.json \
 ### Generate Locales from Examples  
 ```bash
 # Generate translations with dot notation
-gexd locale generate example/assets/translations \
+gexd locale generate example/assets/locales \
   --key-style dot --sort-keys --force
 
 # Generate with camelCase keys
-gexd locale generate example/assets/translations \
+gexd locale generate example/assets/locales \
   --key-style camelCase --output lib/l10n/translations.g.dart
 ```
 
@@ -133,7 +133,7 @@ gexd make model User --file assets/models/user.json \
 ### Custom Locale Generation
 ```bash
 # Advanced locale generation with custom output
-gexd locale generate assets/translations \
+gexd locale generate assets/locales \
   --key-style snake --output lib/core/translations.dart \
   --sort-keys --force
 ```

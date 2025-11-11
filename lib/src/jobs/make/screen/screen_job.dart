@@ -4,6 +4,9 @@ import 'package:gexd/gexd.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 
+/// Job class to handle screen generation
+/// Uses Mason templates to generate screen files
+/// querying ScreenData for necessary information
 class ScreenJob {
   final ScreenData data;
   final Logger logger;

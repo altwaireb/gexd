@@ -1,0 +1,60 @@
+{
+  "title": "GEXD CLI Documentation",
+  "description": "Complete documentation for GEXD - Flutter/GetX project generator with clean architecture support",
+  "author": "GEXD Team",
+  "language": "en",
+  "gitbook": "3.2.3",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  },
+  "plugins": [
+    "theme-default",
+    "search",
+    "lunr",
+    "sharing",
+    "fontsettings",
+    "highlight",
+    "livereload",
+    "anchorjs",
+    "edit-link",
+    "github",
+    "expandable-chapters"
+  ],
+  "pluginsConfig": {
+    "theme-default": {
+      "showLevel": true
+    },
+    "edit-link": {
+      "base": "https://github.com/altwaireb/gexd/edit/main/doc/1.x",
+      "label": "Edit This Page"
+    },
+    "github": {
+      "url": "https://github.com/altwaireb/gexd"
+    },
+    "sharing": {
+      "facebook": false,
+      "twitter": true,
+      "google": false,
+      "weibo": false,
+      "instapaper": false,
+      "vk": false,
+      "all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+    }
+  },
+  "pdf": {
+    "pageNumbers": true,
+    "fontSize": 12,
+    "fontFamily": "Arial",
+    "paperSize": "a4",
+    "chapterMark": "pagebreak",
+    "pageBreaksBefore": "/",
+    "margin": {
+      "right": 62,
+      "left": 62,
+      "top": 56,
+      "bottom": 56
+    }
+  }
+}

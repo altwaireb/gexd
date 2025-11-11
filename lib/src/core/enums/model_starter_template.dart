@@ -1,3 +1,6 @@
+/// Enumeration of model starter templates
+/// Each template includes key, display name,
+/// description, field count, and JSON content.
 enum ModelStarterTemplate {
   basic(
     key: 'basic',

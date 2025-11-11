@@ -6,18 +6,25 @@ import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 
+/// Job class to handle entity generation
+/// Uses Mason templates to generate entity files
+/// querying EntityData for necessary information
 class EntityJob {
   final EntityData data;
   final Logger logger;
   final EntityGeneratorService entityGeneratorService;
   final EntityDetectionService entityDetectionService;
   final EnvironmentValidatorService environmentService;
+  final PostGenerationService postGenerationService;
+  final ModelJob? modelJob;
 
   EntityJob(
     this.data, {
     EntityGeneratorService? entityGeneratorService,
     EntityDetectionService? entityDetectionService,
     EnvironmentValidatorService? environmentService,
+    PostGenerationService? postGenerationService,
+    this.modelJob,
     Logger? logger,
   }) : logger = logger ?? Logger(),
        entityGeneratorService =
@@ -25,7 +32,9 @@ class EntityJob {
        entityDetectionService =
            entityDetectionService ?? EntityDetectionService(),
        environmentService =
-           environmentService ?? EnvironmentValidatorService(logger: logger);
+           environmentService ?? EnvironmentValidatorService(logger: logger),
+       postGenerationService =
+           postGenerationService ?? PostGenerationService(logger: logger);
 
   Future<int> execute() async {
     try {
@@ -54,11 +63,13 @@ class EntityJob {
   Future<void> _validateEnvironment() async {
     logger.detail('Validating environment...');
 
-    // Validate Clean Architecture template
-    if (data.template != ProjectTemplate.clean) {
+    // Validate that entity generation is supported for current template
+    final supportedTemplates =
+        ComponentRegistry.get(NameComponent.entities)?.supportedTemplates ?? {};
+    if (!supportedTemplates.contains(data.template)) {
       throw ValidationException.custom(
-        'Entity generation requires Clean Architecture template. '
-        'Current project uses ${data.template.displayName}.',
+        'Entity generation is not supported for ${data.template.displayName} template. '
+        'Supported templates: ${supportedTemplates.map((t) => t.displayName).join(", ")}',
       );
     }
 
@@ -85,9 +96,9 @@ class EntityJob {
     }
 
     // Write files to disk
-    final targetPath = _getTargetPath();
+    final targetDir = await _prepareTargetDirectory();
     for (final entry in generatedFiles.entries) {
-      final filePath = path.join(targetPath, entry.key);
+      final filePath = path.join(targetDir.path, entry.key);
       final file = File(filePath);
 
       // Check if file exists and handle overwrite
@@ -128,12 +139,12 @@ class EntityJob {
     final entityFileName = EntityDetectionService.getEntityFileName(data.name);
     final files = <String, String>{entityFileName: entityContent};
 
-    // Generate model if requested
+    // Generate model if requested using ModelJob
     if (data.withModel) {
-      // For template mode, create a basic model that extends the entity
-      final modelContent = _generateModelFromEntity(entityContent);
-      final modelFileName = _getModelFileName(data.name);
-      files[modelFileName] = modelContent;
+      await _generateModelUsingModelJob(
+        ModelInputSourceType.template,
+        templateFields: fields,
+      );
     }
 
     return files;
@@ -149,13 +160,25 @@ class EntityJob {
     final file = File(data.filePath!);
     final jsonContent = await file.readAsString();
 
-    return await entityGeneratorService.generateFromJson(
+    // Generate entity without model
+    final entityFiles = await entityGeneratorService.generateFromJson(
       entityName: data.name,
       jsonContent: jsonContent,
       style: data.style,
-      withModel: data.withModel,
+      template: data.template,
+      withModel: false, // We handle model separately
       equatable: data.equatable,
     );
+
+    // Generate model separately if requested
+    if (data.withModel) {
+      await _generateModelUsingModelJob(
+        ModelInputSourceType.file,
+        filePath: data.filePath,
+      );
+    }
+
+    return entityFiles;
   }
 
   /// Generate entity from URL
@@ -180,75 +203,132 @@ class EntityJob {
       throw ValidationException.custom('Invalid JSON response from URL: $e');
     }
 
-    return await entityGeneratorService.generateFromJson(
+    // Generate entity without model
+    final entityFiles = await entityGeneratorService.generateFromJson(
       entityName: data.name,
       jsonContent: response.body,
       style: data.style,
-      withModel: data.withModel,
+      template: data.template,
+      withModel: false, // We handle model separately
       equatable: data.equatable,
     );
+
+    // Generate model separately if requested
+    if (data.withModel) {
+      await _generateModelUsingModelJob(
+        ModelInputSourceType.url,
+        urlPath: data.urlPath,
+      );
+    }
+
+    return entityFiles;
   }
 
-  /// Generate model that extends entity
-  String _generateModelFromEntity(String entityContent) {
-    final entityClassName = EntityDetectionService.getEntityClassName(
-      data.name,
+  /// Prepare target directory for generated files
+  Future<Directory> _prepareTargetDirectory() async {
+    final String targetPath = ArchitectureCoordinator.getFullTargetPath(
+      projectPath: data.targetDir.path,
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
     );
-    final modelClassName = '${data.name}Model';
 
-    // Extract fields from entity for constructor
-    final fields = _extractFieldsFromEntity(entityContent);
-    final constructorParams = fields
-        .map((f) => 'required super.${f.name}')
-        .join(', ');
+    final targetDir = Directory(targetPath);
 
-    return '''
-import 'package:json_annotation/json_annotation.dart';
-import '../../domain/entities/${StringHelpers.toSnakeCase(data.name)}_entity.dart';
-
-part '${StringHelpers.toSnakeCase(data.name)}_model.g.dart';
-
-@JsonSerializable()
-class $modelClassName extends $entityClassName {
-  const $modelClassName({
-    $constructorParams,
-  });
-
-  factory $modelClassName.fromJson(Map<String, dynamic> json) =>
-      _\$${modelClassName}FromJson(json);
-
-  Map<String, dynamic> toJson() => _\$${modelClassName}ToJson(this);
-}
-''';
-  }
-
-  /// Extract fields from entity content
-  List<EntityField> _extractFieldsFromEntity(String entityContent) {
-    final fields = <EntityField>[];
-    final fieldRegex = RegExp(r'final\s+(\w+(?:<[^>]*>)?)\s+(\w+);');
-
-    for (final match in fieldRegex.allMatches(entityContent)) {
-      fields.add(EntityField(name: match.group(2)!, type: match.group(1)!));
+    if (!await targetDir.exists()) {
+      await targetDir.create(recursive: true);
+      logger.detail('Created directory: $targetPath');
     }
 
-    return fields;
+    return targetDir;
   }
 
-  /// Get target path for generated files
-  String _getTargetPath() {
-    final basePath = data.targetDir.path;
+  /// Generate model using ModelJob for proper placement
+  Future<void> _generateModelUsingModelJob(
+    ModelInputSourceType inputSourceType, {
+    String? filePath,
+    String? urlPath,
+    List<EntityField>? templateFields,
+  }) async {
+    // Create ModelData for ModelJob
+    final modelData = ModelData(
+      name: data.name,
+      targetDir: data.targetDir,
+      template: data.template,
+      component: NameComponent.models,
+      inputSourceType: inputSourceType,
+      filePath: filePath,
+      urlPath: urlPath,
+      style: _convertEntityStyleToModelStyle(data.style),
+      immutable: true,
+      copyWith: false,
+      equatable: data.equatable,
+      relationshipsInFolder: false,
+      onPath: data.onPath,
+      force: data.force,
+      starterTemplate: _getModelStarterTemplate(templateFields),
+      customFields: _convertEntityFieldsToModelFields(templateFields),
+    );
 
-    if (data.onPath != null && data.onPath!.isNotEmpty) {
-      return path.join(basePath, 'lib', data.onPath);
+    // Create and execute ModelJob if not provided
+    final effectiveModelJob = modelJob ?? ModelJob(modelData, logger: logger);
+
+    // Execute ModelJob to generate model in proper location
+    await effectiveModelJob.execute();
+  }
+
+  /// Convert EntityStyle to ModelStyle
+  ModelStyle _convertEntityStyleToModelStyle(EntityStyle entityStyle) {
+    switch (entityStyle) {
+      case EntityStyle.plain:
+        return ModelStyle.plain;
+      case EntityStyle.immutable:
+        return ModelStyle.json;
+      case EntityStyle.freezed:
+        return ModelStyle.freezed;
     }
-
-    // Default path for Clean Architecture
-    return path.join(basePath, 'lib', 'features');
   }
 
-  /// Get model file name
-  String _getModelFileName(String entityName) {
-    return '${StringHelpers.toSnakeCase(entityName)}_model.dart';
+  /// Get appropriate ModelStarterTemplate based on fields
+  ModelStarterTemplate _getModelStarterTemplate(List<EntityField>? fields) {
+    if (fields != null && fields.isNotEmpty) {
+      return ModelStarterTemplate.custom;
+    }
+    return ModelStarterTemplate.basic; // Default template
+  }
+
+  /// Convert EntityField to CustomField
+  List<CustomField> _convertEntityFieldsToModelFields(
+    List<EntityField>? entityFields,
+  ) {
+    if (entityFields == null) return [];
+
+    return entityFields.map((field) {
+      // Try to map entity field type to FieldType
+      final fieldType = _mapEntityTypeToFieldType(field.type);
+
+      return CustomField.fromInput(name: field.name, type: fieldType);
+    }).toList();
+  }
+
+  /// Map Entity field type to ModelField FieldType
+  FieldType _mapEntityTypeToFieldType(String entityType) {
+    switch (entityType.toLowerCase()) {
+      case 'string':
+        return FieldType.string;
+      case 'int':
+      case 'integer':
+        return FieldType.integer;
+      case 'double':
+        return FieldType.double;
+      case 'bool':
+      case 'boolean':
+        return FieldType.boolean;
+      case 'datetime':
+        return FieldType.dateTime;
+      default:
+        return FieldType.string; // Default to string
+    }
   }
 
   /// Run post-generation tasks
@@ -269,45 +349,65 @@ class $modelClassName extends $entityClassName {
 
   /// Add model-related dependencies
   Future<void> _addModelDependencies() async {
-    logger.detail('Adding model dependencies...');
-    // The dependencies will be handled by the project template or manual installation
-    // as the DependencyService has private methods
+    // Dependencies are handled by PostGenerationService or manual installation
+    logger.detail('Model dependencies handled by project template');
   }
 
   /// Add Equatable dependency
   Future<void> _addEquatableDependency() async {
+    // Dependencies are handled by PostGenerationService or manual installation
     logger.detail(
-      'Equatable dependency should be added manually if not present...',
+      'Equatable dependency should be added manually if not present',
     );
-    // The dependencies will be handled by the project template or manual installation
   }
 
   /// Format generated files
   Future<void> _formatFiles(Map<String, String> files) async {
     if (files.isEmpty) return;
 
-    logger.detail('Formatting generated files...');
+    // Get the actual target directory path where files were generated
+    final String targetPath = ArchitectureCoordinator.getFullTargetPath(
+      projectPath: data.targetDir.path,
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
+    );
 
-    try {
-      await Process.run('dart', [
-        'format',
-        data.targetDir.path,
-      ], workingDirectory: data.targetDir.path);
-      logger.detail('Files formatted successfully.');
-    } catch (e) {
-      logger.warn('Failed to format files: $e');
-    }
+    // Convert file names to full paths
+    final filePaths = files.keys.map((fileName) {
+      return path.join(targetPath, fileName);
+    }).toList();
+
+    await postGenerationService.formatSpecificFiles(
+      filePaths,
+      data.targetDir.path,
+    );
   }
 
   /// Log generation summary
   void _logSummary(Map<String, String> generatedFiles) {
+    // Get the relative path from project root
+    final String targetPath = ArchitectureCoordinator.getFullTargetPath(
+      projectPath: data.targetDir.path,
+      component: data.component,
+      template: data.template,
+      onPath: data.onPath,
+    );
+
+    // Calculate relative path from project root
+    final String relativePath = path.relative(
+      targetPath,
+      from: data.targetDir.path,
+    );
+
     logger.info('');
     logger.info('🎉 Entity generation completed successfully!');
     logger.info('');
     logger.info('Generated files:');
 
     for (final fileName in generatedFiles.keys) {
-      logger.info('  ✅ $fileName');
+      final fullPath = path.join(relativePath, fileName);
+      logger.info('  ✅ $fullPath');
     }
 
     logger.info('');
@@ -322,13 +422,17 @@ class $modelClassName extends $entityClassName {
     logger.info('');
     logger.info('Next steps:');
     logger.info('  • Add business logic to your entity');
-    logger.info('  • Create repository interfaces and implementations');
-    logger.info('  • Add use cases for your domain logic');
 
     if (data.template == ProjectTemplate.clean) {
+      logger.info('  • Create repository interfaces and implementations');
+      logger.info('  • Add use cases for your domain logic');
       logger.info(
         '  • Consider using "gexd make repository" and "gexd make usecase"',
       );
+    } else if (data.template == ProjectTemplate.getx) {
+      logger.info('  • Create data providers and repositories');
+      logger.info('  • Add controllers to manage entity state');
+      logger.info('  • Consider using GetX state management features');
     }
   }
 }

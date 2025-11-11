@@ -1,3 +1,7 @@
+/// Enumeration of different model styles
+/// Each style defines its key, display name,
+/// description, required dependencies, and dev dependencies.
+/// Used in code generation for model classes.
 enum ModelStyle {
   plain(
     key: 'plain',

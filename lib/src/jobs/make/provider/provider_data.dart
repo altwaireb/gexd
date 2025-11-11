@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:gexd/gexd.dart';
 
+/// Data class for provider job
+/// Holds necessary information to generate provider files
+/// using Mason templates
 class ProviderData {
   final String name;
   final Directory targetDir;
