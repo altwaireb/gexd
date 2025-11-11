@@ -1,0 +1,82 @@
+name: 📚 Documentation Sync
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'doc/**'
+      - '.gitbook.yaml'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  validate-docs:
+    name: ✅ Validate Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+          
+      - name: 🔍 Check Documentation Changes
+        id: docs-changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.gitbook.yaml'
+              - 'README.md'
+              
+      - name: 📝 Validate Documentation Structure
+        if: steps.docs-changes.outputs.docs == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "🔍 Validating documentation structure..."
+          
+          # Check if required files exist
+          if [ ! -f "doc/1.x/SUMMARY.md" ]; then
+            echo "❌ SUMMARY.md not found in doc/1.x/"
+            exit 1
+          fi
+          
+          if [ ! -f "doc/1.x/README.md" ]; then
+            echo "❌ README.md not found in doc/1.x/"
+            exit 1
+          fi
+          
+          if [ ! -f ".gitbook.yaml" ]; then
+            echo "❌ .gitbook.yaml not found in root"
+            exit 1
+          fi
+          
+          echo "✅ Documentation structure is valid"
+          
+      - name: 📊 Create Documentation Report
+        if: steps.docs-changes.outputs.docs == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "## 📚 Documentation Sync Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Status:** Documentation validated successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Live Documentation:** https://gexd-docs.gitbook.io/gexd-cli-documentation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📁 **Files checked:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`doc/1.x/README.md\` ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- \`doc/1.x/SUMMARY.md\` ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- \`.gitbook.yaml\` ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔄 **GitBook Integration:** Active and monitoring changes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⏱️ **Sync Time:** GitBook will update within 1-2 minutes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "> 📝 Automated documentation validation completed"
+
+      - name: 📋 List Documentation Files
+        if: steps.docs-changes.outputs.docs == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "📂 Documentation files in this repository:"
+          find doc/1.x -name "*.md" | head -20
+          echo ""
+          echo "🔢 Total markdown files: $(find doc/1.x -name "*.md" | wc -l)"
