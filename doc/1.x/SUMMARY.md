@@ -1,12 +1,11 @@
-# Summary
+# Table of contents
 
 ## 🚀 GEXD Documentation
 
 * [Introduction](README.md)
 
-## 📋 Commands
+## Project Commands
 
-### Project Commands
 * [Create](commands/create_command.md)
 * [Init](commands/init_command.md)
 * [Add](commands/add_command.md)
@@ -14,16 +13,19 @@
 * [Upgrade](commands/upgrade_command.md)
 * [Self-update](commands/self_update_command.md)
 
-### Information Commands
+## Information Commands
+
 * [Info](commands/info_command.md)
   * [Config](commands/info/config_command.md)
   * [Template](commands/info/template_command.md)
 
-### Localization Commands
+## Localization Commands
+
 * [Locale](commands/locale_command.md)
 * [Generate](commands/locales/generate_command.md)
 
-### Component Generation Commands
+## Component Generation Commands
+
 * [Make](commands/make_command.md)
   * [Binding](commands/make/binding_command.md)
   * [Controller](commands/make/controller_command.md)
@@ -43,6 +45,6 @@
 
 ## 📚 Additional Resources
 
-* [Contributing](CONTRIBUTING.md)
-* [Changelog](CHANGELOG.md)
-* [License](LICENSE.md)
+* [Contributing](additional-resources/contributing.md)
+* [Changelog](additional-resources/changelog.md)
+* [License](additional-resources/license.md)
