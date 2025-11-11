@@ -18,6 +18,7 @@ test_temp/
 **/test_temp/
 
 # Compiled executables (development only)
+bin/gexd  # Main compiled executable
 bin/solidx-dev
 bin/solidx_exec
 bin/*-*  # Any compiled executable with version

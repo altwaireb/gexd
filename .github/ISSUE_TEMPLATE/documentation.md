@@ -10,7 +10,7 @@ assignees: ['altwaireb']
 
 ### 📍 Location
 **Page/Section:** 
-**URL:** https://gexd-docs.gitbook.io/gexd-cli-documentation/
+**URL:** https://gexd.gitbook.io/gexd-docs/
 
 ### 🐛 Issue Description
 <!-- Describe what's wrong with the current documentation -->
@@ -27,6 +27,6 @@ assignees: ['altwaireb']
 ---
 
 ### 🔗 Quick Links
-- 📚 [Full Documentation](https://gexd-docs.gitbook.io/gexd-cli-documentation)
+- 📚 [Full Documentation](https://gexd.gitbook.io/gexd-docs)
 - 🔧 [Source Files](https://github.com/altwaireb/gexd/tree/main/doc/1.x)
 - 🎯 [GitBook Editor](https://app.gitbook.com)

@@ -3,7 +3,7 @@ description: A powerful CLI tool to scaffold Flutter projects using GetX with SO
 version: 0.0.3
 homepage: https://github.com/altwaireb/gexd
 repository: https://github.com/altwaireb/gexd
-documentation: https://gexd-docs.gitbook.io/gexd-cli-documentation
+documentation: https://gexd.gitbook.io/gexd-docs
 issue_tracker: https://github.com/altwaireb/gexd/issues
 funding:
   - https://github.com/sponsors/altwaireb

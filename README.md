@@ -8,11 +8,11 @@
 [![codecov](https://codecov.io/gh/altwaireb/gexd/branch/main/graph/badge.svg)](https://codecov.io/gh/altwaireb/gexd)
 [![pub package](https://img.shields.io/pub/v/gexd.svg)](https://pub.dev/packages/gexd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-GitBook-blue.svg)](https://gexd-docs.gitbook.io/gexd-cli-documentation)
+[![Documentation](https://img.shields.io/badge/docs-GitBook-blue.svg)](https://gexd.gitbook.io/gexd-docs)
 
 > A modern CLI tool for generating Flutter projects using **GetX** and **Clean Architecture**, designed for scalability, maintainability, and developer productivity.
 
-📚 **[Complete Documentation](https://gexd-docs.gitbook.io/gexd-cli-documentation)** | 🚀 **[Quick Start Guide](https://gexd-docs.gitbook.io/gexd-cli-documentation)**
+📚 **[Complete Documentation](https://gexd.gitbook.io/gexd-docs)** | 🚀 **[Quick Start Guide](https://gexd.gitbook.io/gexd-docs)**
 
 ---
 

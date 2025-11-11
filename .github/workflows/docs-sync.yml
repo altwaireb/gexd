@@ -59,7 +59,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Status:** Documentation validated successfully" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 **Live Documentation:** https://gexd-docs.gitbook.io/gexd-cli-documentation" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Live Documentation:** https://gexd.gitbook.io/gexd-docs" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📁 **Files checked:**" >> $GITHUB_STEP_SUMMARY
           echo "- \`doc/1.x/README.md\` ✅" >> $GITHUB_STEP_SUMMARY
