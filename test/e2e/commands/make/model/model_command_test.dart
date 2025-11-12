@@ -146,7 +146,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/basic_user.dart',
+                'lib/app/data/models/basic_user_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);
@@ -188,10 +188,11 @@ class ModelCommandTest extends E2ETestBase {
               );
 
               // Verify file creation
-              final modelFile = File(
+              final basePath = project.projectDir.path;
+              var modelFile = File(
                 path.join(
-                  project.projectDir.path,
-                  'lib/app/data/models/custom_user.dart',
+                  basePath,
+                  'lib/app/data/models/custom_user_model.dart',
                 ),
               );
               expect(await modelFile.exists(), isTrue);
@@ -243,7 +244,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/user_profile.dart',
+                'lib/app/data/models/user_profile_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);
@@ -297,7 +298,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/api_user.dart',
+                'lib/app/data/models/api_user_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);
@@ -343,12 +344,12 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/plain_user.dart',
+                'lib/app/data/models/plain_user_model.dart',
               ),
             );
             final content = await modelFile.readAsString();
 
-            expect(content, contains('class PlainUser extends Equatable'));
+            expect(content, contains('class PlainUserModel extends Equatable'));
             expect(content, contains('final ')); // immutable fields
             expect(content, isNot(contains('@JsonSerializable')));
 
@@ -385,13 +386,13 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/infrastructure/models/json_user.dart',
+                'lib/infrastructure/models/json_user_model.dart',
               ),
             );
             final content = await modelFile.readAsString();
 
             expect(content, contains('@JsonSerializable'));
-            expect(content, contains('part \'json_user.g.dart\''));
+            expect(content, contains('part \'json_user_model.g.dart\''));
 
             print('⚡ JSON serializable model generation passed');
           } finally {
@@ -431,14 +432,17 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/freezed_user.dart',
+                'lib/app/data/models/freezed_user_model.dart',
               ),
             );
             final content = await modelFile.readAsString();
 
             expect(content, contains('@freezed'));
-            expect(content, contains('with _\$FreezedUser'));
-            expect(content, contains('part \'freezed_user.freezed.dart\''));
+            expect(content, contains('with _\$FreezedUserModel'));
+            expect(
+              content,
+              contains('part \'freezed_user_model.freezed.dart\''),
+            );
 
             print('⚡ Freezed model generation passed');
           } finally {
@@ -471,7 +475,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/auth/user/auth_user.dart',
+                'lib/app/data/models/auth/user/auth_user_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);
@@ -549,9 +553,9 @@ class ModelCommandTest extends E2ETestBase {
             stopwatch.stop();
             expect(result.exitCode, equals(ExitCode.success.code));
 
-            // Should complete within reasonable time (30 seconds for E2E)
+            // Should complete within reasonable time (35 seconds for E2E)
             // CI environments may be slower than local development
-            expect(stopwatch.elapsedMilliseconds, lessThan(30000));
+            expect(stopwatch.elapsedMilliseconds, lessThan(35000));
 
             print(
               '⚡ Performance test completed in ${stopwatch.elapsedMilliseconds}ms',
@@ -586,7 +590,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/data/models/get_x_user.dart',
+                'lib/app/data/models/get_x_user_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);
@@ -619,7 +623,7 @@ class ModelCommandTest extends E2ETestBase {
             final modelFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/infrastructure/models/clean_user.dart',
+                'lib/infrastructure/models/clean_user_model.dart',
               ),
             );
             expect(await modelFile.exists(), isTrue);

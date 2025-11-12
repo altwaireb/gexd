@@ -113,7 +113,7 @@ class LocaleCommandTest extends E2ETestBase {
             expect(result.exitCode, equals(ExitCode.success.code));
             expect(
               result.stdout,
-              contains('locale   Manage GetX locale translations'),
+              contains('locale        Manage GetX locale translations'),
             );
 
             print('⚡ Main help integration passed');

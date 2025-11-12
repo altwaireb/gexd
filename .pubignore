@@ -1,11 +1,16 @@
 # Test files (not needed by end users - saves 348KB)
 test/
 
+# Development tools and documentation (not needed by end users)
+tool/
+doc/
+Makefile
+
 # Documentation tools (kept for transparency and developer value)
 # tool/ - Contains gexd_doc generator for automatic documentation
 
-# Build files & executables
-bin/gexd*
+# Build files & executables (compiled versions only)
+bin/gexd-*
 *.exe
 
 # IDE files

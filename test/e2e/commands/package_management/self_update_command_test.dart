@@ -46,12 +46,12 @@ class SelfUpdateCommandTest extends E2ETestBase {
             expect(result.exitCode, equals(ExitCode.success.code));
             expect(
               result.stdout,
-              contains('Update the gexd CLI tool to the latest version'),
+              contains('Update gexd CLI tool to the latest version'),
             );
             expect(result.stdout, contains('--dry-run'));
             expect(
               result.stdout,
-              contains('Check for updates without installing'),
+              contains('Show what would be updated without making changes'),
             );
             print('✅ Help documentation verified');
           } finally {
@@ -429,7 +429,10 @@ class SelfUpdateCommandTest extends E2ETestBase {
               final result = await run(['self-update', '--dry-run'], tempDir);
 
               if (result.exitCode == ExitCode.success.code) {
-                expect(result.stdout, contains('🔍 Checking for updates...'));
+                expect(
+                  result.stdout,
+                  contains('🔍 Checking for gexd updates...'),
+                );
                 expect(
                   result.stdout,
                   anyOf([

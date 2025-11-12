@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="320" height="100">
+  <defs>
+    <!-- Terminal Window Gradient -->
+    <linearGradient id="terminalBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d3748;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#1a202c;stop-opacity:0.95" />
+    </linearGradient>
+    
+    <!-- Main Text Gradient -->
+    <linearGradient id="mainText" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow Effect -->
+    <filter id="textGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feFlood flood-color="#667eea" flood-opacity="0.8"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Cursor Glow -->
+    <filter id="cursorGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Drop Shadow -->
+    <filter id="dropShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.2)"/>
+    </filter>
+  </defs>
+  
+  <!-- Terminal Window -->
+  <rect x="20" y="25" width="180" height="50" rx="8" ry="8" 
+        fill="url(#terminalBg)" 
+        stroke="#4a5568" 
+        stroke-width="1.5" 
+        filter="url(#dropShadow)"/>
+  
+  <!-- Terminal Header -->
+  <rect x="20" y="25" width="180" height="16" rx="8" ry="8" fill="#2d3748"/>
+  <rect x="20" y="33" width="180" height="8" fill="#2d3748"/>
+  
+  <!-- Traffic Light Buttons -->
+  <circle cx="32" cy="33" r="3" fill="#ff5f57"/>
+  <circle cx="44" cy="33" r="3" fill="#ffbd2e"/>
+  <circle cx="56" cy="33" r="3" fill="#28ca42"/>
+  
+  <!-- Window Title -->
+  <text x="100" y="37" font-family="system-ui, -apple-system, sans-serif" 
+        font-size="9" fill="#a0aec0" text-anchor="middle">Terminal</text>
+  
+  <!-- Command Line Content -->
+  <g font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace">
+    <!-- Prompt Line 1 -->
+    <text x="30" y="53" font-size="8" fill="#4ade80">$</text>
+    <text x="38" y="53" font-size="8" fill="#e2e8f0">dart</text>
+    <text x="58" y="53" font-size="8" fill="#38bdf8">pub</text>
+    <text x="75" y="53" font-size="8" fill="#f59e0b">global</text>
+    <text x="108" y="53" font-size="8" fill="#8b5cf6">activate</text>
+    <text x="148" y="53" font-size="8" fill="#ef4444">gexd</text>
+    
+    <!-- Prompt Line 2 -->
+    <text x="30" y="65" font-size="8" fill="#4ade80">$</text>
+    <text x="38" y="65" font-size="8" fill="#e2e8f0">gexd</text>
+    <text x="60" y="65" font-size="8" fill="#38bdf8">create</text>
+    <text x="90" y="65" font-size="8" fill="#f59e0b">my_app</text>
+    
+    <!-- Blinking Cursor -->
+    <rect x="125" y="58" width="6" height="10" fill="#4ade80" opacity="0.9" filter="url(#cursorGlow)">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Main GEXD Text -->
+  <g transform="translate(230, 45)">
+    <text x="20" y="5" 
+          font-family="'Inter', 'Helvetica Neue', sans-serif" 
+          font-size="24" 
+          font-weight="700" 
+          fill="url(#mainText)" 
+          text-anchor="middle">GEXD</text>
+    
+    <text x="20" y="20" 
+          font-family="'Inter', 'Helvetica Neue', sans-serif" 
+          font-size="7" 
+          fill="#64748b" 
+          letter-spacing="1px"
+          font-weight="500" 
+          text-anchor="middle">CLI GENERATOR</text>
+  </g>
+</svg>

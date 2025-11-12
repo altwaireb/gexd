@@ -1,5 +1,9 @@
 # Table of contents
 
+<div align="center">
+  <img src="https://github.com/altwaireb/gexd/raw/main/assets/gexd-text-logo.svg" alt="GEXD" width="200"/>
+</div>
+
 ## 🚀 GEXD Documentation
 
 * [Introduction](README.md)

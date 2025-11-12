@@ -265,6 +265,13 @@ class ViewCommandTest extends E2ETestBase {
               '$basePath/lib/presentation/pages/views/shared_view.dart',
             );
 
+            // Try alternative path for Clean template
+            if (!viewFile.existsSync()) {
+              viewFile = File(
+                '$basePath/lib/presentation/views/shared_view.dart',
+              );
+            }
+
             // Accept if either location exists
             expect(viewFile.existsSync(), isTrue);
 

@@ -11,6 +11,19 @@ structure:
 # Format options
 format: website
 
+# Site customization
+customization:
+  logo:
+    # Logo for light mode (black text for light backgrounds)
+    light: ../../assets/gexd-text-logo-black.svg
+    # Logo for dark mode (white text for dark backgrounds)
+    dark: ../../assets/gexd-text-logo-white.svg
+  favicon: ../../assets/gexd-favicon.svg
+  
+# Site metadata
+title: GEXD CLI
+description: A powerful CLI tool for generating GetX and Clean Architecture projects
+
 # Git integration
 git:
   # GitBook will sync this branch

@@ -8,6 +8,13 @@ issue_tracker: https://github.com/altwaireb/gexd/issues
 funding:
   - https://github.com/sponsors/altwaireb
 
+# Package assets and logos
+assets:
+  - assets/gexd-logo.svg
+  - assets/gexd-text-logo.svg 
+  - assets/gexd-logo-transparent.svg
+  - assets/gexd-favicon.svg
+
 environment:
   sdk: ^3.8.3
 
@@ -38,4 +45,4 @@ dev_dependencies:
 
 
 executables:
-  gexd: gexd
+  gexd:

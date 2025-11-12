@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <!-- Main Text Gradient -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="33%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="66%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Subtle glow effect -->
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main GEXD Text -->
+  <text x="100" y="35" 
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" 
+        font-size="36" 
+        font-weight="800" 
+        fill="url(#mainGradient)"
+        text-anchor="middle">GEXD</text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="50" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="9" 
+        font-weight="500"
+        fill="#64748b" 
+        text-anchor="middle"
+        letter-spacing="3px">CLI GENERATOR</text>
+</svg>

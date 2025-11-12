@@ -69,8 +69,8 @@ class RemoveCommandTest extends E2ETestBase {
               contains('Remove packages from your Flutter project'),
             );
             expect(result.stdout, contains('--dry-run'));
-            expect(result.stdout, contains('--offline'));
-            expect(result.stdout, contains('--precompile'));
+            expect(result.stdout, contains('--[no-]offline'));
+            expect(result.stdout, contains('--[no-]precompile'));
             print('✅ Help documentation verified');
           } finally {
             await project.cleanup();
@@ -88,7 +88,7 @@ class RemoveCommandTest extends E2ETestBase {
               result.stderr,
               contains('Please specify at least one package'),
             );
-            expect(result.stderr, contains('gexd remove http'));
+            expect(result.stdout, contains('gexd remove http'));
             print('✅ Package name requirement validation working');
           } finally {
             await project.cleanup();
@@ -425,13 +425,13 @@ class RemoveCommandTest extends E2ETestBase {
             final result = await run(['remove'], project.projectDir);
 
             expect(result.exitCode, equals(ExitCode.usage.code));
-            expect(result.stderr, contains('gexd remove http'));
+            expect(result.stdout, contains('gexd remove http'));
             expect(
-              result.stderr,
+              result.stdout,
               contains('gexd remove http dio shared_preferences'),
             );
             expect(
-              result.stderr,
+              result.stdout,
               contains('gexd remove override:package_name'),
             );
 

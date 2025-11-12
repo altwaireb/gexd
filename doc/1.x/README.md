@@ -1,5 +1,9 @@
 # GEXD CLI Documentation
 
+<div align="center">
+  <img src="https://github.com/altwaireb/gexd/raw/main/assets/gexd-logo.svg" alt="GEXD Logo" width="400"/>
+</div>
+
 {% hint style="success" %}
 **Welcome to GEXD!** A powerful Flutter project generator for clean architecture.
 {% endhint %}
