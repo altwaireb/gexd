@@ -39,8 +39,11 @@
 ## 🚀 Installation
 
 ```bash
-# Install from pub.dev
+# Install from pub.dev (Using Dart)
 dart pub global activate gexd
+
+# Alternative: Install using Flutter
+flutter pub global activate gexd
 
 # Verify installation
 gexd --version

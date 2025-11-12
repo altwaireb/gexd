@@ -24,8 +24,11 @@ GEXD (GetX Development) is a CLI tool that automates the creation of Flutter pro
 ## 🚀 Quick Start
 
 ```bash
-# Install GEXD globally
+# Install GEXD globally (Using Dart)
 dart pub global activate gexd
+
+# Alternative: Install using Flutter  
+flutter pub global activate gexd
 
 # Create a new project
 gexd create my_app

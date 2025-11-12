@@ -108,8 +108,11 @@ gexd self-update --version 0.9.5
 # If permission denied on macOS/Linux
 sudo gexd self-update
 
-# Alternative: Update via pub
+# Alternative: Update via pub (Dart)
 dart pub global activate gexd
+
+# Alternative: Update via pub (Flutter)
+flutter pub global activate gexd
 ```
 
 ### **Network Issues:**
@@ -126,9 +129,13 @@ ping pub.dev
 # If update causes issues, rollback
 gexd self-update --version [previous_version]
 
-# Or reinstall via pub
+# Or reinstall via pub (Dart)
 dart pub global deactivate gexd
 dart pub global activate gexd [version]
+
+# Or reinstall via pub (Flutter)
+flutter pub global deactivate gexd
+flutter pub global activate gexd [version]
 ```
 
 ---

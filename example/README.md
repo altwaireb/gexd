@@ -35,7 +35,11 @@ Gexd (GetX Developer) is an advanced CLI tool that revolutionizes Flutter develo
 
 ### 1. Installation
 ```bash
+# Install via Dart pub
 dart pub global activate gexd
+
+# Alternative: Install via Flutter pub  
+flutter pub global activate gexd
 ```
 
 ### 2. Create Your First Project
@@ -263,7 +267,7 @@ Explore complete examples in this directory:
 
 ## 🚀 Getting Started Checklist
 
-- [ ] Install Gexd CLI: `dart pub global activate gexd`
+- [ ] Install Gexd CLI: `dart pub global activate gexd` or `flutter pub global activate gexd`
 - [ ] Create new project: `gexd create my_app --template clean`
 - [ ] Generate your first screen: `gexd make screen Home`
 - [ ] Add a model: `gexd make model User --file user.json`
