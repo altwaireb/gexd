@@ -1,3 +1,12 @@
+## 0.1.0
+
+- **🏗️ Architecture Consistency** - Unified naming from "translations" to "locales" across all templates and components
+- **🧪 E2E Test Stability** - Fixed all E2E tests for widget, interface, and locale commands
+- **📚 Documentation Improvements** - Simplified examples and updated all asset paths
+- **🌐 Locale Path Consistency** - Updated all examples
+- **✅ Model Command Fixes** - Fixed broken URL test by replacing unreliable endpoint with jsonplaceholder
+- **📖 README Enhancements** - Comprehensive documentation updates with consistent examples and paths
+
 ## 0.0.3
 
 - **NEW: Entity Command** - Generate domain entities for Clean Architecture with multiple styles and JSON conversion support

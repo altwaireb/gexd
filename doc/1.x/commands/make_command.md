@@ -74,8 +74,8 @@ gexd make repository ApiRepository --on data/repositories
 #### [`service`](make/service_command.md)
 **Description:** Generate service files for business logic
 ```bash
-gexd make service AuthService
-gexd make service PaymentService --on services
+gexd make service Auth
+gexd make service Payment --on services
 ```
 
 #### [`provider`](make/provider_command.md)

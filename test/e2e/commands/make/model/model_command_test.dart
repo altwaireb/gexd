@@ -283,7 +283,7 @@ class ModelCommandTest extends E2ETestBase {
               'model',
               'ApiUser',
               '--url',
-              'https://httpbin.org/json',
+              'https://jsonplaceholder.typicode.com/users/1',
               '--style',
               'json',
             ], project.projectDir);

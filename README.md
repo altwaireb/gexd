@@ -144,7 +144,7 @@ gexd make repository User --model User             # Type-safe repository
 Generate powerful multi-language support with advanced features:
 
 ```bash
-gexd locale generate assets/translations --key-style dot --sort-keys
+gexd locale generate assets/locales --key-style dot --sort-keys
 ```
 
 ### 🚀 Localization Features
@@ -298,7 +298,7 @@ gexd make model User --file assets/models/user.json --immutable --copyWith
 gexd make repository User --type crud --interface --on auth/data
 
 # 4. Generate authentication service  
-gexd make service AuthService --on auth/services
+gexd make service Auth --on auth
 
 # 5. Generate login screen with form validation
 gexd make screen Login --type form --on auth
@@ -307,7 +307,7 @@ gexd make screen Login --type form --on auth
 gexd make screen UserProfile --type withState --has-model --on auth
 
 # 7. Generate multi-language support
-gexd locale generate assets/translations --key-style dot --sort-keys
+gexd locale generate assets/locales --key-style dot --sort-keys
 
 # 8. Generate core bindings
 gexd make binding App --location core
@@ -344,7 +344,7 @@ Licensed under the **MIT License** — see [LICENSE](LICENSE).
 
 * [📘 Complete Examples](./example/README.md) - Comprehensive usage examples
 * [🗂️ Model Examples](./example/assets/models/) - JSON examples for model generation  
-* [🌍 Locale Examples](./example/assets/translations/) - Multi-language examples
+* [🌍 Locale Examples](./example/assets/locales/) - Multi-language examples
 * [🚀 Advanced Features](./example/assets/LOCALE_FEATURES.md) - trVars & trCount usage
 * [📦 pub.dev](https://pub.dev/packages/gexd)
 * [💬 Discussions](https://github.com/altwaireb/gexd/discussions)

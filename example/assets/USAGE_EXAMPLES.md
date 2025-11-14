@@ -302,7 +302,7 @@ gexd make screen UserProfile --type withState --has-model --on auth
 gexd make repository User --type crud --interface --on auth/data
 
 # 7. Generate Auth service
-gexd make service AuthService --on auth/services
+gexd make service Auth --on auth
 ```
 
 ### Multi-language Blog App

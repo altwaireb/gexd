@@ -151,7 +151,7 @@ Build robust business logic:
 
 ```bash
 # 🏢 Business service layer
-gexd make service AuthService --on auth
+gexd make service Auth --on auth
 
 # 🎮 Standalone controller
 gexd make controller ChatController --type withState
