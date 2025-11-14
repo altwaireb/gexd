@@ -38,7 +38,7 @@ class GenerateInputs {
 
     final ProjectTemplate template = this.template;
 
-    final NameComponent component = NameComponent.translations;
+    final NameComponent component = NameComponent.locales;
 
     return GenerateData(
       from: from,
@@ -85,7 +85,7 @@ class GenerateInputs {
     }
 
     // Generate output path based on template and component
-    final component = NameComponent.translations;
+    final component = NameComponent.locales;
     final basePath = ArchitectureCoordinator.getComponentPath(
       component,
       template,

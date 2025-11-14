@@ -380,13 +380,13 @@ class ComponentRegistry {
       },
       isEssential: {ProjectTemplate.getx: true, ProjectTemplate.clean: true},
     ),
-    NameComponent.translations: ComponentMetadata(
-      description: 'Translation and internationalization files',
+    NameComponent.locales: ComponentMetadata(
+      description: 'Localization and internationalization files',
       category: 'core',
       supportedTemplates: {ProjectTemplate.getx, ProjectTemplate.clean},
       defaultPath: {
-        ProjectTemplate.getx: ArchitectureTemplate.getxTranslations,
-        ProjectTemplate.clean: ArchitectureTemplate.cleanTranslations,
+        ProjectTemplate.getx: ArchitectureTemplate.getxLocales,
+        ProjectTemplate.clean: ArchitectureTemplate.cleanLocales,
       },
       isEssential: {ProjectTemplate.getx: false, ProjectTemplate.clean: false},
     ),

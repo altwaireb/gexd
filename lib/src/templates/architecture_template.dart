@@ -79,7 +79,7 @@ class ArchitectureTemplate {
   static const String getxSharedComponents = 'lib/app/shared/components';
 
   // Translations and Internationalization
-  static const String getxTranslations = 'lib/app/locales';
+  static const String getxLocales = 'lib/app/locales';
 
   // ============================================================================
   // 🏛️ CLEAN ARCHITECTURE TEMPLATE
@@ -176,7 +176,7 @@ class ArchitectureTemplate {
   static const String cleanSharedComponents = 'lib/shared/components';
 
   // Translations and Internationalization
-  static const String cleanTranslations = 'lib/locales';
+  static const String cleanLocales = 'lib/locales';
 
   // Test
   static const String test = 'test';

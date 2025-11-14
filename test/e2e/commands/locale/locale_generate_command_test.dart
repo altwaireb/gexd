@@ -173,7 +173,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             expect(await outputFile.exists(), isTrue);
@@ -215,7 +215,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/translations/translations.g.dart',
+                'lib/locales/translations.g.dart',
               ),
             );
             expect(await outputFile.exists(), isTrue);
@@ -250,7 +250,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -286,7 +286,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -321,7 +321,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -357,7 +357,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -585,10 +585,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
 
             // Verify extension files are created
             final extensionsDir = Directory(
-              path.join(
-                project.projectDir.path,
-                'lib/app/translations/extensions',
-              ),
+              path.join(project.projectDir.path, 'lib/app/locales/extensions'),
             );
             expect(await extensionsDir.exists(), isTrue);
 
@@ -647,7 +644,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
               final trCountFile = File(
                 path.join(
                   project.projectDir.path,
-                  'lib/app/translations/extensions/tr_count_extension.dart',
+                  'lib/app/locales/extensions/tr_count_extension.dart',
                 ),
               );
               final content = await trCountFile.readAsString();
@@ -703,7 +700,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -743,7 +740,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -781,7 +778,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -824,7 +821,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();
@@ -862,7 +859,7 @@ class LocaleGenerateCommandTest extends E2ETestBase {
             final outputFile = File(
               path.join(
                 project.projectDir.path,
-                'lib/app/translations/translations.g.dart',
+                'lib/app/locales/translations.g.dart',
               ),
             );
             final content = await outputFile.readAsString();

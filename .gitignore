@@ -40,6 +40,7 @@ ehthumbs.db
 Thumbs.db
 
 # Mason configuration 
+.mason  # Mason cache and local configuration
 .mason/  # Mason cache and local configuration
 mason-lock.json  # Contains local paths and sensitive info
 

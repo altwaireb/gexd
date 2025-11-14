@@ -203,7 +203,7 @@ class WidgetCommandTest extends E2ETestBase {
 
             final basePath = project.projectDir.path;
             final widgetFile = File(
-              '$basePath/lib/presentation/pages/widgets/clean_card_widget.dart',
+              '$basePath/lib/shared/widgets/clean_card_widget.dart',
             );
 
             expect(widgetFile.existsSync(), isTrue);

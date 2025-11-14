@@ -41,7 +41,7 @@ enum NameComponent {
   components,
 
   widgets,
-  translations,
+  locales,
   test,
   testWidgets,
   testBindings,
