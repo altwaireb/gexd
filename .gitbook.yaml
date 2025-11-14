@@ -15,9 +15,9 @@ format: website
 customization:
   logo:
     # Logo for light mode (black text for light backgrounds)
-    light: ../../assets/gexd-text-logo-black.svg
+    light: ../../assets/logo-black.svg
     # Logo for dark mode (white text for dark backgrounds)
-    dark: ../../assets/gexd-text-logo-white.svg
+    dark: ../../assets/logo-white.svg
   favicon: ../../assets/gexd-favicon.svg
   
 # Site metadata

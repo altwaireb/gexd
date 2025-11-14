@@ -2,50 +2,39 @@
 
 This directory contains the official logos and brand assets for the GEXD CLI tool.
 
-## 📁 Available Assets
+## 📁 Main Logos
 
-### 🎯 Text-Based Logos (Recommended)
+- **`logo.svg`** - Primary GEXD logo with gradient colors
+  
+![Main Logo](logo.svg)
 
-#### 🌈 **Main Colored Logo**
-- **`gexd-text-logo.svg`** - Primary colorful text logo (200x60px)
-  - Beautiful gradient colors (blue → purple → pink)
-  - Perfect for headers, documentation, and main branding
-  - **Best for:** GitBook headers, README files, presentations
+*Perfect for GitHub README headers, documentation, and general branding.*
 
-#### ⚪ **White Logo**
-- **`gexd-text-logo-white.svg`** - White text for dark backgrounds (200x60px)
-  - Clean white text with subtle glow
-  - **Best for:** Dark themes, presentations, overlays
+- **`logo-black.svg`** - Black version for light backgrounds
+- **`logo-white.svg`** - White version for dark backgrounds  
+- **`logo.png`** - PNG version for pub.dev screenshots
 
-#### ⚫ **Black Logo**
-- **`gexd-text-logo-black.svg`** - Black text for light backgrounds (200x60px)
-  - Professional black text with subtle shadow
-  - **Best for:** Print materials, light themes, official documents
+## �️ CLI-Specific Logo
 
-#### 🔤 **Simple Logo**
-- **`gexd-simple.svg`** - Text only, no subtitle (120x40px)
-  - Just "GEXD" with gradient
-  - **Best for:** Favicon, small spaces, minimal designs
+- **`gexd-cli-logo.svg`** - CLI variant with "CLI GENERATOR" subtitle
 
-### 🖼️ Legacy Logos
-- **`gexd-logo.svg`** - Original terminal-style logo
-- **`gexd-logo-transparent.svg`** - Enhanced version with effects
+## 🎯 Legacy & Utility Logos
+
 - **`gexd-favicon.svg`** - Icon version for browsers
 
 ## 🎯 Usage Guidelines
 
 ### ✅ Primary Recommendations:
-- **GitBook Main Logo:** Use `gexd-text-logo.svg`
-- **GitBook Favicon:** Convert `gexd-simple.svg` to 32x32 PNG/ICO
-- **GitHub README:** Use `gexd-text-logo.svg`
-- **Dark Backgrounds:** Use `gexd-text-logo-white.svg`
-- **Light/Print:** Use `gexd-text-logo-black.svg`
+- **GitHub README:** Use `logo.svg` or `gexd-cli-logo.svg`
+- **GitBook Main Logo:** Use `logo.svg`
+- **GitBook Themes:** Use `logo-black.svg` (light) / `logo-white.svg` (dark)
+- **pub.dev Screenshots:** Use `logo.png`
+- **Favicon:** Use `gexd-favicon.svg` (convert to 32x32 PNG)
 
 ### 📐 Size Recommendations:
-- **Headers:** 200x60px (text logos)
-- **Favicon:** 32x32px (from gexd-simple.svg)
-- **Social Media:** 1200x630px (use text logo with background)
-- **Small Icons:** 120x40px (gexd-simple.svg)
+- **Headers:** Use original SVG dimensions (scalable)
+- **Favicon:** 32x32px (from existing SVG files)
+- **Social Media:** 1200x630px (use main logo with background)
 
 ## 🎨 Design Specifications
 
@@ -58,12 +47,13 @@ This directory contains the official logos and brand assets for the GEXD CLI too
 
 ### 📋 File Specifications
 
-| File | Dimensions | Colors | Use Case |
-|------|------------|--------|----------|
-| `gexd-text-logo.svg` | 200×60 | Gradient | Main branding |
-| `gexd-text-logo-white.svg` | 200×60 | White | Dark backgrounds |
-| `gexd-text-logo-black.svg` | 200×60 | Black | Light backgrounds |
-| `gexd-simple.svg` | 120×40 | Gradient | Small spaces/Favicon |
+| File | Type | Colors | Use Case |
+|------|------|--------|----------|
+| `logo.svg` | SVG | Gradient | Main branding |
+| `logo-black.svg` | SVG | Black | Light backgrounds |
+| `logo-white.svg` | SVG | White | Dark backgrounds |
+| `logo.png` | PNG | Gradient | pub.dev screenshots |
+| `gexd-cli-logo.svg` | SVG | Gradient | CLI-specific branding |
 
 ## 🌈 Brand Colors
 
@@ -85,16 +75,16 @@ This directory contains the official logos and brand assets for the GEXD CLI too
 
 ### For GitBook Favicon:
 ```bash
-# Convert simple logo to PNG
-convert -background transparent gexd-simple.svg -resize 32x32 favicon.png
+# Convert favicon to PNG
+convert -background transparent gexd-favicon.svg -resize 32x32 favicon.png
 ```
 
 ### For High-DPI displays:
 ```bash
-# Create 2x version
-convert -background transparent gexd-text-logo.svg -resize 400x120 gexd-text-logo@2x.png
+# Create 2x version from main logo
+convert -background transparent logo.svg -resize 400x120 logo@2x.png
 ```
 
 ---
 
-> 💡 **Tip:** The text-based logos are clean, scalable, and work perfectly across all platforms and backgrounds. Use the colored version as primary, white for dark themes, and black for light themes or print materials.
+> 💡 **Tip:** The simplified naming convention makes asset management easier. Use `logo.svg` as the primary brand asset, with `logo-black.svg`/`logo-white.svg` for theme-specific needs, and `logo.png` for platforms requiring raster images.

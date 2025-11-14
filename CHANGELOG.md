@@ -1,3 +1,17 @@
+## 0.1.1
+
+- **🎨 Asset Reorganization** - Simplified asset naming convention for improved maintainability
+- **📦 pub.dev Optimization** - Enhanced package description, updated dependencies, and added platform support declarations  
+- **🖼️ New Asset Structure** - Replaced complex asset names with clean, intuitive naming:
+  - `logo.svg` - Primary brand logo
+  - `logo-black.svg` / `logo-white.svg` - Theme-specific variants
+  - `logo.png` - PNG version for pub.dev screenshots
+  - `gexd-cli-logo.svg` - CLI-specific branding
+- **📝 Documentation Updates** - Updated all asset references across documentation, GitBook, and configuration files
+- **🗑️ Legacy Cleanup** - Removed outdated asset files and references for cleaner repository structure
+- **🏗️ GitBook Integration** - Updated logo configuration for better theme compatibility
+- **📊 pub.dev Score Improvement** - Enhanced package metadata and compliance for better discoverability
+
 ## 0.1.0
 
 - **🏗️ Architecture Consistency** - Unified naming from "translations" to "locales" across all templates and components

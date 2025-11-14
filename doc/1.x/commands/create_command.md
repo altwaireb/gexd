@@ -1,7 +1,7 @@
 # `create` Command
 
 <div align="center">
-  <img src="https://github.com/altwaireb/gexd/raw/main/assets/gexd-text-logo.svg" alt="GEXD" width="150"/>
+  <img src="https://github.com/altwaireb/gexd/raw/main/assets/logo.svg" alt="GEXD" width="150"/>
 </div>
 
 ---

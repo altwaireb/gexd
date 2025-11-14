@@ -1,7 +1,7 @@
 # 🧩 Gexd CLI
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/gexd-logo.svg" alt="GEXD Logo" width="400"/>
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/gexd-cli-logo.svg" alt="GEXD Logo" width="400"/>
 </div>
 
 [![Format & Analyze](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml)
@@ -352,7 +352,7 @@ Licensed under the **MIT License** — see [LICENSE](LICENSE).
 ---
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/gexd-text-logo.svg" alt="GEXD" width="350"/>
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logo.svg" alt="GEXD" width="350"/>
   <br><br>
   <strong>Made with ❤️ for the Flutter community.</strong>
 </div>

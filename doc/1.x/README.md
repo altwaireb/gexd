@@ -1,7 +1,7 @@
 # GEXD CLI Documentation
 
 <div align="center">
-  <img src="https://github.com/altwaireb/gexd/raw/main/assets/gexd-logo.svg" alt="GEXD Logo" width="400"/>
+  <img src="https://github.com/altwaireb/gexd/raw/main/assets/logo.svg" alt="GEXD Logo" width="400"/>
 </div>
 
 {% hint style="success" %}
