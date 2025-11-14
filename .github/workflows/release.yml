@@ -108,14 +108,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # Publish to pub.dev (optional, for stable releases only)  
+    # Publish to pub.dev (using OIDC for secure authentication)
   publish:
     name: Publish to pub.dev
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [build, release]
     if: startsWith(github.ref, 'refs/tags/') && !contains(github.ref, '-')
-    
+    permissions:
+      id-token: write # Required for OIDC authentication
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -131,11 +133,5 @@ jobs:
       - name: Verify package
         run: dart pub publish --dry-run
         
-      # TODO: Enable when ready to publish
-      # - name: Setup pub credentials
-      #   run: |
-      #     mkdir -p ~/.pub-cache/
-      #     echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.pub-cache/credentials.json
-      #     
-      # - name: Publish to pub.dev
-      #   run: dart pub publish --force
+      - name: Publish to pub.dev
+        run: dart pub publish --force
