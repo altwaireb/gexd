@@ -108,7 +108,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Publish to pub.dev (using OIDC for secure authentication)
+  # Publish to pub.dev using OIDC authentication
   publish:
     name: Publish to pub.dev
     runs-on: ubuntu-latest
