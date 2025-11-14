@@ -8,18 +8,41 @@ This project uses **{{template}}** pattern with the following structure:
 
 ```
 lib/
-├── app/
-│   ├── core/
-│   │   ├── bindings/          # Dependency injection
-│   │   └── theme/             # App theming
-│   ├── modules/               # Feature modules
-│   │   └── home/              # Home module
-│   │       ├── bindings/      # Module bindings
-│   │       ├── controllers/   # Business logic
-│   │       └── views/         # UI components
-│   └── routes/                # Navigation
+├── core/
+│   ├── bindings/              # Dependency injection
+│   └── themes/                # App theming & styles
+│       ├── app_colors.dart    # Color definitions
+│       └── app_theme.dart     # Theme configuration
+├── presentation/              # UI Layer
+│   ├── pages/                 # Screen widgets
+│   │   ├── home/              # Home page
+│   │   │   ├── bindings/      # Page bindings
+│   │   │   ├── controllers/   # Page controllers
+│   │   │   └── views/         # Page views
+│   │   └── errors/            # Error pages
+│   │       └── not_found/     # 404 page
+│   └── routes/                # Navigation & routing
+│       ├── app_pages.dart     # Page definitions
+│       └── app_routes.dart    # Route constants
 └── main.dart                  # App entry point
 ```
+
+## 🏛️ Clean Architecture Principles
+
+This template follows Clean Architecture principles:
+
+### 🎯 **Separation of Concerns**
+- **Presentation Layer**: UI components, pages, and controllers
+- **Core Layer**: Business logic, themes, and shared functionality
+
+### 📁 **Layer Organization**
+- **`presentation/`**: Contains all UI-related code
+- **`core/`**: Contains business logic and shared resources
+
+### 🔗 **Dependency Rule**
+- Inner layers don't depend on outer layers
+- Business logic is independent of UI frameworks
+- Easy to test and maintain
 
 ## 🚀 Getting Started
 
@@ -56,15 +79,14 @@ lib/
 
 ### Generate Components
 ```bash
-# Create a new screen
-gexd make screen ProfileScreen
-
+# Create a new page (Clean Architecture)
+gexd make view ProfileView
 
 # Create a controller
-gexd make controller User
+gexd make controller Profile
 
-# Create a service
-gexd make service Api
+# Create a widget
+gexd make widget CustomButton
 
 # Create a model
 gexd make model User
@@ -85,16 +107,16 @@ gexd docs
 ## 📁 Project Structure
 
 ### Key Directories
-- **`lib/app/modules/`** - Feature modules with GetX pattern
-- **`lib/app/core/`** - Core application functionality
-- **`lib/app/routes/`** - Navigation and routing
-- **`lib/app/core/theme/`** - Theme configuration
+- **`lib/presentation/pages/`** - UI pages organized by feature
+- **`lib/core/`** - Core application functionality & themes
+- **`lib/presentation/routes/`** - Navigation and routing
+- **`lib/core/themes/`** - Theme configuration & colors
 
 ### Generated Files
 - **`lib/main.dart`** - Application entry point
-- **`lib/app/routes/app_pages.dart`** - Route definitions
-- **`lib/app/core/bindings/initial_binding.dart`** - Global dependencies
-- **`lib/app/core/theme/app_theme.dart`** - Theme configuration
+- **`lib/presentation/routes/app_pages.dart`** - Route definitions
+- **`lib/core/bindings/initial_binding.dart`** - Global dependencies
+- **`lib/core/themes/app_theme.dart`** - Theme configuration
 
 ## 🎨 Theming
 
@@ -125,7 +147,7 @@ flutter drive --target=test_driver/app.dart
 ## 📚 Learn More
 
 ### Documentation
-- [Gexd Documentation](https://github.com/altwaireb/gexd)
+- [Gexd Documentation](https://gexd.gitbook.io/gexd-docs)
 - [Flutter Documentation](https://docs.flutter.dev/)
 - [GetX Documentation](https://github.com/jonataslaw/getx)
 
@@ -155,5 +177,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Generated with ❤️ by [Gexd CLI](https://github.com/altwaireb/gexd)**
+
+📚 **[Complete Documentation](https://gexd.gitbook.io/gexd-docs)** | 🚀 **[Quick Start Guide](https://gexd.gitbook.io/gexd-docs)**
 
 > Ready to build something amazing? Start coding! 🚀

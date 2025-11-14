@@ -9,7 +9,6 @@
 [![E2E Tests](https://github.com/altwaireb/gexd/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/e2e-tests.yml)
 [![Release](https://github.com/altwaireb/gexd/actions/workflows/release.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/release.yml)
 [![Latest Release](https://img.shields.io/github/v/release/altwaireb/gexd)](https://github.com/altwaireb/gexd/releases/latest)
-[![codecov](https://codecov.io/gh/altwaireb/gexd/branch/main/graph/badge.svg)](https://codecov.io/gh/altwaireb/gexd)
 [![pub package](https://img.shields.io/pub/v/gexd.svg)](https://pub.dev/packages/gexd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Documentation](https://img.shields.io/badge/docs-GitBook-blue.svg)](https://gexd.gitbook.io/gexd-docs)
@@ -357,5 +356,3 @@ Licensed under the **MIT License** — see [LICENSE](LICENSE).
   <br><br>
   <strong>Made with ❤️ for the Flutter community.</strong>
 </div>
-
-```

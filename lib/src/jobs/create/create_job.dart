@@ -98,5 +98,8 @@ class CreateJob {
       JobMessages.projectCreatedSuccessfully.format({'name': data.name}),
     );
     logger.info('');
+    logger.info('📚 Documentation: ${MainConstants.packageDocumentation}');
+    logger.info('💡 Need help? Visit our docs for guides and examples!');
+    logger.info('');
   }
 }

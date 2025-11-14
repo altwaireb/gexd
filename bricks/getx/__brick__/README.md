@@ -124,7 +124,7 @@ flutter drive --target=test_driver/app.dart
 ## 📚 Learn More
 
 ### Documentation
-- [Gexd Documentation](https://github.com/altwaireb/gexd)
+- [Gexd Documentation](https://gexd.gitbook.io/gexd-docs)
 - [Flutter Documentation](https://docs.flutter.dev/)
 - [GetX Documentation](https://github.com/jonataslaw/getx)
 
@@ -154,5 +154,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Generated with ❤️ by [Gexd CLI](https://github.com/altwaireb/gexd)**
+
+📚 **[Complete Documentation](https://gexd.gitbook.io/gexd-docs)** | 🚀 **[Quick Start Guide](https://gexd.gitbook.io/gexd-docs)**
 
 > Ready to build something amazing? Start coding! 🚀

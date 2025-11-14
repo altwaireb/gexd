@@ -69,5 +69,8 @@ class InitJob {
       JobMessages.projectInitializationSuccessfully.format({'name': data.name}),
     );
     logger.info('');
+    logger.info('📚 Documentation: ${MainConstants.packageDocumentation}');
+    logger.info('💡 Need help? Visit our docs for guides and examples!');
+    logger.info('');
   }
 }

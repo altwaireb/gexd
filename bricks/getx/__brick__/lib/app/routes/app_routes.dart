@@ -12,6 +12,6 @@ abstract class Routes {
 /// Internal route paths (implementation detail)
 abstract class _Paths {
   _Paths._();
-  static const HOME = '/home';
+  static const HOME = '/';
   static const NOT_FOUND = '/404';
 }

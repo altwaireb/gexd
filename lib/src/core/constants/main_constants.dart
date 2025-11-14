@@ -5,6 +5,11 @@
 class MainConstants {
   MainConstants._();
 
+  /// Package information
+  static const String packageName = 'Gexd';
+  static const String packageDocumentation =
+      'https://gexd.gitbook.io/gexd-docs';
+
   /// Maximum allowed depth for a given path
   static const int maxPathDepth = 3;
 
