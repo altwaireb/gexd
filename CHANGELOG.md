@@ -1,3 +1,8 @@
+## 0.1.2
+
+- **🔧 pub.dev Compliance** - Fixed topics count to meet pub.dev's 5-topic limit requirement
+- **📝 Topic Optimization** - Refined package topics to focus on core functionality (cli, flutter, getx, clean-architecture, code-generation)
+
 ## 0.1.1
 
 - **🎨 Asset Reorganization** - Simplified asset naming convention for improved maintainability
