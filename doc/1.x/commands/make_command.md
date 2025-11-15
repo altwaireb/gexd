@@ -34,22 +34,22 @@ gexd make screen UserProfile --type withState --has-model
 #### [`controller`](make/controller_command.md) 
 **Description:** Generate controller files for state management
 ```bash
-gexd make controller AuthController
-gexd make controller UserController --type withState
+gexd make controller Auth
+gexd make controller User --type withState
 ```
 
 #### [`view`](make/view_command.md)
 **Description:** Generate view files (UI components)
 ```bash
-gexd make view LoginView
-gexd make view UserProfileView --on auth
+gexd make view Login
+gexd make view UserProfile --on auth
 ```
 
 #### [`binding`](make/binding_command.md)
 **Description:** Generate binding files for dependency injection
 ```bash
-gexd make binding AuthBinding
-gexd make binding CoreBinding --location core
+gexd make binding Auth
+gexd make binding Core --location core
 ```
 
 ---
@@ -67,8 +67,8 @@ gexd make model User --immutable --copyWith --relationships-in-folder
 #### [`repository`](make/repository_command.md)
 **Description:** Generate repository files for data access layers
 ```bash
-gexd make repository UserRepository --type crud --interface
-gexd make repository ApiRepository --on data/repositories
+gexd make repository User --type crud --interface
+gexd make repository Api --on data/repositories
 ```
 
 #### [`service`](make/service_command.md)
@@ -81,8 +81,8 @@ gexd make service Payment --on services
 #### [`provider`](make/provider_command.md)
 **Description:** Generate provider files for data sources
 ```bash
-gexd make provider ApiProvider
-gexd make provider LocalProvider --on data/providers
+gexd make provider Api
+gexd make provider Local --on data/providers
 ```
 
 ---
@@ -99,22 +99,22 @@ gexd make entity Product --on domain/entities
 #### [`interface`](make/interface_command.md)
 **Description:** Generate interface files for contracts and abstractions
 ```bash
-gexd make interface UserInterface --type crud
-gexd make interface PaymentInterface --on interfaces
+gexd make interface User --type crud
+gexd make interface Payment --on interfaces
 ```
 
 #### [`exception`](make/exception_command.md)
 **Description:** Generate custom exception classes
 ```bash
-gexd make exception AuthException
-gexd make exception ValidationException --on core/exceptions
+gexd make exception Auth
+gexd make exception Validation --on core/exceptions
 ```
 
 #### [`middleware`](make/middleware_command.md)
 **Description:** Generate middleware files for request/response handling
 ```bash
-gexd make middleware AuthMiddleware
-gexd make middleware LoggingMiddleware --on core/middleware
+gexd make middleware Auth
+gexd make middleware Logging --on core/middleware
 ```
 
 ---
@@ -180,25 +180,25 @@ gexd make constant AppConstants --on core/constants
 # Generate a complete user management feature
 gexd make screen UserProfile --type withState --has-model
 gexd make model User --file assets/user.json --relationships-in-folder
-gexd make repository UserRepository --type crud --interface
-gexd make service UserService --on auth/services
-gexd make binding UserBinding --location screen --on-screen user_profile
+gexd make repository User --type crud --interface
+gexd make service User --on auth/services
+gexd make binding User --location screen --on-screen user_profile
 ```
 
 ### 🏗️ **Clean Architecture Setup**
 ```bash
 # Domain layer
 gexd make entity User --on domain/entities
-gexd make interface UserRepository --on domain/repositories
+gexd make interface User --on domain/repositories
 
 # Data layer  
 gexd make model User --file user.json --on data/models
-gexd make repository UserRepositoryImpl --on data/repositories
-gexd make provider UserProvider --on data/providers
+gexd make repository User --on data/repositories
+gexd make provider User --on data/providers
 
 # Presentation layer
 gexd make screen UserProfile --on presentation/pages
-gexd make controller UserController --on presentation/controllers
+gexd make controller User --on presentation/controllers
 ```
 
 ### 📊 **API Integration Workflow**
@@ -207,11 +207,11 @@ gexd make controller UserController --on presentation/controllers
 gexd make model Product --url https://api.store.com/products/1
 
 # 2. Create data access layer
-gexd make repository ProductRepository --type crud --interface
-gexd make provider ApiProvider --on data/providers
+gexd make repository Product --type crud --interface
+gexd make provider Api --on data/providers
 
 # 3. Business logic layer
-gexd make service ProductService --on services
+gexd make service Product --on services
 
 # 4. UI layer
 gexd make screen ProductList --type withState --model Product
