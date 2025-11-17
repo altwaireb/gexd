@@ -1,3 +1,9 @@
+## 0.1.6
+
+- **🚀 Mason Templates Included** - Moved bricks to assets/bricks/ to ensure templates are included in published package
+- **🔧 Enhanced Path Resolution** - Improved MasonService to support both development (tool/bricks/) and published (assets/bricks/) locations
+- **📦 Package Optimization** - Fixed pub.dev validation issues while maintaining full functionality (204KB)
+
 ## 0.1.5
 
 - **🚀 Architecture Optimization** - Organized Mason bricks in `tool/bricks/` for cleaner package structure

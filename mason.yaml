@@ -1,27 +1,27 @@
 bricks:
   getx:
-    path: tool/bricks/getx
+    path: assets/bricks/getx
   clean:
-    path: tool/bricks/clean
+    path: assets/bricks/clean
   screen:
-    path: tool/bricks/screen
+    path: assets/bricks/screen
   binding:
-    path: tool/bricks/binding
+    path: assets/bricks/binding
   controller:
-    path: tool/bricks/controller
+    path: assets/bricks/controller
   view:
-    path: tool/bricks/view
+    path: assets/bricks/view
   service:
-    path: tool/bricks/service
+    path: assets/bricks/service
   middleware:
-    path: tool/bricks/middleware
+    path: assets/bricks/middleware
   exception:
-    path: tool/bricks/exception
+    path: assets/bricks/exception
   provider:
-    path: tool/bricks/provider
+    path: assets/bricks/provider
   repository:
-    path: tool/bricks/repository
+    path: assets/bricks/repository
   constant:
-    path: tool/bricks/constant
+    path: assets/bricks/constant
   util:
-    path: tool/bricks/util
+    path: assets/bricks/util

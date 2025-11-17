@@ -43,10 +43,10 @@ class MasonService implements MasonServiceInterface {
     bool overwrite = false,
   }) async {
     try {
-      // First try the new tool/bricks location (for development)
-      var brickPath = 'tool/bricks/$brickName';
+      // First try the new assets/bricks location (for published packages)
+      var brickPath = 'assets/bricks/$brickName';
       if (!Directory(brickPath).existsSync()) {
-        // Fallback to package-relative tool/bricks path
+        // Fallback to package-relative path
         brickPath = await _findPackageBrickPath(brickName);
       }
 
@@ -76,8 +76,14 @@ class MasonService implements MasonServiceInterface {
     final packageRoot = await _findPackageRoot();
 
     if (packageRoot != null) {
-      // Check new tool/bricks location first
-      final newPath = '$packageRoot/tool/bricks/$brickName';
+      // Check assets/bricks first (published package location)
+      final assetsPath = '$packageRoot/assets/bricks/$brickName';
+      if (Directory(assetsPath).existsSync()) {
+        return assetsPath;
+      }
+
+      // Check new assets/bricks location (development)
+      final newPath = '$packageRoot/assets/bricks/$brickName';
       if (Directory(newPath).existsSync()) {
         return newPath;
       }
@@ -96,8 +102,12 @@ class MasonService implements MasonServiceInterface {
     }
 
     // Local development paths
-    if (Directory('tool/bricks/$brickName').existsSync()) {
-      return 'tool/bricks/$brickName';
+    if (Directory('assets/bricks/$brickName').existsSync()) {
+      return 'assets/bricks/$brickName';
+    }
+
+    if (Directory('assets/bricks/$brickName').existsSync()) {
+      return 'assets/bricks/$brickName';
     }
 
     if (Directory('lib/src/bricks/$brickName').existsSync()) {
@@ -117,8 +127,8 @@ class MasonService implements MasonServiceInterface {
     final packageRoot = await _findPackageRoot();
 
     if (packageRoot != null) {
-      // Check tool/bricks first
-      final toolPath = '$packageRoot/tool/bricks/$templateKey';
+      // Check assets/bricks first
+      final toolPath = '$packageRoot/assets/bricks/$templateKey';
       if (Directory(toolPath).existsSync()) {
         return toolPath;
       }
@@ -137,7 +147,7 @@ class MasonService implements MasonServiceInterface {
     }
 
     // Search in current directory
-    String templatePath = 'tool/bricks/$templateKey';
+    String templatePath = 'assets/bricks/$templateKey';
     if (Directory(templatePath).existsSync()) {
       return templatePath;
     }
@@ -153,7 +163,7 @@ class MasonService implements MasonServiceInterface {
     }
 
     // Search in parent directory (for testing)
-    templatePath = '../gexd/tool/bricks/$templateKey';
+    templatePath = '../gexd/assets/bricks/$templateKey';
     if (Directory(templatePath).existsSync()) {
       return templatePath;
     }
@@ -166,7 +176,7 @@ class MasonService implements MasonServiceInterface {
     // Search for package root in hierarchy
     String currentDir = Directory.current.path;
     while (currentDir != '/') {
-      final testPath = '$currentDir/tool/bricks/$templateKey';
+      final testPath = '$currentDir/assets/bricks/$templateKey';
       if (Directory(testPath).existsSync()) {
         return testPath;
       }

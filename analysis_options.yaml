@@ -21,6 +21,10 @@ include: package:lints/recommended.yaml
 
 analyzer:
   exclude:
+    # Exclude brick templates in published packages
+    - assets/bricks/**
+    - assets/bricks/**/pubspec.yaml
+    - assets/bricks/**/analysis_options.yaml
     # Exclude brick templates in development tools
     - tool/bricks/**
     - tool/bricks/**/pubspec.yaml

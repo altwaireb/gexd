@@ -2,7 +2,6 @@
 test/
 
 # Development tools and documentation (not needed by end users)
-tool/
 doc/
 Makefile
 
