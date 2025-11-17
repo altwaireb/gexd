@@ -33,7 +33,7 @@ class MasonService implements MasonServiceInterface {
     );
   }
 
-  /// Generate from package brick with automatic path resolution
+  /// Generate from package brick using package-relative path
   @override
   Future<void> generateFromPackageBrick({
     required String brickName,
@@ -42,14 +42,63 @@ class MasonService implements MasonServiceInterface {
     bool hooks = true,
     bool overwrite = false,
   }) async {
-    final brickPath = await _findTemplatePath(brickName);
-    await generateFromBrick(
-      brickPath: brickPath,
-      targetDir: targetDir,
-      vars: vars,
-      hooks: hooks,
-      overwrite: overwrite,
-    );
+    try {
+      // First try the new lib/src/bricks location (for published packages)
+      var brickPath = 'lib/src/bricks/$brickName';
+      if (!Directory(brickPath).existsSync()) {
+        // Fallback to package-relative lib/src/bricks path
+        brickPath = await _findPackageBrickPath(brickName);
+      }
+
+      await generateFromBrick(
+        brickPath: brickPath,
+        targetDir: targetDir,
+        vars: vars,
+        hooks: hooks,
+        overwrite: overwrite,
+      );
+    } catch (e) {
+      // Final fallback to original path resolution
+      final brickPath = await _findTemplatePath(brickName);
+      await generateFromBrick(
+        brickPath: brickPath,
+        targetDir: targetDir,
+        vars: vars,
+        hooks: hooks,
+        overwrite: overwrite,
+      );
+    }
+  }
+
+  /// Find brick path within the package
+  Future<String> _findPackageBrickPath(String brickName) async {
+    // Try to locate the package through the script path
+    final packageRoot = await _findPackageRoot();
+
+    if (packageRoot != null) {
+      // Check new location first
+      final newPath = '$packageRoot/lib/src/bricks/$brickName';
+      if (Directory(newPath).existsSync()) {
+        return newPath;
+      }
+
+      // Check old location as fallback
+      final oldPath = '$packageRoot/bricks/$brickName';
+      if (Directory(oldPath).existsSync()) {
+        return oldPath;
+      }
+    }
+
+    // Local development paths
+    if (Directory('lib/src/bricks/$brickName').existsSync()) {
+      return 'lib/src/bricks/$brickName';
+    }
+
+    if (Directory('bricks/$brickName').existsSync()) {
+      return 'bricks/$brickName';
+    }
+
+    throw MasonBrickException.brickNotFound(brickName);
   }
 
   /// Find template path using the same logic as TemplateService

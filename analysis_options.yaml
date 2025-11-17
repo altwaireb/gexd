@@ -21,7 +21,9 @@ include: package:lints/recommended.yaml
 
 analyzer:
   exclude:
-    - bricks/**
+    - lib/src/bricks/**
+    - lib/src/bricks/**/pubspec.yaml
+    - lib/src/bricks/**/analysis_options.yaml
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints

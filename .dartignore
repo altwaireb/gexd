@@ -1,0 +1,5 @@
+# Ignore brick templates from formatting and analysis
+lib/src/bricks/**
+lib/src/bricks/**/pubspec.yaml
+lib/src/bricks/**/analysis_options.yaml
+lib/src/bricks/**/*.dart

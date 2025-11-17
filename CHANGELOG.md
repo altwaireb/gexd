@@ -1,3 +1,9 @@
+## 0.1.4
+
+- **🔧 Critical Fix** - Move bricks to `lib/src/bricks/` to ensure they are included in published package
+- **📦 Template Accessibility** - Fix "Brick not found" error when using `dart pub global activate gexd`
+- **⚡ Improved Path Resolution** - Enhanced Mason service with fallback path resolution for better reliability
+
 ## 0.1.3
 
 - **🔧 Package Assets** - Include Mason bricks in published package for template functionality
