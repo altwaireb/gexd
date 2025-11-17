@@ -17,6 +17,9 @@ export '../core/constants/main_constants.dart';
 export '../core/helpers/project_helpers.dart';
 export '../core/helpers/string_helpers.dart';
 
+// version
+export '../version.dart';
+
 // enums
 export '../core/enums/entity_style.dart';
 export '../core/enums/model_style.dart';

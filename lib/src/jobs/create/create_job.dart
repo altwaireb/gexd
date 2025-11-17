@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:gexd/gexd.dart';
-import 'package:gexd/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
 
 /// Job to create a new Flutter project with specified architecture
