@@ -1,3 +1,9 @@
+## 0.1.8
+
+- **🔧 Critical Fix** - Enhanced package root detection to properly locate Mason bricks in published packages
+- **🎯 Brick Discovery** - Fixed "Brick not found" error by improving pub-cache and global package path resolution
+- **📦 Robust Path Resolution** - Added multiple fallback methods to ensure bricks are found in all installation scenarios
+
 ## 0.1.7
 
 - **🔧 GitHub Actions Fix** - Updated dart-lang/setup-dart to correct version v1.7.1 to resolve CI/CD pipeline errors

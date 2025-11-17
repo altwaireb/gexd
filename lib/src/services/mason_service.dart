@@ -189,13 +189,41 @@ class MasonService implements MasonServiceInterface {
   /// Find package root directory
   Future<String?> _findPackageRoot() async {
     try {
-      // Get current executable file path
+      // Method 1: Check if we're in a global package installation
+      final pubCachePackages = [
+        '${Platform.environment['HOME']}/.pub-cache/hosted/pub.dev',
+        '${Platform.environment['HOME']}/.pub-cache/global_packages/gexd',
+      ];
+
+      for (final basePath in pubCachePackages) {
+        if (Directory(basePath).existsSync()) {
+          // Look for gexd package directories
+          final gexdDirs = Directory(basePath)
+              .listSync()
+              .where(
+                (entity) => entity is Directory && entity.path.contains('gexd'),
+              )
+              .cast<Directory>()
+              .toList();
+
+          // Sort by version and take the latest
+          if (gexdDirs.isNotEmpty) {
+            gexdDirs.sort((a, b) => b.path.compareTo(a.path));
+            final latestGexd = gexdDirs.first.path;
+            if (File('$latestGexd/pubspec.yaml').existsSync()) {
+              return latestGexd;
+            }
+          }
+        }
+      }
+
+      // Method 2: Get current executable file path
       final scriptPath = Platform.script.toFilePath();
       final scriptDir = Directory(scriptPath).parent.path;
 
       // Search for pubspec.yaml in hierarchy
       String currentDir = scriptDir;
-      while (currentDir != '/') {
+      while (currentDir != '/' && currentDir.length > 1) {
         final pubspecPath = '$currentDir/pubspec.yaml';
         if (File(pubspecPath).existsSync()) {
           // Check that this is gexd directory
