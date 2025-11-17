@@ -1,3 +1,11 @@
+## 0.1.11
+
+- **🔧 Template Validation & Recovery** - Enhanced template content validation and automatic correction for both create and init commands0.1.11
+
+- **� Template Validation & Recovery** - Enhanced template content validation and automatic correction for both create and init commands
+- **📝 Complete Variable Support** - Added missing template variables and improved Mason generation reliability
+- **✅ Bulletproof File Generation** - Guaranteed creation of .gexd/config.yaml and test/widget_test.dart with correct content
+
 ## 0.1.10
 
 - **🔧 Enhanced Error Handling** - Added fallback mechanisms to create missing template files (.gexd/config.yaml, test/widget_test.dart) when Mason generation fails

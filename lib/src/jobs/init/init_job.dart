@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:gexd/gexd.dart';
+import 'package:gexd/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
 
 /// Job to initialize a project with specified architecture
@@ -28,12 +29,116 @@ class InitJob {
   Future<int> execute() async {
     try {
       // Step 1: Generate project structure using Mason
+      final masonProgress = logger.progress(
+        'Generating project structure from template...',
+      );
+
       await masonService.generateFromPackageBrick(
         brickName: data.template.key,
         targetDir: targetDirectory,
         vars: data.toVars(),
         overwrite: true,
+        hooks: true,
       );
+
+      masonProgress.complete('Project structure generated successfully');
+
+      // Verify key files were created
+      final configFile = File('${targetDirectory.path}/.gexd/config.yaml');
+      final testFile = File('${targetDirectory.path}/test/widget_test.dart');
+
+      if (!configFile.existsSync()) {
+        logger.warn('Warning: .gexd/config.yaml was not created properly');
+        // Try to create it manually as fallback
+        final gexdDir = Directory('${targetDirectory.path}/.gexd');
+        if (!gexdDir.existsSync()) {
+          gexdDir.createSync(recursive: true);
+        }
+        await configFile.writeAsString('''# Generation Details
+generated_by: Gexd CLI
+creation_version: $packageVersion
+current_version: $packageVersion
+generated_date: ${DateTime.now().toIso8601String()}
+last_updated: null
+
+# Project Information
+project_name: ${data.name}
+template: ${data.template.key}
+''');
+        logger.detail('✓ .gexd/config.yaml created manually');
+      } else {
+        logger.detail('✓ .gexd/config.yaml created');
+      }
+
+      if (!testFile.existsSync()) {
+        logger.warn('Warning: test/widget_test.dart was not created properly');
+        // Create it manually as fallback
+        await testFile.writeAsString(
+          '''import 'package:flutter_test/flutter_test.dart';
+
+import 'package:${data.name}/main.dart';
+
+void main() {
+  testWidgets('MainApp builds and settles', (WidgetTester tester) async {
+    // Build the application and ensure it boots without throwing.
+    await tester.pumpWidget(const MainApp());
+    await tester.pumpAndSettle();
+
+    // Basic sanity: MainApp is present in the widget tree.
+    expect(find.byType(MainApp), findsOneWidget);
+  });
+}
+''',
+        );
+        logger.detail('✓ test/widget_test.dart created manually');
+      } else {
+        final content = await testFile.readAsString();
+
+        // Check if it's the correct template (should contain MainApp, not MyApp)
+        final hasCorrectTemplate =
+            content.contains('MainApp') &&
+            content.contains('package:${data.name}/main.dart');
+        final hasUnprocessedVariables = content.contains(
+          '{{project_name.snakeCase()}}',
+        );
+
+        if (!hasCorrectTemplate || hasUnprocessedVariables) {
+          if (!hasCorrectTemplate) {
+            logger.warn(
+              'Warning: test/widget_test.dart has wrong template content',
+            );
+          }
+          if (hasUnprocessedVariables) {
+            logger.warn(
+              'Warning: test/widget_test.dart contains unprocessed Mason variables',
+            );
+          }
+
+          // Replace with correct template
+          await testFile.writeAsString(
+            '''import 'package:flutter_test/flutter_test.dart';
+
+import 'package:${data.name}/main.dart';
+
+void main() {
+  testWidgets('MainApp builds and settles', (WidgetTester tester) async {
+    // Build the application and ensure it boots without throwing.
+    await tester.pumpWidget(const MainApp());
+    await tester.pumpAndSettle();
+
+    // Basic sanity: MainApp is present in the widget tree.
+    expect(find.byType(MainApp), findsOneWidget);
+  });
+}
+''',
+          );
+          logger.detail(
+            '✓ test/widget_test.dart corrected with proper template',
+          );
+        } else {
+          logger.detail('✓ test/widget_test.dart created and processed');
+        }
+      }
 
       // Step 2: Add dependencies
       await dependencyService.addDependencies(

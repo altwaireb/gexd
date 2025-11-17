@@ -26,6 +26,7 @@ class InitData {
       'is_clean': template == ProjectTemplate.clean,
       'is_create': false,
       'version': packageVersion,
+      'generated_date': DateTime.now().toIso8601String(),
     };
   }
 }
