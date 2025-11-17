@@ -34,6 +34,7 @@ class CreateData {
       'is_clean': template == ProjectTemplate.clean,
       'is_create': true,
       'version': packageVersion,
+      'generated_date': DateTime.now().toIso8601String(),
     };
   }
 }

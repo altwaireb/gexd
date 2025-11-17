@@ -1,3 +1,10 @@
+## 0.1.9
+
+- **✅ Template Variable Processing** - Fixed complete Mason template variable resolution in generated projects
+- **🎯 Enhanced Template Files** - Ensured all template files (.gexd/config.yaml, test/widget_test.dart) are properly generated with processed variables
+- **📊 Added Template Variables** - Added missing `generated_date` variable to CreateData.toVars() for complete template support
+- **🔍 Improved Debugging** - Enhanced logging and verification for template file generation
+
 ## 0.1.8
 
 - **🔧 Critical Fix** - Enhanced package root detection to properly locate Mason bricks in published packages

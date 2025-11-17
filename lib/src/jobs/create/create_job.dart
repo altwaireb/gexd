@@ -37,14 +37,43 @@ class CreateJob {
 
       // Step 2: Generate custom architecture using Mason
       final targetDir = Directory(data.name);
-      // final targetDir = Directory('${Directory.current.path}/${data.name}');
+
+      final masonProgress = logger.progress(
+        'Generating project structure from template...',
+      );
 
       await masonService.generateFromPackageBrick(
         brickName: data.template.key,
         targetDir: targetDir,
         vars: data.toVars(),
         overwrite: true,
+        hooks: true,
       );
+
+      masonProgress.complete('Project structure generated successfully');
+
+      // Verify key files were created
+      final configFile = File('${targetDir.path}/.gexd/config.yaml');
+      final testFile = File('${targetDir.path}/test/widget_test.dart');
+
+      if (!configFile.existsSync()) {
+        logger.warn('Warning: .gexd/config.yaml was not created properly');
+      } else {
+        logger.detail('✓ .gexd/config.yaml created');
+      }
+
+      if (!testFile.existsSync()) {
+        logger.warn('Warning: test/widget_test.dart was not created properly');
+      } else {
+        final content = await testFile.readAsString();
+        if (content.contains('{{project_name.snakeCase()}}')) {
+          logger.warn(
+            'Warning: test/widget_test.dart contains unprocessed Mason variables',
+          );
+        } else {
+          logger.detail('✓ test/widget_test.dart created and processed');
+        }
+      }
 
       // Step 3: Create architecture directories
       final progress = logger.progress('Creating architecture directories...');
