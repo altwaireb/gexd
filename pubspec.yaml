@@ -1,6 +1,6 @@
 name: gexd
 description: Modern CLI tool for Flutter projects using GetX and Clean Architecture. Generate models, screens, repositories, and services with SOLID principles.
-version: 0.1.9
+version: 0.1.10
 homepage: https://github.com/altwaireb/gexd
 repository: https://github.com/altwaireb/gexd
 documentation: https://gexd.gitbook.io/gexd-docs

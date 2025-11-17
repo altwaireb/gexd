@@ -1,3 +1,10 @@
+## 0.1.10
+
+- **🔧 Enhanced Error Handling** - Added fallback mechanisms to create missing template files (.gexd/config.yaml, test/widget_test.dart) when Mason generation fails
+- **🛠️ Automatic File Recovery** - Template files are now created manually with proper content if Mason brick generation is incomplete  
+- **📝 Improved Variable Processing** - Fixed unprocessed Mason variables with automatic replacement fallback
+- **🔍 Better Debugging** - Enhanced logging to show exactly which files are created vs recovered manually
+
 ## 0.1.9
 
 - **✅ Template Variable Processing** - Fixed complete Mason template variable resolution in generated projects

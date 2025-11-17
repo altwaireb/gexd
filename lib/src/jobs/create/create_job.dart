@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:gexd/gexd.dart';
+import 'package:gexd/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
 
 /// Job to create a new Flutter project with specified architecture
@@ -58,18 +59,61 @@ class CreateJob {
 
       if (!configFile.existsSync()) {
         logger.warn('Warning: .gexd/config.yaml was not created properly');
+        // Try to create it manually as fallback
+        final gexdDir = Directory('${targetDir.path}/.gexd');
+        if (!gexdDir.existsSync()) {
+          gexdDir.createSync(recursive: true);
+        }
+        await configFile.writeAsString('''# Generation Details
+generated_by: Gexd CLI
+creation_version: $packageVersion
+current_version: $packageVersion
+generated_date: ${DateTime.now().toIso8601String()}
+last_updated: null
+
+# Project Information
+project_name: ${data.name}
+template: ${data.template.key}
+''');
+        logger.detail('✓ .gexd/config.yaml created manually');
       } else {
         logger.detail('✓ .gexd/config.yaml created');
       }
 
       if (!testFile.existsSync()) {
         logger.warn('Warning: test/widget_test.dart was not created properly');
+        // Create it manually as fallback
+        await testFile.writeAsString(
+          '''import 'package:flutter_test/flutter_test.dart';
+
+import 'package:${data.name}/main.dart';
+
+void main() {
+  testWidgets('MainApp builds and settles', (WidgetTester tester) async {
+    // Build the application and ensure it boots without throwing.
+    await tester.pumpWidget(const MainApp());
+    await tester.pumpAndSettle();
+
+    // Basic sanity: MainApp is present in the widget tree.
+    expect(find.byType(MainApp), findsOneWidget);
+  });
+}
+''',
+        );
+        logger.detail('✓ test/widget_test.dart created manually');
       } else {
         final content = await testFile.readAsString();
         if (content.contains('{{project_name.snakeCase()}}')) {
           logger.warn(
             'Warning: test/widget_test.dart contains unprocessed Mason variables',
           );
+          // Fix unprocessed variables
+          final fixedContent = content.replaceAll(
+            '{{project_name.snakeCase()}}',
+            data.name,
+          );
+          await testFile.writeAsString(fixedContent);
+          logger.detail('✓ test/widget_test.dart variables processed manually');
         } else {
           logger.detail('✓ test/widget_test.dart created and processed');
         }
