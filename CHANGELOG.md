@@ -1,3 +1,9 @@
+## 0.1.5
+
+- **🚀 Architecture Optimization** - Organized Mason bricks in `tool/bricks/` for cleaner package structure
+- **⚡ Performance Enhancement** - Reduced package size by 21% (162KB) with improved efficiency
+- **🛡️ Enhanced Reliability** - Improved MasonService with robust path resolution
+
 ## 0.1.4
 
 - **🔧 Critical Fix** - Move bricks to `lib/src/bricks/` to ensure they are included in published package

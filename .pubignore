@@ -6,9 +6,6 @@ tool/
 doc/
 Makefile
 
-# Documentation tools (kept for transparency and developer value)
-# tool/ - Contains gexd_doc generator for automatic documentation
-
 # Build files & executables (compiled versions only)
 bin/gexd-*
 *.exe
@@ -23,3 +20,6 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Mason development files
+.mason/

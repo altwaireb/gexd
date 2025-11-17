@@ -39,8 +39,7 @@ jobs:
         run: dart pub get
 
       - name: Check formatting
-        run: |
-          find lib test bin -name "*.dart" ! -path "lib/src/bricks/*" -exec dart format --output=none --set-exit-if-changed {} +
+        run: dart format --output=none --set-exit-if-changed lib/ test/ bin/ tool/gexd_doc/
 
       - name: Analyze code
         run: dart analyze --fatal-warnings --fatal-infos
