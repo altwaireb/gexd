@@ -1,3 +1,8 @@
+## 0.1.3
+
+- **🔧 Package Assets** - Include Mason bricks in published package for template functionality
+- **📦 Template Support** - Ensure all project templates work correctly after global installation
+
 ## 0.1.2
 
 - **🔧 pub.dev Compliance** - Fixed topics count to meet pub.dev's 5-topic limit requirement
