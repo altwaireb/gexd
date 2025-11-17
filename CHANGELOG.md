@@ -1,3 +1,8 @@
+## 0.1.7
+
+- **🔧 GitHub Actions Fix** - Updated dart-lang/setup-dart to correct version v1.7.1 to resolve CI/CD pipeline errors
+- **⚡ CI/CD Stability** - Fixed workflow execution issues that were preventing successful releases
+
 ## 0.1.6
 
 - **🚀 Mason Templates Included** - Moved bricks to assets/bricks/ to ensure templates are included in published package
