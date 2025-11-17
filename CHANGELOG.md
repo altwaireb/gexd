@@ -1,3 +1,9 @@
+## 0.1.12
+
+- **🔧 Code Quality Fixes** - Fixed unnecessary imports and improved export structure for better maintainability
+- **📝 CHANGELOG Formatting** - Fixed corrupted formatting and duplicate entries
+- **✅ CI/CD Compatibility** - Resolved dart analyze warnings to ensure smooth GitHub Actions workflow
+
 ## 0.1.11
 
 - **🔧 Template Validation & Recovery** - Enhanced template content validation and automatic correction for both create and init commands
