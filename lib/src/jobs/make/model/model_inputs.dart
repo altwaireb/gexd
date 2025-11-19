@@ -154,7 +154,7 @@ class ModelInputs
     }
 
     // If not in interactive mode and no file/url specified, default to template
-    if (!isInteractiveMode && (argFile == null && argUrl == null)) {
+    if (!isInteractiveMode) {
       return ModelInputSourceType.template;
     }
 

@@ -361,7 +361,7 @@ Licensed under the **MIT License** — see [LICENSE](LICENSE).
 ---
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logos/icon_with_text/svg/logo.svg" alt="GEXD" width="350"/>
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logos/icon_with_text/svg/logo.svg" alt="GEXD" width="120"/>
   <br><br>
   <strong>Made with ❤️ for the Flutter community.</strong>
 </div>

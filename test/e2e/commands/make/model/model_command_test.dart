@@ -326,7 +326,9 @@ class ModelCommandTest extends E2ETestBase {
               await project.cleanup();
             }
           },
-          timeout: const Timeout(Duration(minutes: 2)),
+          timeout: const Timeout(
+            Duration(seconds: 45),
+          ), // Reduced from 2 minutes
         );
       });
 
