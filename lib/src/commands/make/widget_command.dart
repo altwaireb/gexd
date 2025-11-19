@@ -22,7 +22,6 @@ class WidgetCommand extends Command<int>
         valueHelp: 'shared|screen',
         allowed: WidgetLocation.allKeys,
         allowedHelp: WidgetLocation.allowedHelp,
-        defaultsTo: WidgetLocation.shared.key,
       )
       ..addOption(
         'on-screen',

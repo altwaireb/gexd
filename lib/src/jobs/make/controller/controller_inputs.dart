@@ -109,11 +109,6 @@ class ControllerInputs
   Future<ControllerLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return ControllerLocation.shared;
-    }
-
     if (argLocation != null && argLocation.isNotEmpty) {
       if (!ControllerLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
@@ -123,6 +118,11 @@ class ControllerInputs
         );
       }
       return ControllerLocation.fromKey(argLocation);
+    }
+
+    // If not in interactive mode and no location specified, use default
+    if (!isInteractiveMode) {
+      return ControllerLocation.shared;
     }
 
     final options = ControllerLocation.toList;

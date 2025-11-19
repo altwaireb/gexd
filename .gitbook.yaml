@@ -15,10 +15,10 @@ format: website
 customization:
   logo:
     # Logo for light mode (black text for light backgrounds)
-    light: ../../assets/logo-black.svg
+    light: ../../assets/logos/icon_with_text/svg/logo-black.svg
     # Logo for dark mode (white text for dark backgrounds)
-    dark: ../../assets/logo-white.svg
-  favicon: ../../assets/gexd-favicon.svg
+    dark: ../../assets/logos/icon_with_text/svg/logo-white.svg
+  favicon: ../../assets/logos/icons/gexd-favicon.svg
   
 # Site metadata
 title: GEXD CLI

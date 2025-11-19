@@ -45,10 +45,20 @@ class ScreenInputs
       confirmPrompt: MainConstants.askForOnPathPrompt,
     );
     final skipRoute = await _getSkipRoute();
+
+    // Get model information first
     final modelName = await _getModelName(screenType);
     final hasModelFlag = await _getHasModelFlag(screenType);
-    final entityName = await _getEntityName(screenType);
-    final hasEntityFlag = await _getHasEntityFlag(screenType);
+
+    // Check if user chose to use a model
+    final hasAnyModel =
+        (modelName != null && modelName.isNotEmpty) || hasModelFlag;
+
+    // Only ask about entity if no model was chosen
+    final entityName = hasAnyModel ? null : await _getEntityName(screenType);
+    final hasEntityFlag = hasAnyModel
+        ? false
+        : await _getHasEntityFlag(screenType);
 
     // Validate that model and entity are not both specified
     _validateModelEntityConflict(
@@ -82,25 +92,25 @@ class ScreenInputs
 
     ModelDetectionData? modelData;
 
-    // Check model only if modelName is provided
-    if (modelName != null && modelName.isNotEmpty) {
+    // Determine if we should look for a model
+    final shouldUseModel = hasAnyModel || hasModelFlag;
+
+    if (shouldUseModel) {
+      // Use provided modelName, or fallback to screen name if not provided
+      final finalModelName = (modelName != null && modelName.isNotEmpty)
+          ? modelName
+          : name;
+
       modelData = await ModelDetectionService.getModelData(
-        modelName: modelName,
-        template: template,
-        basePath: targetDir,
-        suffixes: ['Model'],
-      );
-    } else if (hasModelFlag == true) {
-      modelData = await ModelDetectionService.getModelData(
-        modelName: name,
+        modelName: finalModelName,
         template: template,
         basePath: targetDir,
         suffixes: ['Model'],
       );
 
-      // Validate that model exists when using --has-model
-      if (!modelData.exists) {
-        throw ModelNotFoundException.fromModelName(name, template);
+      // Validate that model exists when using model detection
+      if (!modelData.exists && (hasModelFlag || hasAnyModel)) {
+        throw ModelNotFoundException.fromModelName(finalModelName, template);
       }
     }
 
@@ -151,11 +161,19 @@ class ScreenInputs
   Future<ScreenType> _getScreenType() async {
     final typeArg = argResults['type'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (typeArg == null || typeArg.isEmpty)) {
-      return ScreenType.basic;
+    // In interactive mode, always ask for screen type regardless of default value
+    if (isInteractiveMode) {
+      final options = ScreenType.toList;
+      final selection = await prompt.select(
+        MainConstants.chooseInput.formatWith({'input': 'screen type'}),
+        options,
+        initialIndex: ScreenType.basic.index,
+      );
+
+      return ScreenType.values[selection];
     }
 
+    // If not in interactive mode, use provided type or default
     if (typeArg != null && typeArg.isNotEmpty) {
       if (!ScreenType.isValidKey(typeArg)) {
         throw ValidationException.invalidOption(
@@ -167,14 +185,7 @@ class ScreenInputs
       return ScreenType.fromKey(typeArg) ?? ScreenType.basic;
     }
 
-    final options = ScreenType.toList;
-    final selection = await prompt.select(
-      MainConstants.chooseInput.formatWith({'input': 'screen type'}),
-      options,
-      initialIndex: ScreenType.basic.index,
-    );
-
-    return ScreenType.values[selection];
+    return ScreenType.basic;
   }
 
   Future<bool> _getSkipRoute() async {
@@ -225,13 +236,17 @@ class ScreenInputs
     if (!askForModel) return null;
 
     final nameModel = await prompt.input(
-      MainConstants.nameInput.formatWith({'input': 'model'}),
+      'Enter model name (leave empty to use screen name):',
       validator: (value) {
-        if (value.trim().isEmpty) return null; // Allow empty
+        if (value.trim().isEmpty) {
+          return null; // Allow empty - will use screen name
+        }
         _validateModelName(value, toUserMessage: true);
         return null;
       },
     );
+
+    // If empty, return null (will be handled by hasModelFlag later)
     return nameModel.trim().isEmpty ? null : nameModel;
   }
 
@@ -253,12 +268,9 @@ class ScreenInputs
 
     if (screenType != ScreenType.withState) return false;
 
-    final confirm = await prompt.confirm(
-      MainConstants.askForHasModelInput,
-      defaultValue: false,
-    );
-
-    return confirm;
+    // No longer ask this confusing question in interactive mode
+    // The logic is now: if modelName is empty, we automatically use screen name as model
+    return false;
   }
 
   // section for Validations

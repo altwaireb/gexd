@@ -105,11 +105,6 @@ class BindingInputs
   Future<BindingLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return BindingLocation.shared;
-    }
-
     if (argLocation != null && argLocation.isNotEmpty) {
       if (!BindingLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
@@ -119,6 +114,11 @@ class BindingInputs
         );
       }
       return BindingLocation.fromKey(argLocation);
+    }
+
+    // If not in interactive mode and no location specified, use default
+    if (!isInteractiveMode) {
+      return BindingLocation.shared;
     }
 
     final options = BindingLocation.toList;

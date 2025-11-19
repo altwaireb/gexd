@@ -22,7 +22,6 @@ class ControllerCommand extends Command<int>
         valueHelp: 'shared|screen',
         allowed: ControllerLocation.allKeys,
         allowedHelp: ControllerLocation.allowedHelp,
-        defaultsTo: ControllerLocation.shared.key,
       )
       ..addOption(
         'on-screen',

@@ -1,3 +1,10 @@
+## 0.1.13
+
+- **🎯 Interactive Mode Fix** - Fixed all `make` commands to properly ask for options in interactive mode
+- **📦 Smart Package Management** - Auto-detect and install equatable when using `--equatable` flag
+- **🔧 Model Import Fix** - View files now correctly import Model classes when using `--model` option
+- **🎨 Demo & Assets** - Added demo GIF and reorganized logos structure
+
 ## 0.1.12
 
 - **🔧 Code Quality Fixes** - Fixed unnecessary imports and improved export structure for better maintainability

@@ -131,11 +131,6 @@ class RepositoryInputs
   Future<RepositoryType> _getType() async {
     final typeArg = argResults['type'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (typeArg == null || typeArg.isEmpty)) {
-      return RepositoryType.empty;
-    }
-
     if (typeArg != null && typeArg.isNotEmpty) {
       if (!RepositoryType.isValidKey(typeArg)) {
         throw ValidationException.invalidOption(
@@ -145,6 +140,11 @@ class RepositoryInputs
         );
       }
       return RepositoryType.fromKey(typeArg) ?? RepositoryType.empty;
+    }
+
+    // If not in interactive mode and no type specified, use default
+    if (!isInteractiveMode) {
+      return RepositoryType.empty;
     }
 
     final options = RepositoryType.toList;

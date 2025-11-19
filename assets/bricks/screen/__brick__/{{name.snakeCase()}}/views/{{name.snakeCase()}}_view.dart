@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/{{name.snakeCase()}}_controller.dart';
+{{#has_model}}
+{{#modelExists}}
+import '{{{modelImport}}}';
+{{/modelExists}}
+{{/has_model}}
 
 {{#is_basic}}
 /// Basic screen view with simple UI

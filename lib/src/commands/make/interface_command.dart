@@ -25,7 +25,6 @@ class InterfaceCommand extends Command<int>
         valueHelp: 'crud|empty',
         allowed: InterfaceType.allKeys,
         allowedHelp: InterfaceType.allowedHelp,
-        defaultsTo: InterfaceType.empty.key,
       )
       ..addOption(
         'model',
@@ -40,7 +39,6 @@ class InterfaceCommand extends Command<int>
         valueHelp: 'domain|repositories|datasources',
         allowed: InterfaceLocation.allKeys,
         allowedHelp: InterfaceLocation.allowedHelp,
-        defaultsTo: InterfaceLocation.domain.key,
       )
       ..addOption(
         'on',

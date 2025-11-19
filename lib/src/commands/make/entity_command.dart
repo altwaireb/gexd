@@ -34,7 +34,6 @@ class EntityCommand extends Command<int>
         abbr: 's',
         allowed: EntityStyle.allKeys,
         allowedHelp: EntityStyle.allowedHelp,
-        defaultsTo: EntityStyle.immutable.key,
         help: 'Choose entity generation style',
       )
       ..addFlag(

@@ -190,9 +190,16 @@ class EntityInputs
 
   Future<EntityStyle> _getEntityStyleInput() async {
     final argStyle = argResults['style'] as String?;
+
     if (argStyle != null && argStyle.isNotEmpty) {
       return EntityStyle.fromKey(argStyle);
     }
+
+    // If not in interactive mode and no style specified, use default
+    if (!isInteractiveMode) {
+      return EntityStyle.immutable;
+    }
+
     final options = EntityStyle.toList;
     final selection = await prompt.select(
       MainConstants.chooseInput.formatWith({'input': 'entity style'}),

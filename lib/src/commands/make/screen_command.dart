@@ -25,7 +25,6 @@ class ScreenCommand extends Command<int>
         valueHelp: 'basic|form|withState',
         allowed: ScreenType.allKeys,
         allowedHelp: ScreenType.allowedHelp,
-        defaultsTo: ScreenType.basic.key,
       )
       ..addOption(
         'model',

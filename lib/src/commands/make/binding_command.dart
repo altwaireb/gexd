@@ -22,7 +22,6 @@ class BindingCommand extends Command<int>
         valueHelp: 'core|shared|screen',
         allowed: BindingLocation.allKeys,
         allowedHelp: BindingLocation.allowedHelp,
-        defaultsTo: BindingLocation.shared.key,
       )
       ..addOption(
         'on-screen',

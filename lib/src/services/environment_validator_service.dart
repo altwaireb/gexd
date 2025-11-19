@@ -66,6 +66,70 @@ class EnvironmentValidatorService {
     }
   }
 
+  /// Check if a single dependency is available
+  Future<bool> hasDependency(String dependency) async {
+    return await hasDependencies([dependency]);
+  }
+
+  /// Install a single package
+  /// [packageName] - Name of the package to install
+  /// [isDev] - Whether to install as dev dependency (default: false)
+  /// Returns true if installation was successful
+  Future<bool> installPackage(String packageName, {bool isDev = false}) async {
+    try {
+      _logger.info('Installing $packageName...');
+
+      final args = ['pub', 'add'];
+      if (isDev) args.add('--dev');
+      args.add(packageName);
+
+      final result = await Process.run('dart', args);
+
+      if (result.exitCode != 0) {
+        _logger.err('Failed to install $packageName: ${result.stderr}');
+        return false;
+      }
+
+      _logger.info('✅ $packageName installed successfully');
+      return true;
+    } catch (e) {
+      _logger.err('Error installing $packageName: $e');
+      return false;
+    }
+  }
+
+  /// Install multiple packages at once
+  /// [packages] - List of package names to install
+  /// [isDev] - Whether to install as dev dependencies (default: false)
+  /// Returns true if all installations were successful
+  Future<bool> installPackages(
+    List<String> packages, {
+    bool isDev = false,
+  }) async {
+    if (packages.isEmpty) return true;
+
+    try {
+      _logger.info('Installing ${packages.length} packages...');
+
+      final args = ['pub', 'add'];
+      if (isDev) args.add('--dev');
+      args.addAll(packages);
+
+      final result = await Process.run('dart', args);
+
+      if (result.exitCode != 0) {
+        _logger.err('Failed to install packages: ${result.stderr}');
+        return false;
+      }
+
+      _logger.info('✅ Packages installed successfully');
+      return true;
+    } catch (e) {
+      _logger.err('Error installing packages: $e');
+      return false;
+    }
+  }
+
   /// Install required dependencies for a model style
   Future<bool> installDependenciesForStyle(ModelStyle style) async {
     try {
@@ -203,6 +267,46 @@ class EnvironmentValidatorService {
       issues: issues,
       warnings: warnings,
     );
+  }
+
+  /// Validate and optionally install equatable package
+  /// [promptUser] - Function to prompt user if package should be installed
+  /// Returns true if equatable is available (either already installed or newly installed)
+  Future<bool> validateAndInstallEquatable({
+    Future<bool> Function()? promptUser,
+  }) async {
+    // Check if equatable is already installed
+    if (await hasDependency('equatable')) {
+      return true;
+    }
+
+    _logger.warn('⚠️  Equatable package is not installed in your project.');
+
+    // If no prompt function provided, ask for installation
+    final shouldInstall = promptUser != null
+        ? await promptUser()
+        : true; // Default to true if no prompt
+
+    if (!shouldInstall) {
+      _logger.warn(
+        '⚠️  Continuing without equatable. You will need to install it manually:',
+      );
+      _logger.info('   Run: dart pub add equatable');
+      return false;
+    }
+
+    // Install equatable
+    _logger.info('📦 Installing equatable package...');
+    final installed = await installPackage('equatable');
+
+    if (installed) {
+      _logger.success('✅ Equatable package installed successfully');
+      return true;
+    } else {
+      _logger.err('❌ Failed to install equatable package');
+      _logger.info('   Please install manually: dart pub add equatable');
+      return false;
+    }
   }
 
   /// Auto-fix environment issues

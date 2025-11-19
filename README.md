@@ -1,7 +1,7 @@
 # 🧩 Gexd CLI
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/gexd-cli-logo.svg" alt="GEXD Logo" width="400"/>
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logos/gexd-cli.svg" alt="GEXD Logo" width="400"/>
 </div>
 
 [![Format & Analyze](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml/badge.svg)](https://github.com/altwaireb/gexd/actions/workflows/formatting-analyze.yml)
@@ -15,7 +15,16 @@
 
 > A modern CLI tool for generating Flutter projects using **GetX** and **Clean Architecture**, designed for scalability, maintainability, and developer productivity.
 
-📚 **[Complete Documentation](https://gexd.gitbook.io/gexd-docs)** | 🚀 **[Quick Start Guide](https://gexd.gitbook.io/gexd-docs)**
+📚 **[Complete Documentation](https://gexd.gitbook.io/gexd-docs)**
+
+---
+
+## 🎬 Demo
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/gexd-demo.gif" alt="Gexd Demo" width="600"/>
+  <p><em>See Gexd in action! Generate screens, models, and more with simple commands.</em></p>
+</div>
 
 ---
 
@@ -352,7 +361,7 @@ Licensed under the **MIT License** — see [LICENSE](LICENSE).
 ---
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logo.svg" alt="GEXD" width="350"/>
+  <img src="https://raw.githubusercontent.com/altwaireb/gexd/main/assets/logos/icon_with_text/svg/logo.svg" alt="GEXD" width="350"/>
   <br><br>
   <strong>Made with ❤️ for the Flutter community.</strong>
 </div>

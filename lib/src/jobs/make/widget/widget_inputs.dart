@@ -107,11 +107,6 @@ class WidgetInputs
   Future<WidgetLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return WidgetLocation.shared;
-    }
-
     if (argLocation != null && argLocation.isNotEmpty) {
       if (!WidgetLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
@@ -121,6 +116,11 @@ class WidgetInputs
         );
       }
       return WidgetLocation.fromKey(argLocation);
+    }
+
+    // If not in interactive mode and no location specified, use default
+    if (!isInteractiveMode) {
+      return WidgetLocation.shared;
     }
 
     final options = WidgetLocation.toList;

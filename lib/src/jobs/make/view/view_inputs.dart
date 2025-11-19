@@ -105,11 +105,6 @@ class ViewInputs
   Future<ViewLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return ViewLocation.shared;
-    }
-
     if (argLocation != null && argLocation.isNotEmpty) {
       if (!ViewLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
@@ -119,6 +114,11 @@ class ViewInputs
         );
       }
       return ViewLocation.fromKey(argLocation);
+    }
+
+    // If not in interactive mode and no location specified, use default
+    if (!isInteractiveMode) {
+      return ViewLocation.shared;
     }
 
     final options = ViewLocation.toList;

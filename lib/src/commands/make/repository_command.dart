@@ -25,7 +25,6 @@ class RepositoryCommand extends Command<int>
         valueHelp: 'crud|empty',
         allowed: RepositoryType.allKeys,
         allowedHelp: RepositoryType.allowedHelp,
-        defaultsTo: RepositoryType.empty.key,
       )
       ..addOption(
         'model',

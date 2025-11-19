@@ -108,11 +108,6 @@ class InterfaceInputs
   Future<InterfaceLocation> _getLocation() async {
     final argLocation = argResults['location'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (argLocation == null || argLocation.isEmpty)) {
-      return InterfaceLocation.domain;
-    }
-
     if (argLocation != null && argLocation.isNotEmpty) {
       if (!InterfaceLocation.isValidKey(argLocation)) {
         throw ValidationException.invalidOption(
@@ -122,6 +117,11 @@ class InterfaceInputs
         );
       }
       return InterfaceLocation.fromKey(argLocation);
+    }
+
+    // If not in interactive mode and no location specified, use default
+    if (!isInteractiveMode) {
+      return InterfaceLocation.domain;
     }
 
     final options = InterfaceLocation.toList;
@@ -150,11 +150,6 @@ class InterfaceInputs
   Future<InterfaceType> _getType() async {
     final typeArg = argResults['type'] as String?;
 
-    // If not in interactive mode and no type specified, use default
-    if (!isInteractiveMode && (typeArg == null || typeArg.isEmpty)) {
-      return InterfaceType.empty;
-    }
-
     if (typeArg != null && typeArg.isNotEmpty) {
       if (!InterfaceType.isValidKey(typeArg)) {
         throw ValidationException.invalidOption(
@@ -164,6 +159,11 @@ class InterfaceInputs
         );
       }
       return InterfaceType.fromKey(typeArg) ?? InterfaceType.empty;
+    }
+
+    // If not in interactive mode and no type specified, use default
+    if (!isInteractiveMode) {
+      return InterfaceType.empty;
     }
 
     final options = InterfaceType.toList;

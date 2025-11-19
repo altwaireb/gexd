@@ -33,7 +33,6 @@ class ModelCommand extends Command<int>
         abbr: 't',
         allowed: ModelStarterTemplate.allKeys,
         allowedHelp: ModelStarterTemplate.allowedHelp,
-        defaultsTo: ModelStarterTemplate.basic.key,
         help: 'Choose starter template for model generation',
       )
       // Model style and features
@@ -42,7 +41,6 @@ class ModelCommand extends Command<int>
         abbr: 's',
         allowed: ModelStyle.allKeys,
         allowedHelp: ModelStyle.allowedHelp,
-        defaultsTo: ModelStyle.plain.key,
         help: 'Choose model generation style',
       )
       ..addFlag(
@@ -150,6 +148,7 @@ Examples:
         quicktypeService: QuicktypeService(logger: _logger),
         relationshipService: RelationshipDetectorService(logger: _logger),
         environmentService: EnvironmentValidatorService(logger: _logger),
+        prompt: _prompt,
         logger: _logger,
       );
 

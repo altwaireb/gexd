@@ -21,7 +21,6 @@ class ViewCommand extends Command<int> with HasProjectData, HasTargetDirectory {
         valueHelp: 'shared|screen',
         allowed: ViewLocation.allKeys,
         allowedHelp: ViewLocation.allowedHelp,
-        defaultsTo: ViewLocation.shared.key,
       )
       ..addOption(
         'on-screen',

@@ -15,24 +15,32 @@ class ModelJob {
   final QuicktypeService quicktypeService;
   final RelationshipDetectorService relationshipService;
   final EnvironmentValidatorService environmentService;
+  final PromptServiceInterface prompt;
 
   ModelJob(
     this.data, {
     QuicktypeService? quicktypeService,
     RelationshipDetectorService? relationshipService,
     EnvironmentValidatorService? environmentService,
+    PromptServiceInterface? prompt,
     Logger? logger,
   }) : logger = logger ?? Logger(),
        quicktypeService = quicktypeService ?? QuicktypeService(logger: logger),
        relationshipService =
            relationshipService ?? RelationshipDetectorService(logger: logger),
        environmentService =
-           environmentService ?? EnvironmentValidatorService(logger: logger);
+           environmentService ?? EnvironmentValidatorService(logger: logger),
+       prompt = prompt ?? PromptService();
 
   Future<int> execute() async {
     try {
       // Validate environment first
       await _validateEnvironment();
+
+      // Check and install equatable if needed
+      if (data.equatable) {
+        await _validateEquatable();
+      }
 
       // Generate files using Quicktype
       final generatedFiles = await _generateModels();
@@ -83,6 +91,21 @@ class ModelJob {
       if (shouldAutoFix) {
         await environmentService.autoFixEnvironment(data.style);
       }
+    }
+  }
+
+  /// Validate and install equatable if needed
+  Future<void> _validateEquatable() async {
+    logger.detail('Checking equatable package...');
+
+    final hasEquatable = await environmentService.validateAndInstallEquatable(
+      promptUser: _promptEquatableInstall,
+    );
+
+    if (!hasEquatable) {
+      logger.warn(
+        '⚠️  Model will be generated with equatable imports, but you need to install it manually.',
+      );
     }
   }
 
@@ -317,14 +340,41 @@ class ModelJob {
 
   /// Prompt for auto-fix
   Future<bool> _promptAutoFix() async {
-    // For now, return true to auto-fix. In interactive mode, this would prompt the user
-    return true;
+    try {
+      return await prompt.confirm(
+        'Would you like to auto-fix the environment by installing missing dependencies?',
+        defaultValue: true,
+      );
+    } catch (e) {
+      // Fallback if prompt fails
+      return true;
+    }
+  }
+
+  /// Prompt for equatable installation
+  Future<bool> _promptEquatableInstall() async {
+    try {
+      return await prompt.confirm(
+        'Equatable package is not installed. Would you like to install it now?',
+        defaultValue: true,
+      );
+    } catch (e) {
+      // Fallback if prompt fails
+      return true;
+    }
   }
 
   /// Prompt for build runner
   Future<bool> _promptBuildRunner() async {
-    // For now, return true to run build_runner. In interactive mode, this would prompt the user
-    return true;
+    try {
+      return await prompt.confirm(
+        'Would you like to run build_runner now to generate serialization code?',
+        defaultValue: true,
+      );
+    } catch (e) {
+      // Fallback if prompt fails
+      return true;
+    }
   }
 
   /// Log summary of generated files

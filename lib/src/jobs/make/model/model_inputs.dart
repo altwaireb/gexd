@@ -221,9 +221,16 @@ class ModelInputs
     ModelInputSourceType inputSourceType,
   ) async {
     final argStyle = argResults['style'] as String?;
+
     if (argStyle != null && argStyle.isNotEmpty) {
       return ModelStyle.fromKey(argStyle);
     }
+
+    // If not in interactive mode and no style specified, use default
+    if (!isInteractiveMode) {
+      return ModelStyle.plain;
+    }
+
     final options = ModelStyle.toList;
     final selection = await prompt.select(
       MainConstants.chooseInput.formatWith({'input': 'model style'}),
@@ -242,8 +249,14 @@ class ModelInputs
     }
 
     final argTemplate = argResults['template'] as String?;
+
     if (argTemplate != null && argTemplate.isNotEmpty) {
       return ModelStarterTemplate.fromKey(argTemplate);
+    }
+
+    // If not in interactive mode and no template specified, use default
+    if (!isInteractiveMode) {
+      return ModelStarterTemplate.basic;
     }
 
     final options = ModelStarterTemplate.toList;
